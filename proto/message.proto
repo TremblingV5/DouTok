@@ -1,0 +1,37 @@
+syntax = "proto3";
+package message;
+option go_package = "message";
+
+message douyin_message_chat_request {
+    string token = 1; // 用户鉴权token
+    int64 to_user_id = 2; // 对方用户id
+}
+
+message douyin_message_chat_response {
+    int32 status_code = 1; // 状态码，0-成功，其他-失败
+    optional string status_msg = 2; // 返回状态描述
+    repeated Message message_list = 3; // 消息列表
+}
+
+message Message {
+    int64 id = 1;
+    string content = 2;
+    optional string create_time = 3;
+}
+
+message douyin_relation_action_request {
+    string token = 1; // 用户鉴权token
+    int64 to_user_id = 2; // 对方用户id
+    int32 action_type = 3; // 1-发送消息
+    string content = 4; // 消息内容
+}
+
+message douyin_relation_action_response {
+    int32 status_code = 1; // 状态码，0-成功，其他-失败
+    optional string status_msg = 2; // 返回状态描述
+}
+
+service MessageService {
+    rpc MessageChat(douyin_message_chat_request) returns (douyin_message_chat_response); // 聊天记录
+    rpc MessageAction(douyin_relation_action_request) returns (douyin_relation_action_response); // 消息操作
+}
