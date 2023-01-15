@@ -103,3 +103,13 @@ message
 > socket
 > /douyin/message/chat/
 > /douyin/message/action/
+
+## 存储方案
+
+hbase：
+
+聊天记录表、评论表、关注表、粉丝表、点赞表、视频表
+
+mysql：
+
+用户信息表（不包括点赞数、关注数等）、用户count表（点赞数、粉丝数等）
