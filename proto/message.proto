@@ -9,14 +9,14 @@ message douyin_message_chat_request {
 
 message douyin_message_chat_response {
     int32 status_code = 1; // 状态码，0-成功，其他-失败
-    optional string status_msg = 2; // 返回状态描述
+    string status_msg = 2; // 返回状态描述
     repeated Message message_list = 3; // 消息列表
 }
 
 message Message {
     int64 id = 1;
     string content = 2;
-    optional string create_time = 3;
+    string create_time = 3;
 }
 
 message douyin_relation_action_request {
@@ -28,7 +28,7 @@ message douyin_relation_action_request {
 
 message douyin_relation_action_response {
     int32 status_code = 1; // 状态码，0-成功，其他-失败
-    optional string status_msg = 2; // 返回状态描述
+    string status_msg = 2; // 返回状态描述
 }
 
 service MessageService {
