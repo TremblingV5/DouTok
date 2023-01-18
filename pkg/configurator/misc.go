@@ -9,10 +9,12 @@ import (
 )
 
 func GetConfigPath(configName string) (string, error) {
-	pathList := [3]string{
+	pathList := [5]string{
 		"./config/",
 		"../../config/",
 		"../../../config/",
+		"../../../../config/",
+		"../../../../../config/",
 	}
 
 	for i := range pathList {
