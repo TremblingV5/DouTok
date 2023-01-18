@@ -13,7 +13,7 @@ message douyin_favorite_action_request {
 
 message douyin_favorite_action_response {
     int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    optional string status_msg = 2; // 返回状态描述
+    string status_msg = 2; // 返回状态描述
 }
 
 message douyin_favorite_list_request {
@@ -23,7 +23,7 @@ message douyin_favorite_list_request {
 
 message douyin_favorite_list_response {
     int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    optional string status_msg = 2; // 返回状态描述
+    string status_msg = 2; // 返回状态描述
     repeated feed.Video video_list = 3; // 用户点赞视频列表
 }
 

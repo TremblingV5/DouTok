@@ -12,7 +12,7 @@ message douyin_publish_action_request {
 
 message douyin_publish_action_response {
     int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    optional string status_msg = 2; // 返回状态描述
+    string status_msg = 2; // 返回状态描述
 }
 
 message douyin_publish_list_request {
@@ -22,7 +22,7 @@ message douyin_publish_list_request {
 
 message douyin_publish_list_response {
     int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    optional string status_msg = 2; // 返回状态描述
+    string status_msg = 2; // 返回状态描述
     repeated feed.Video video_list = 3; // 用户发布的视频列表
 }
 

@@ -5,8 +5,8 @@ option go_package = "feed";
 import "user.proto";
 
 message douyin_feed_request {
-    optional int64 latest_time = 1; // 可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
-    optional string token = 2; // 可选参数，登录用户设置
+    int64 latest_time = 1; // 可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
+    string token = 2; // 可选参数，登录用户设置
 }
 
 // 例如当前请求的latest_time为9:00，那么返回的视频列表时间戳为[8:55,7:40, 6:30, 6:00]
@@ -14,9 +14,9 @@ message douyin_feed_request {
 // 那么下次请求返回的视频时间戳就会小于6:00
 message douyin_feed_response {
     int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    optional string status_msg = 2; // 返回状态描述
+    string status_msg = 2; // 返回状态描述
     repeated Video video_list = 3; // 视频列表
-    optional int64 next_time = 4; // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+    int64 next_time = 4; // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
 }
 
 message video_id_request{
