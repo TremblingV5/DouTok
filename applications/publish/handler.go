@@ -1,8 +1,9 @@
 package main
 
 import (
-	"../../kitex_gen/publish"
 	"context"
+
+	"github.com/TremblingV5/DouTok/kitex_gen/publish"
 )
 
 // PublishServiceImpl implements the last service interface defined in the IDL.

@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/applications/feed/kitex_gen/feed"
+
+	"github.com/TremblingV5/DouTok/kitex_gen/feed"
 )
 
 // FeedServiceImpl implements the last service interface defined in the IDL.
