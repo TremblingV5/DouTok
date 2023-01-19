@@ -1,12 +1,19 @@
-package service
+package main
 
 import (
+	"github.com/TremblingV5/DouTok/applications/feed/dal/model"
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
+	"gorm.io/gen"
 )
 
-func GetDb() error {
+func main() {
+	g := gen.NewGenerator(gen.Config{
+		OutPath: "../query",
+		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
+	})
+
 	var config configStruct.MySQLConfig
 	configurator.InitConfig(
 		&config, "mysql.yaml",
@@ -21,9 +28,12 @@ func GetDb() error {
 	)
 
 	if err != nil {
-		return err
+		panic(err)
 	}
 
-	DB = db
-	return nil
+	g.UseDB(db)
+	g.ApplyBasic(model.Video{})
+	g.ApplyInterface(func() {}, model.Video{})
+
+	g.Execute()
 }
