@@ -6,9 +6,9 @@ import (
 )
 
 func TestQueryVideoCountFromRDB(t *testing.T) {
-	GetDb()
+	InitDb()
 
-	v, err := QueryVideoCountFromRDB(1)
+	v, err := QueryVideoFromRBDById(1)
 
 	if err != nil {
 		fmt.Println(err)
@@ -19,9 +19,9 @@ func TestQueryVideoCountFromRDB(t *testing.T) {
 }
 
 func TestQueryAFewVideoCountFromRDB(t *testing.T) {
-	GetDb()
+	InitDb()
 
-	videos, err := QueryAFewVideoCountFromRDB(1, 22)
+	videos, err := QuerySomeVideoFromRDBByIds(1, 22)
 
 	if err != nil {
 		fmt.Println(err)
