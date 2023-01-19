@@ -38,7 +38,7 @@
 ├── go.mod
 ├── go.sum
 ├── kitex_gen        # kitex generate
-├── pkg
+├── pkg~~~~
 │   ├── configurator # 配置初始化器
 │   ├── constants    # 常量库/错误库
 │   ├── mysqIniter   # MySQL 初始化器
@@ -47,3 +47,4 @@
 └── scripts      # 脚本文件
 ```
 
+- test
