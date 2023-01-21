@@ -29,9 +29,11 @@ require (
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gen v0.3.19
 	gorm.io/gorm v1.24.3
+	gorm.io/plugin/dbresolver v1.3.0
 )
 
 require (
+	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible // indirect
 	github.com/apache/thrift v0.13.0 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
 	github.com/bytedance/gopkg v0.0.0-20220623074550-9d6d3df70991 // indirect
@@ -118,10 +120,14 @@ require (
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
 	golang.org/x/sys v0.0.0-20221006211917-84dc82d7e875 // indirect
 	golang.org/x/text v0.4.0 // indirect
+	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/genproto v0.0.0-20210513213006-bf773b8c8384 // indirect
 	gorm.io/datatypes v1.0.7 // indirect
 	gorm.io/hints v1.1.0 // indirect
+<<<<<<< HEAD
 	gorm.io/plugin/dbresolver v1.3.0 // indirect
 >>>>>>> gorm/gen生成关于数据库操作的相关代码，完成一些基本代码以及获取视频点赞数和评论数的代码
+=======
+>>>>>>> oss handle及相关的配置文件 仍需要完成一个带回调的oss put方法
 )
