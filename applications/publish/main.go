@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/TremblingV5/DouTok/applications/publish/callback"
 	"github.com/TremblingV5/DouTok/applications/publish/service"
 )
 
@@ -13,7 +14,7 @@ func InitDb() {
 func main() {
 	InitDb()
 	v, _ := service.QueryVideoFromRBDById(1)
-	vs, _ := service.QuerySomeVideoFromRDBByIds(1, 22)
+	vs, _ := service.QuerySomeVideoFromRDBByIds(1)
 	fmt.Println(v)
 
 	for _, v := range vs {
@@ -21,4 +22,6 @@ func main() {
 	}
 
 	fmt.Println(service.DB)
+
+	callback.InitCallbackServer()
 }
