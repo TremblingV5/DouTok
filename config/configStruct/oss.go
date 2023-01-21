@@ -5,4 +5,5 @@ type OssConfig struct {
 	Key        string `yaml:"key"`
 	Secret     string `yaml:"secret"`
 	BucketName string `yaml:"bucket"`
+	Callback   string `yaml:"callback"`
 }
