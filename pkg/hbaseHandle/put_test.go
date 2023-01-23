@@ -18,14 +18,11 @@ func TestPut(t *testing.T) {
 	client := InitHB(config.Host)
 
 	values := map[string]map[string][]byte{
-		"data": {
-			"title":     []byte("test video"),
-			"id":        []byte("0001"),
-			"author_id": []byte("0002"),
-			"video_url": []byte("www.baidu.com"),
-			"cover_url": []byte("www.baidu.com"),
+		"d": {
+			"title": []byte("test video"),
+			"time":  []byte("1997"),
 		},
 	}
 
-	client.Put("videos", "00010003", values)
+	client.Put("test", "00030003", values)
 }
