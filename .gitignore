@@ -1,5 +1,11 @@
 go.sum
 .vscode/
 .idea/
+<<<<<<< HEAD
 hbase-data
 hbase-zoo-data
+=======
+hbase-data/
+hbase-2.1.3/
+hbase-zoo-data/
+>>>>>>> 完善了hbase的环境部署，使用docker-compose在本地环境可以随意启停使用，其他环境未测试

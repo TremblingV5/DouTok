@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
+<<<<<<< HEAD
     <property>
         <name>hbase.cluster.distributed</name>
         <value>true</value>
@@ -22,3 +23,26 @@
       <value>/hbase</value>
     </property> -->
 </configuration>
+=======
+  <property>
+    <name>hbase.cluster.distributed</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hbase.rootdir</name>
+    <value>/hbase-data</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.quorum</name>
+    <value>localhost:2181</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.property.dataDir</name>
+    <value>/zookeeper-data</value>
+  </property>
+  <!-- <property>
+    <name>zookeeper.znode.parent</name>
+    <value>/hbase</value>
+  </property> -->
+</configuration>
+>>>>>>> 完善了hbase的环境部署，使用docker-compose在本地环境可以随意启停使用，其他环境未测试
