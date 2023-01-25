@@ -12,6 +12,7 @@ type Video struct {
 	CoverUrl  string
 	FavCount  uint64 // 点赞数
 	ComCount  uint64 // 评论数
+	RowKey    string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
