@@ -8,7 +8,7 @@ import (
 	"github.com/tsuna/gohbase/hrpc"
 )
 
-func (c HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[string]map[string]any, error) {
+func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[string]map[string]any, error) {
 	req, err := hrpc.NewScanStr(
 		context.Background(), table, options...,
 	)
@@ -41,7 +41,7 @@ func (c HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[s
 	return packed, nil
 }
 
-func (c HBaseClient) ScanRange(table string, start string, end string, options ...func(hrpc.Call) error) (map[string]map[string]any, error) {
+func (c *HBaseClient) ScanRange(table string, start string, end string, options ...func(hrpc.Call) error) (map[string]map[string]any, error) {
 	req, err := hrpc.NewScanRangeStr(
 		context.Background(), table, start, end, options...,
 	)
@@ -74,11 +74,8 @@ func (c HBaseClient) ScanRange(table string, start string, end string, options .
 	return packed, nil
 }
 
-func GetFilterByRowKeyPrefix(num int, prefix string) []func(hrpc.Call) error {
+func GetFilterByRowKeyPrefix(prefix string) []func(hrpc.Call) error {
 	var res []func(hrpc.Call) error
-
-	f1 := filter.NewPageFilter(int64(num))
-	res = append(res, hrpc.Filters(f1))
 
 	f2 := filter.NewPrefixFilter([]byte(prefix))
 	res = append(res, hrpc.Filters(f2))

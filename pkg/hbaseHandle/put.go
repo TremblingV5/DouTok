@@ -6,7 +6,7 @@ import (
 	"github.com/tsuna/gohbase/hrpc"
 )
 
-func (c HBaseClient) Put(table string, rowKey string, values map[string]map[string][]byte) error {
+func (c *HBaseClient) Put(table string, rowKey string, values map[string]map[string][]byte) error {
 	putReq, err := hrpc.NewPutStr(
 		context.Background(), table, rowKey, values,
 	)

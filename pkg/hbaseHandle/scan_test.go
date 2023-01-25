@@ -48,7 +48,7 @@ func TestScanByRowKeyPrefix(t *testing.T) {
 
 	client := InitHB(config.Host)
 
-	res, _ := client.Scan("test", GetFilterByRowKeyPrefix(100, "0003")...)
+	res, _ := client.Scan("test", GetFilterByRowKeyPrefix("0003")...)
 
 	for k, v := range res {
 		fmt.Println(k)
