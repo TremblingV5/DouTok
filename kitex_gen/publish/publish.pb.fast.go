@@ -35,6 +35,11 @@ func (x *DouyinPublishActionRequest) FastRead(buf []byte, _type int8, number int
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -65,6 +70,11 @@ func (x *DouyinPublishActionRequest) fastReadField3(buf []byte, _type int8) (off
 
 func (x *DouyinPublishActionRequest) fastReadField4(buf []byte, _type int8) (offset int, err error) {
 	x.UserId, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *DouyinPublishActionRequest) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Name, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -196,6 +206,7 @@ func (x *DouyinPublishActionRequest) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
 	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
 	return offset
 }
 
@@ -228,6 +239,14 @@ func (x *DouyinPublishActionRequest) fastWriteField4(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteInt64(buf[offset:], 4, x.UserId)
+	return offset
+}
+
+func (x *DouyinPublishActionRequest) fastWriteField5(buf []byte) (offset int) {
+	if x.Name == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 5, x.Name)
 	return offset
 }
 
@@ -325,6 +344,7 @@ func (x *DouyinPublishActionRequest) Size() (n int) {
 	n += x.sizeField2()
 	n += x.sizeField3()
 	n += x.sizeField4()
+	n += x.sizeField5()
 	return n
 }
 
@@ -357,6 +377,14 @@ func (x *DouyinPublishActionRequest) sizeField4() (n int) {
 		return n
 	}
 	n += fastpb.SizeInt64(4, x.UserId)
+	return n
+}
+
+func (x *DouyinPublishActionRequest) sizeField5() (n int) {
+	if x.Name == "" {
+		return n
+	}
+	n += fastpb.SizeString(5, x.Name)
 	return n
 }
 
@@ -451,6 +479,7 @@ var fieldIDToName_DouyinPublishActionRequest = map[int32]string{
 	2: "Data",
 	3: "Title",
 	4: "UserId",
+	5: "Name",
 }
 
 var fieldIDToName_DouyinPublishActionResponse = map[int32]string{
