@@ -3,7 +3,11 @@ module github.com/TremblingV5/DouTok
 go 1.18
 
 require (
+<<<<<<< HEAD
 	github.com/cloudwego/hertz v0.5.1
+=======
+	github.com/cloudwego/fastpb v0.0.3
+>>>>>>> 更改了feed模块和publish模块的IDL并进行了代码生成，修改内容为为请求体添加了user_id和username参数
 	github.com/cloudwego/kitex v0.4.4
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/go-redis/redis/v8 v8.11.5
@@ -36,7 +40,6 @@ require (
 	github.com/chenzhuoyu/base64x v0.0.0-20211019084208-fb5309c8db06 // indirect
 	github.com/chenzhuoyu/iasm v0.0.0-20220818063314-28c361dae733 // indirect
 	github.com/choleraehyq/pid v0.0.15 // indirect
-	github.com/cloudwego/fastpb v0.0.3 // indirect
 	github.com/cloudwego/frugal v0.1.3 // indirect
 	github.com/cloudwego/netpoll v0.3.1 // indirect
 	github.com/cloudwego/thriftgo v0.2.4 // indirect
