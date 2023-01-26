@@ -21,9 +21,11 @@ require (
 	github.com/spf13/viper v1.15.0
 	go.uber.org/zap v1.23.0
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible
+	github.com/cloudwego/fastpb v0.0.3
 	github.com/cloudwego/kitex v0.4.4
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/sirupsen/logrus v1.9.0
 	github.com/tsuna/gohbase v0.0.0-20221118171731-ee78e2db30c3
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/yaml.v3 v3.0.1
