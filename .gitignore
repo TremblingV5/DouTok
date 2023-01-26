@@ -1,5 +1,6 @@
 go.sum
 .vscode/
 .idea/
-hbase-data
-hbase-zoo-data
+hbase-data/
+hbase-2.1.3/
+hbase-zoo-data/
