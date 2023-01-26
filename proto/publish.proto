@@ -9,6 +9,7 @@ message douyin_publish_action_request {
     bytes data = 2; // 视频数据
     string title = 3; // 视频标题
     int64 user_id = 4; // 发布视频的user id
+    string name = 5; // 发布视频的user name
 }
 
 message douyin_publish_action_response {
