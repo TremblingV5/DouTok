@@ -1,5 +1,5 @@
 package constants
 
 const (
-	DbDefault = "default"
+	IdentityKey = "user_id"
 )
