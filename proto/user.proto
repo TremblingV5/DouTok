@@ -11,12 +11,10 @@ message douyin_user_register_response {
     int32 status_code = 1; // 状态码，0-成功，其他值-失败
     string status_msg = 2; // 返回状态描述
     int64 user_id = 3; // 用户id
-    string token = 4; // 用户鉴权token
 }
 
 message douyin_user_request {
     int64 user_id = 1; // 用户id
-    string token = 2; // 用户鉴权token
 }
 
 message douyin_user_response {

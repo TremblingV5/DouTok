@@ -10,7 +10,7 @@
 .
 ├── README.md
 ├── applications       # 各模块业务 
-│   ├── api            # 网关
+│   ├── api.yaml            # 网关
 │   │   ├── pack       # 需要包装的结构（dto）
 │   │   ├── handlers   # 接口回调函数
 │   │   ├── main.go    # hertz 主函数
