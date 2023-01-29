@@ -4,10 +4,9 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"mime/multipart"
+	"io"
 
 	"github.com/TremblingV5/DouTok/config/configStruct"
-	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
 func GetCallBackMap(config configStruct.OssConfig) string {
@@ -26,11 +25,11 @@ func GetCallBackMap(config configStruct.OssConfig) string {
 	return callbackVal
 }
 
-func (o *OssClient) Put(objectType string, filename string, data multipart.File, callback string) error {
+func (o *OssClient) Put(objectType string, filename string, data io.Reader) error {
 	err := o.Bucket.PutObject(
 		objectType+"/"+filename,
 		data,
-		oss.Callback(callback),
+		// oss.Callback(callback),
 	)
 
 	if err != nil {
