@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/TremblingV5/DouTok/applications/publish/dal/model"
+	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/misc"
 )
 
@@ -37,7 +38,7 @@ func SavePublish(user_id int64, title string, data []byte) error {
 	// 3. 写入数据到HBase，分别写入publish表和feed表
 
 	if err := SaveVideo2HB(id, uint64(user_id), title, play_url, cover_url, fmt.Sprint(timestamp)); err != nil {
-
+		dlog.Warn(err)
 	}
 
 	return nil
@@ -73,8 +74,8 @@ func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cove
 	// 	Timestamp:  timestamp,
 	// }
 
-	publish_rowkey := misc.LFill(string(user_id), 6) + timestamp
-	feed_rowkey := timestamp + misc.LFill(string(user_id), 6)
+	publish_rowkey := misc.LFill(fmt.Sprint(user_id), 6) + timestamp
+	feed_rowkey := timestamp + misc.LFill(fmt.Sprint(user_id), 6)
 
 	hbData := map[string]map[string][]byte{
 		"data": {
