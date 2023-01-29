@@ -36,7 +36,7 @@ func PackPublishListRes(list []typedef.VideoInHB, code int32, msg string, req *p
 
 		newReq := user.DouyinUserRequest{
 			UserId: req.UserId,
-			Token:  req.Token,
+			// Token:  req.Token,
 		}
 
 		resp, err := rpc.GetUserById(

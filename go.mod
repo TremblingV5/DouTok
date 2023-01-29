@@ -22,11 +22,26 @@ require (
 	go.uber.org/zap v1.23.0
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible
 	github.com/cloudwego/fastpb v0.0.3
+	github.com/cloudwego/hertz v0.5.1
 	github.com/cloudwego/kitex v0.4.4
+	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/hertz-contrib/gzip v0.0.1
+	github.com/hertz-contrib/http2 v0.1.4
+	github.com/hertz-contrib/jwt v1.0.2
+	github.com/hertz-contrib/logger/zap v0.0.0-20221227100845-46a8693d7847
+	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
+	github.com/hertz-contrib/pprof v0.1.0
+	github.com/hertz-contrib/registry/etcd v0.0.0-20221226122036-3c451682dc72
+	github.com/kitex-contrib/obs-opentelemetry v0.1.0
+	github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20221109071748-a433b0b57972
+	github.com/kitex-contrib/registry-etcd v0.1.0
 	github.com/sirupsen/logrus v1.9.0
+	github.com/spf13/pflag v1.0.5
+	github.com/spf13/viper v1.7.0
 	github.com/tsuna/gohbase v0.0.0-20221118171731-ee78e2db30c3
+	go.uber.org/zap v1.23.0
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.4.5
@@ -75,6 +90,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/nyaruka/phonenumbers v1.0.55 // indirect
 	github.com/oleiade/lane v1.0.1 // indirect
+	github.com/pelletier/go-toml v1.2.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/savsgio/gotils v0.0.0-20220530130905-52f3993e8d6d // indirect
 	github.com/spf13/afero v1.9.3 // indirect
@@ -117,14 +133,15 @@ require (
 	google.golang.org/grpc v1.52.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/net v0.4.0 // indirect
+	golang.org/x/net v0.5.0 // indirect
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/text v0.6.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
-	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c // indirect
-	google.golang.org/grpc v1.41.0 // indirect
+	google.golang.org/genproto v0.0.0-20211118181313-81c1377c94b1 // indirect
+	google.golang.org/grpc v1.46.2 // indirect
+	gopkg.in/ini.v1 v1.51.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/datatypes v1.0.7 // indirect
 	gorm.io/hints v1.1.0 // indirect
