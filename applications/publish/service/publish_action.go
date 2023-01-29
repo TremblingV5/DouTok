@@ -20,9 +20,11 @@ func SavePublish(user_id int64, title string, data []byte) error {
 	hasher.Write([]byte(fmt.Sprint(user_id) + title))
 	filename := hex.EncodeToString(hasher.Sum(nil))
 
-	OSSClient.Put(
+	if err := OSSClient.Put(
 		"video", filename, bytes.NewReader(data),
-	)
+	); err != nil {
+		return err
+	}
 
 	play_url := "https://" + OssCfg.BucketName + "." + OssCfg.Endpoint + "/video/" + filename
 	cover_url := play_url + "?x-oss-process=video/snapshot,t_30000,f_jpg,w_0,h_0,m_fast,ar_auto"
