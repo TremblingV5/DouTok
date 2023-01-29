@@ -48,3 +48,18 @@ func InitHB() error {
 
 	return nil
 }
+
+func InitOSS() error {
+	var config configStruct.OssConfig
+	configurator.InitConfig(
+		&config, "oss.yaml",
+	)
+
+	OSSClient.Init(
+		config.Endpoint, config.Key, config.Secret, config.BucketName,
+	)
+
+	OssCfg = &config
+
+	return nil
+}
