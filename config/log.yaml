@@ -1,0 +1,33 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v1"
+
+Log:
+  level: "info"
+  development: false
+  encoding: "console" # console or json
+  encoderConfig:
+    # https://godoc.org/go.uber.org/zap/zapcore#EncoderConfig
+    messageKey: "msg"
+    levelKey: "level"
+    timeKey: "ts"
+    nameKey: "DouTokLogger"
+    callerKey: "caller"
+    functionKey: ""
+    stacktraceKey: "stacktrace"
+    skipLineEnding: false
+    LineEnding:
+    levelEncoder: "capital" # capitalColor, capital, color, lowercase
+    timeEncoder: "iso8601" # rfc3339nano, rfc3339, iso8601, millis, nanos, default
+    durationEncoder: "seconds" # string, nanos, ms, seconds
+    callerEncoder: "full" # full, short
+    nameEncoder: "full" # full
+    consoleSeparator: " "
+
+  outputPaths:
+    - "stdout"
+    - "/tmp/DouTok.log"
+  #errorOutputPaths:
+  #  - "stderr"
+  #initialFields:
+  #  foo: "bar"
