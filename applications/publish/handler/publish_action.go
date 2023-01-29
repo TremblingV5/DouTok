@@ -15,7 +15,7 @@ func (s *PublishServiceImpl) PublishAction(ctx context.Context, req *publish.Dou
 
 	if err := service.SavePublish(req.UserId, req.Title, req.Data); err != nil {
 		resp, _ := service.PackPublishActionRes(1, err.Error())
-		return resp, nil
+		return resp, err
 	}
 
 	resp, _ = service.PackPublishActionRes(0, err.Error())
