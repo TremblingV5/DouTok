@@ -24,6 +24,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	methods := map[string]kitex.MethodInfo{
 		"CommentAction": kitex.NewMethodInfo(commentActionHandler, newCommentActionArgs, newCommentActionResult, false),
 		"CommentList":   kitex.NewMethodInfo(commentListHandler, newCommentListArgs, newCommentListResult, false),
+		"CommentCount":  kitex.NewMethodInfo(commentCountHandler, newCommentCountArgs, newCommentCountResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "comment",
@@ -245,6 +246,109 @@ func (p *CommentListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
+func commentCountHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(comment.DouyinCommentCountRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(comment.CommentService).CommentCount(ctx, req)
+		if err != nil {
+			return err
+		}
+		if err := st.SendMsg(resp); err != nil {
+			return err
+		}
+	case *CommentCountArgs:
+		success, err := handler.(comment.CommentService).CommentCount(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*CommentCountResult)
+		realResult.Success = success
+	}
+	return nil
+}
+func newCommentCountArgs() interface{} {
+	return &CommentCountArgs{}
+}
+
+func newCommentCountResult() interface{} {
+	return &CommentCountResult{}
+}
+
+type CommentCountArgs struct {
+	Req *comment.DouyinCommentCountRequest
+}
+
+func (p *CommentCountArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, fmt.Errorf("No req in CommentCountArgs")
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *CommentCountArgs) Unmarshal(in []byte) error {
+	msg := new(comment.DouyinCommentCountRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var CommentCountArgs_Req_DEFAULT *comment.DouyinCommentCountRequest
+
+func (p *CommentCountArgs) GetReq() *comment.DouyinCommentCountRequest {
+	if !p.IsSetReq() {
+		return CommentCountArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *CommentCountArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+type CommentCountResult struct {
+	Success *comment.DouyinCommentCountResponse
+}
+
+var CommentCountResult_Success_DEFAULT *comment.DouyinCommentCountResponse
+
+func (p *CommentCountResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, fmt.Errorf("No req in CommentCountResult")
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *CommentCountResult) Unmarshal(in []byte) error {
+	msg := new(comment.DouyinCommentCountResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *CommentCountResult) GetSuccess() *comment.DouyinCommentCountResponse {
+	if !p.IsSetSuccess() {
+		return CommentCountResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *CommentCountResult) SetSuccess(x interface{}) {
+	p.Success = x.(*comment.DouyinCommentCountResponse)
+}
+
+func (p *CommentCountResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -270,6 +374,16 @@ func (p *kClient) CommentList(ctx context.Context, Req *comment.DouyinCommentLis
 	_args.Req = Req
 	var _result CommentListResult
 	if err = p.c.Call(ctx, "CommentList", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) CommentCount(ctx context.Context, Req *comment.DouyinCommentCountRequest) (r *comment.DouyinCommentCountResponse, err error) {
+	var _args CommentCountArgs
+	_args.Req = Req
+	var _result CommentCountResult
+	if err = p.c.Call(ctx, "CommentCount", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
