@@ -3,8 +3,10 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/kitex_gen/favorite"
 	"github.com/TremblingV5/DouTok/kitex_gen/favorite/favoriteservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/errno"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
@@ -50,4 +52,28 @@ func initFavoriteRpc(Config *dtviper.Config) {
 		panic(err)
 	}
 	favoriteClient = c
+}
+
+// 传递 点赞操作 的上下文, 并获取 RPC Server 端的响应.
+func FavoriteAction(ctx context.Context, req *favorite.DouyinFavoriteActionRequest) (resp *favorite.DouyinFavoriteActionResponse, err error) {
+	resp, err = favoriteClient.FavoriteAction(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+// 传递 获取点赞列表操作 的上下文, 并获取 RPC Server 端的响应.
+func FavoriteList(ctx context.Context, req *favorite.DouyinFavoriteListRequest) (resp *favorite.DouyinFavoriteListResponse, err error) {
+	resp, err = favoriteClient.FavoriteList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
 }
