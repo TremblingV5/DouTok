@@ -3,9 +3,8 @@ package message;
 option go_package = "message";
 
 message douyin_message_chat_request {
-    string token = 1; // 用户鉴权token
-    int64 to_user_id = 2; // 对方用户id
-    int64 user_id = 3; // 发出动作的user id
+    int64 to_user_id = 1; // 对方用户id
+    int64 user_id = 2; // 发出动作的user id
 }
 
 message douyin_message_chat_response {
@@ -21,11 +20,10 @@ message Message {
 }
 
 message douyin_relation_action_request {
-    string token = 1; // 用户鉴权token
-    int64 to_user_id = 2; // 对方用户id
-    int64 user_id = 3;  // 发消息的user id
-    int32 action_type = 4; // 1-发送消息
-    string content = 5; // 消息内容
+    int64 to_user_id = 1; // 对方用户id
+    int64 user_id = 2;  // 发消息的user id
+    int32 action_type = 3; // 1-发送消息
+    string content = 4; // 消息内容
 }
 
 message douyin_relation_action_response {

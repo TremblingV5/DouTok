@@ -3,8 +3,10 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/kitex_gen/message/messageservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/errno"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
@@ -50,4 +52,28 @@ func initMessageRpc(Config *dtviper.Config) {
 		panic(err)
 	}
 	messageClient = c
+}
+
+// 传递 发布视频操作 的上下文, 并获取 RPC Server 端的响应.
+func MessageAction(ctx context.Context, req *message.DouyinRelationActionRequest) (resp *message.DouyinRelationActionResponse, err error) {
+	resp, err = messageClient.MessageAction(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+// 传递 获取用户发布视频列表操作 的上下文, 并获取 RPC Server 端的响应.
+func MessageChat(ctx context.Context, req *message.DouyinMessageChatRequest) (resp *message.DouyinMessageChatResponse, err error) {
+	resp, err = messageClient.MessageChat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
 }

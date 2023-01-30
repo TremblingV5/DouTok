@@ -6,3 +6,5 @@
   https://blog.csdn.net/qq_38366063/article/details/128570644
 - DashBoard 展示模板的配置
   https://blog.csdn.net/ll535299/article/details/127534678
+- 访问仪表盘
+  http://127.0.0.1:3000/?orgId=1
