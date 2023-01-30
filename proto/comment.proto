@@ -37,7 +37,18 @@ message Comment {
     string create_date = 4; // 评论发布日期，格式 mm-dd
 }
 
+message douyin_comment_count_request {
+    repeated int64 video_id_list = 1; // 视频id所组成的列表
+}
+
+message douyin_comment_count_response {
+    int32 status_code = 1;
+    string status_msg = 2;
+    map<int64, int64> result = 3; // key为视频的id，value为该视频的评论数
+}
+
 service CommentService{
     rpc CommentAction(douyin_comment_action_request) returns (douyin_comment_action_response); //评论操作
     rpc CommentList(douyin_comment_list_request) returns (douyin_comment_list_response); //返回评论列表
+    rpc CommentCount(douyin_comment_count_request) returns (douyin_comment_count_response); // 返回一个视频列表中各自的评论数量
 }
