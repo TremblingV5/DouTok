@@ -4,10 +4,13 @@ package api
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
+	"github.com/TremblingV5/DouTok/kitex_gen/feed"
+	"github.com/TremblingV5/DouTok/pkg/errno"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // GetUserFeed .
@@ -17,11 +20,16 @@ func GetUserFeed(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinFeedRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, errno.ErrBind)
 		return
 	}
 
-	resp := new(api.DouyinFeedResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err := rpc.GetUserFeed(ctx, &feed.DouyinFeedRequest{
+		LatestTime: req.LatestTime,
+	})
+	if err != nil {
+		handler.SendResponse(c, errno.ConvertErr(err))
+		return
+	}
+	handler.SendResponse(c, resp)
 }

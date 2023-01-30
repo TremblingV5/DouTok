@@ -3,8 +3,10 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/kitex_gen/feed"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed/feedservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/errno"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
@@ -50,4 +52,16 @@ func initFeedRpc(Config *dtviper.Config) {
 		panic(err)
 	}
 	feedClient = c
+}
+
+// 传递 获取视频流操作 的上下文, 并获取 RPC Server 端的响应.
+func GetUserFeed(ctx context.Context, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
+	resp, err = feedClient.GetUserFeed(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
 }

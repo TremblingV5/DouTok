@@ -4,10 +4,13 @@ package api
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
+	"github.com/TremblingV5/DouTok/kitex_gen/relation"
+	"github.com/TremblingV5/DouTok/pkg/errno"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // RelationAction .
@@ -17,13 +20,21 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinRelationActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, errno.ErrBind)
 		return
 	}
 
-	resp := new(api.DouyinRelationActionResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	rpcReq := relation.DouyinRelationActionRequest{
+		ToUserId:   req.ToUserId,
+		ActionType: req.ActionType,
+	}
+	resp, err := rpc.RelationAction(ctx, &rpcReq)
+	if err != nil {
+		handler.SendResponse(c, errno.ConvertErr(err))
+		return
+	}
+	handler.SendResponse(c, resp)
 }
 
 // RelationFollowList .
@@ -33,13 +44,18 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinRelationFollowListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, errno.ErrBind)
 		return
 	}
 
-	resp := new(api.DouyinRelationFollowListResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err := rpc.RelationFollowList(ctx, &relation.DouyinRelationFollowListRequest{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		handler.SendResponse(c, errno.ConvertErr(err))
+		return
+	}
+	handler.SendResponse(c, resp)
 }
 
 // RelationFollowerList .
@@ -49,27 +65,38 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinRelationFollowerListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, errno.ErrBind)
 		return
 	}
 
-	resp := new(api.DouyinRelationFollowerListResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err := rpc.RelationFollowerList(ctx, &relation.DouyinRelationFollowerListRequest{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		handler.SendResponse(c, errno.ConvertErr(err))
+		return
+	}
+	handler.SendResponse(c, resp)
 }
 
 // RelationFriendList .
 // @router /douyin/relation/friend/list [GET]
+// 内部为调用获取粉丝列表
 func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinRelationFriendListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, errno.ErrBind)
 		return
 	}
 
-	resp := new(api.DouyinRelationFriendListResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err := rpc.RelationFollowerList(ctx, &relation.DouyinRelationFollowerListRequest{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		handler.SendResponse(c, errno.ConvertErr(err))
+		return
+	}
+	handler.SendResponse(c, resp)
 }
