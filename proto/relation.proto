@@ -6,9 +6,8 @@ import "user.proto";
 
 message douyin_relation_action_request {
     int64 user_id = 1; // 用户id
-    string token = 2; // 用户鉴权token
-    int64 to_user_id = 3; // 对方用户id
-    int32 action_type = 4; // 1-关注，2-取消关注
+    int64 to_user_id = 2; // 对方用户id
+    int32 action_type = 3; // 1-关注，2-取消关注
 }
 
 message douyin_relation_action_response {
@@ -18,7 +17,6 @@ message douyin_relation_action_response {
 
 message douyin_relation_follow_list_request {
     int64 user_id = 1; // 用户id
-    string token = 2; // 用户鉴权token
 }
 
 message douyin_relation_follow_list_response {
@@ -29,7 +27,6 @@ message douyin_relation_follow_list_response {
 
 message douyin_relation_follower_list_request {
     int64 user_id = 1; // 用户id
-    string token = 2; // 用户鉴权token
 }
 
 message douyin_relation_follower_list_response {
