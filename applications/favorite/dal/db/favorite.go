@@ -1,77 +1,115 @@
 package db
-//目前只改了import和结构体
+
 import (
 	"context"
-	"gorm.io/gorm"
 	"github.com/TremblingV5/DouTok/pkg/constants"
+
+	"gorm.io/gorm"
 )
 
-type UserFavorVideos struct {
-	gorm.Model
-	UserId  int64  `json:"user_id"`
-	VideoId  int64  `json:"video_id"`
+// GetFavoriteRelation get favorite video info
+// 会用到feed和user里的表结构
+func GetFavoriteRelation(ctx context.Context, uid int64, vid int64) (*Video, error) {
+	user := new(User)
+	if err := DB.WithContext(ctx).First(user, uid).Error; err != nil {
+		return nil, err
+	}
+
+	video := new(Video)
+	// if err := DB.WithContext(ctx).First(&video, vid).Error; err != nil {
+	// 	return nil, err
+	// }
+
+	if err := DB.WithContext(ctx).Model(&user).Association("FavoriteVideos").Find(&video, vid); err != nil {
+		return nil, err
+	}
+	return video, nil
 }
 
-func (f *UserFavorVideos) TableName() string {
-	return constants.FavoriteTableName
+// Favorite new favorite data.
+func Favorite(ctx context.Context, uid int64, vid int64) error {
+	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// 在事务中执行一些 db 操作
+		//1. 新增点赞数据
+		user := new(User)
+		if err := tx.WithContext(ctx).First(user, uid).Error; err != nil {
+			return err
+		}
+
+		video := new(Video)
+		if err := tx.WithContext(ctx).First(video, vid).Error; err != nil {
+			return err
+		}
+
+		if err := tx.WithContext(ctx).Model(&user).Association("FavoriteVideos").Append(video); err != nil {
+			return err
+		}
+
+		//2.改变 video 表中的 favorite count
+		res := tx.Model(video).Update("favorite_count", gorm.Expr("favorite_count + ?", 1))
+		if res.Error != nil {
+			return res.Error
+		}
+
+		//ErrDatabase在pkg/constants/error_const.go中定义
+		//后续需要修改，因为需要返回的是数字而不是错误码，目前还没有理顺这个
+		if res.RowsAffected != 1 {
+			return constants.ErrDatabase
+		}
+
+		return nil
+	})
+	return err
 }
 
-// CreateFavorite
-func CreateFavorite(ctx context.Context, favors []*UserFavorVideos) error {
-	if err := DB.WithContext(ctx).Create(favors).Error; err != nil {
-		return err
-	}
-	return nil
+// DisFavorite deletes the specified favorite from the database
+func DisFavorite(ctx context.Context, uid int64, vid int64) error {
+	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		//1. 删除点赞数据
+		user := new(User)
+		if err := tx.WithContext(ctx).First(user, uid).Error; err != nil {
+			return err
+		}
+
+		video, err := GetFavoriteRelation(ctx, uid, vid)
+		if err != nil {
+			return err
+		}
+
+		err = tx.Unscoped().WithContext(ctx).Model(&user).Association("FavoriteVideos").Delete(video)
+		if err != nil {
+			return err
+		}
+
+		//2.改变 video 表中的 favorite count
+		res := tx.Model(video).Update("favorite_count", gorm.Expr("favorite_count - ?", 1))
+		if res.Error != nil {
+			return res.Error
+		}
+
+		if res.RowsAffected != 1 {
+			return constants.ErrDatabase
+		}
+
+		return nil
+	})
+	return err
 }
 
-//  get list of favor info
-func MGetNotes(ctx context.Context, noteIDs []int64) ([]*UserFavorVideos, error) {
-	var res []*UserFavorVideos
-	if len(noteIDs) == 0 {
-		return res, nil
+// FavoriteList returns a list of Favorite videos.
+func FavoriteList(ctx context.Context, uid int64) ([]Video, error) {
+	user := new(User)
+	if err := DB.WithContext(ctx).First(user, uid).Error; err != nil {
+		return nil, err
 	}
 
-	if err := DB.WithContext(ctx).Where("id in ?", noteIDs).Find(&res).Error; err != nil {
-		return res, err
+	videos := []Video{}
+	// if err := DB.WithContext(ctx).First(&video, vid).Error; err != nil {
+	// 	return nil, err
+	// }
+
+	if err := DB.WithContext(ctx).Model(&user).Association("FavoriteVideos").Find(&videos); err != nil {
+		return nil, err
 	}
-	return res, nil
-}
-
-// UpdateNote update note info
-func UpdateNote(ctx context.Context, noteID, userID int64, title, content *string) error {
-	params := map[string]interface{}{}
-	if title != nil {
-		params["title"] = *title
-	}
-	if content != nil {
-		params["content"] = *content
-	}
-	return DB.WithContext(ctx).Model(&UserFavorVideos{}).Where("id = ? and user_id = ?", noteID, userID).
-		Updates(params).Error
-}
-
-// DeleteNote delete note info
-func DeleteNote(ctx context.Context, noteID, userID int64) error {
-	return DB.WithContext(ctx).Where("id = ? and user_id = ? ", noteID, userID).Delete(&UserFavorVideos{}).Error
-}
-
-// QueryNote query list of note info
-func QueryNote(ctx context.Context, userID int64, searchKey *string, limit, offset int) ([]*UserFavorVideos, int64, error) {
-	var total int64
-	var res []*UserFavorVideos
-	conn := DB.WithContext(ctx).Model(&UserFavorVideos{}).Where("user_id = ?", userID)
-
-	if searchKey != nil {
-		conn = conn.Where("title like ?", "%"+*searchKey+"%")
-	}
-
-	if err := conn.Count(&total).Error; err != nil {
-		return res, total, err
-	}
-
-	if err := conn.Limit(limit).Offset(offset).Find(&res).Error; err != nil {
-		return res, total, err
-	}
-
-	return res, total, nil
+	return videos, nil
 }
