@@ -4,10 +4,13 @@ package api
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
+	"github.com/TremblingV5/DouTok/kitex_gen/message"
+	"github.com/TremblingV5/DouTok/pkg/errno"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // MessageChat .
@@ -17,13 +20,18 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinMessageChatRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, errno.ErrBind)
 		return
 	}
 
-	resp := new(api.DouyinMessageChatResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err := rpc.MessageChat(ctx, &message.DouyinMessageChatRequest{
+		ToUserId: req.ToUserId,
+	})
+	if err != nil {
+		handler.SendResponse(c, errno.ConvertErr(err))
+		return
+	}
+	handler.SendResponse(c, resp)
 }
 
 // MessageAction .
@@ -33,11 +41,18 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinMessageActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, errno.ErrBind)
 		return
 	}
 
-	resp := new(api.DouyinMessageActionResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err := rpc.MessageAction(ctx, &message.DouyinRelationActionRequest{
+		ToUserId:   req.ToUserId,
+		ActionType: req.ActionType,
+		Content:    req.Content,
+	})
+	if err != nil {
+		handler.SendResponse(c, errno.ConvertErr(err))
+		return
+	}
+	handler.SendResponse(c, resp)
 }
