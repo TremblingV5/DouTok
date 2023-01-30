@@ -12,6 +12,7 @@ const (
 	UserAlreadyExistErrCode    = 10003
 	AuthorizationFailedErrCode = 10004
 	BadRequestErrCode          = 10005
+	ErrBindErrCode             = 10006
 )
 
 type ErrNo struct {
@@ -39,6 +40,7 @@ var (
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	BadRequest             = NewErrNo(BadRequestErrCode, "Request Failed")
+	ErrBind                = NewErrNo(ErrBindErrCode, "Error occurred while binding the request body to the struct")
 )
 
 // ConvertErr convert error to Errno

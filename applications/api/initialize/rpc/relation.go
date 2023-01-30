@@ -3,8 +3,10 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/kitex_gen/relation"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/errno"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
@@ -50,4 +52,40 @@ func initRelationRpc(Config *dtviper.Config) {
 		panic(err)
 	}
 	relationClient = c
+}
+
+// 传递 关注操作 的上下文, 并获取 RPC Server 端的响应.
+func RelationAction(ctx context.Context, req *relation.DouyinRelationActionRequest) (resp *relation.DouyinRelationActionResponse, err error) {
+	resp, err = relationClient.RelationAction(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+// 传递 获取正在关注列表操作 的上下文, 并获取 RPC Server 端的响应.
+func RelationFollowList(ctx context.Context, req *relation.DouyinRelationFollowListRequest) (resp *relation.DouyinRelationFollowListResponse, err error) {
+	resp, err = relationClient.RelationFollowList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+// 传递 获取粉丝列表操作 的上下文, 并获取 RPC Server 端的响应.
+func RelationFollowerList(ctx context.Context, req *relation.DouyinRelationFollowerListRequest) (resp *relation.DouyinRelationFollowerListResponse, err error) {
+	resp, err = relationClient.RelationFollowerList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
 }
