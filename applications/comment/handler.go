@@ -19,3 +19,9 @@ func (s *CommentServiceImpl) CommentList(ctx context.Context, req *comment.Douyi
 	// TODO: Your code here...
 	return
 }
+
+// CommentCount implements the CommentServiceImpl interface.
+func (s *CommentServiceImpl) CommentCount(ctx context.Context, req *comment.DouyinCommentCountRequest) (resp *comment.DouyinCommentCountResponse, err error) {
+	// TODO: Your code here...
+	return
+}
