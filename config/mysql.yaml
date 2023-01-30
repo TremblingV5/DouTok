@@ -1,5 +1,9 @@
 host: "127.0.0.1"
 port: 3307
+<<<<<<< HEAD
 database: "test"
+=======
+database: "DouTok"
+>>>>>>> 88e4d588ab0e357b17e19dccbeda7cf64e8244af
 username: "root"
 password: "root"
