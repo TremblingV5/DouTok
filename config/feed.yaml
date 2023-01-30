@@ -30,3 +30,6 @@ MySQL:
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
+
+Snowflake:
+  Node: 50
