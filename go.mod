@@ -1,8 +1,9 @@
-module github.com/TremblingV5/DouTok
+module DouTok
 
 go 1.18
 
 require (
+	github.com/TremblingV5/DouTok v0.0.0-20230131104437-b8f667015224
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/cloudwego/hertz v0.5.1
@@ -24,13 +25,13 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.15.0
 	github.com/tsuna/gohbase v0.0.0-20221118171731-ee78e2db30c3
-	go.uber.org/zap v1.23.0
+	go.uber.org/zap v1.24.0
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.4.5
-	gorm.io/gen v0.3.19
+	gorm.io/gen v0.3.20
 	gorm.io/gorm v1.24.3
-	gorm.io/plugin/dbresolver v1.3.0
+	gorm.io/plugin/dbresolver v1.4.1
 )
 
 require (
@@ -101,7 +102,6 @@ require (
 	go.etcd.io/etcd/api/v3 v3.5.6 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.6 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.6 // indirect
-	go.etcd.io/etcd/server/v3 v3.5.6 // indirect
 	go.opentelemetry.io/contrib/instrumentation/runtime v0.32.0 // indirect
 	go.opentelemetry.io/contrib/propagators/b3 v1.9.0 // indirect
 	go.opentelemetry.io/contrib/propagators/ot v1.9.0 // indirect
