@@ -13,6 +13,7 @@ const (
 	AuthorizationFailedErrCode = 10004
 	BadRequestErrCode          = 10005
 	ErrBindErrCode             = 10006
+	InternalErrCode            = 10007
 )
 
 type ErrNo struct {
@@ -41,6 +42,7 @@ var (
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	BadRequest             = NewErrNo(BadRequestErrCode, "Request Failed")
 	ErrBind                = NewErrNo(ErrBindErrCode, "Error occurred while binding the request body to the struct")
+	InternalErr            = NewErrNo(InternalErrCode, "Internal server error")
 )
 
 // ConvertErr convert error to Errno

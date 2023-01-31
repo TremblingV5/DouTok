@@ -19,3 +19,9 @@ func (s *MessageServiceImpl) MessageAction(ctx context.Context, req *message.Dou
 	// TODO: Your code here...
 	return
 }
+
+// MessageFriendList implements the MessageServiceImpl interface.
+func (s *MessageServiceImpl) MessageFriendList(ctx context.Context, req *message.DouyinFriendLastMessageRequest) (resp *message.DouyinFriendLastMessageResponse, err error) {
+	// TODO: Your code here...
+	return
+}

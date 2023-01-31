@@ -20,7 +20,7 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinPublishActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildPublishActionResp(errno.ErrBind))
 		return
 	}
 
@@ -30,9 +30,10 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 		Data:  req.Data,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildPublishActionResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
 
@@ -43,7 +44,7 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinPublishListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
 		return
 	}
 
@@ -51,8 +52,9 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 		UserId: req.UserId,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildPublishListResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }

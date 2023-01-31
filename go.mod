@@ -17,7 +17,7 @@ require (
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
 	github.com/hertz-contrib/pprof v0.1.0
 	github.com/hertz-contrib/registry/etcd v0.0.0-20221226122036-3c451682dc72
-	github.com/kitex-contrib/obs-opentelemetry v0.0.0-20220602130216-69ec17b4ff8d
+	github.com/kitex-contrib/obs-opentelemetry v0.1.0
 	github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20221109071748-a433b0b57972
 	github.com/kitex-contrib/registry-etcd v0.1.0
 	github.com/sirupsen/logrus v1.9.0
@@ -62,7 +62,6 @@ require (
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
-	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/pprof v0.0.0-20220608213341-c488b8fa1db3 // indirect
@@ -103,14 +102,10 @@ require (
 	go.etcd.io/etcd/client/pkg/v3 v3.5.6 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.6 // indirect
 	go.etcd.io/etcd/server/v3 v3.5.6 // indirect
-	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/runtime v0.32.0 // indirect
 	go.opentelemetry.io/contrib/propagators/b3 v1.9.0 // indirect
-	go.opentelemetry.io/contrib/propagators/jaeger v1.7.0 // indirect
-	go.opentelemetry.io/contrib/propagators/opencensus v0.32.0 // indirect
 	go.opentelemetry.io/contrib/propagators/ot v1.9.0 // indirect
 	go.opentelemetry.io/otel v1.11.1 // indirect
-	go.opentelemetry.io/otel/bridge/opencensus v0.30.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/internal/retry v1.9.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric v0.31.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.31.0 // indirect

@@ -29,6 +29,7 @@ message User {
     int64 follow_count = 3; // 关注总数
     int64 follower_count = 4; // 粉丝总数
     bool is_follow = 5; // true-已关注，false-未关注
+    string avatar = 6; // 用户头像Url
 }
 
 service UserService{

@@ -13,6 +13,7 @@ import (
 type Client interface {
 	MessageChat(ctx context.Context, Req *message.DouyinMessageChatRequest, callOptions ...callopt.Option) (r *message.DouyinMessageChatResponse, err error)
 	MessageAction(ctx context.Context, Req *message.DouyinRelationActionRequest, callOptions ...callopt.Option) (r *message.DouyinRelationActionResponse, err error)
+	MessageFriendList(ctx context.Context, Req *message.DouyinFriendLastMessageRequest, callOptions ...callopt.Option) (r *message.DouyinFriendLastMessageResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -52,4 +53,9 @@ func (p *kMessageServiceClient) MessageChat(ctx context.Context, Req *message.Do
 func (p *kMessageServiceClient) MessageAction(ctx context.Context, Req *message.DouyinRelationActionRequest, callOptions ...callopt.Option) (r *message.DouyinRelationActionResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.MessageAction(ctx, Req)
+}
+
+func (p *kMessageServiceClient) MessageFriendList(ctx context.Context, Req *message.DouyinFriendLastMessageRequest, callOptions ...callopt.Option) (r *message.DouyinFriendLastMessageResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.MessageFriendList(ctx, Req)
 }
