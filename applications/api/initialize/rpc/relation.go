@@ -89,3 +89,15 @@ func RelationFollowerList(ctx context.Context, req *relation.DouyinRelationFollo
 	}
 	return resp, nil
 }
+
+// 传递 获取好友列表操作 的上下文, 并获取 RPC Server 端的响应.
+func RelationFriendList(ctx context.Context, req *relation.DouyinRelationFriendListRequest) (resp *relation.DouyinRelationFriendListResponse, err error) {
+	resp, err = relationClient.RelationFriendList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+	}
+	return resp, nil
+}
