@@ -6,11 +6,11 @@ import (
 	"time"
 )
 
-func (c RedisClient) Set(ctx context.Context, key string, value string, expire time.Duration) error {
+func (c *RedisClient) Set(ctx context.Context, key string, value string, expire time.Duration) error {
 	return c.Client.Set(ctx, key, value, expire).Err()
 }
 
-func (c RedisClient) SetObj(ctx context.Context, key string, value any, expire time.Duration) error {
+func (c *RedisClient) SetObj(ctx context.Context, key string, value any, expire time.Duration) error {
 	valueJson, err := json.Marshal(value)
 
 	if err != nil {
