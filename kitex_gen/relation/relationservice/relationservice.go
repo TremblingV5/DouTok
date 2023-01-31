@@ -25,6 +25,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"RelationAction":       kitex.NewMethodInfo(relationActionHandler, newRelationActionArgs, newRelationActionResult, false),
 		"RelationFollowList":   kitex.NewMethodInfo(relationFollowListHandler, newRelationFollowListArgs, newRelationFollowListResult, false),
 		"RelationFollowerList": kitex.NewMethodInfo(relationFollowerListHandler, newRelationFollowerListArgs, newRelationFollowerListResult, false),
+		"RelationFriendList":   kitex.NewMethodInfo(relationFriendListHandler, newRelationFriendListArgs, newRelationFriendListResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "relation",
@@ -349,6 +350,109 @@ func (p *RelationFollowerListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
+func relationFriendListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(relation.DouyinRelationFriendListRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(relation.RelationService).RelationFriendList(ctx, req)
+		if err != nil {
+			return err
+		}
+		if err := st.SendMsg(resp); err != nil {
+			return err
+		}
+	case *RelationFriendListArgs:
+		success, err := handler.(relation.RelationService).RelationFriendList(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*RelationFriendListResult)
+		realResult.Success = success
+	}
+	return nil
+}
+func newRelationFriendListArgs() interface{} {
+	return &RelationFriendListArgs{}
+}
+
+func newRelationFriendListResult() interface{} {
+	return &RelationFriendListResult{}
+}
+
+type RelationFriendListArgs struct {
+	Req *relation.DouyinRelationFriendListRequest
+}
+
+func (p *RelationFriendListArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, fmt.Errorf("No req in RelationFriendListArgs")
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *RelationFriendListArgs) Unmarshal(in []byte) error {
+	msg := new(relation.DouyinRelationFriendListRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var RelationFriendListArgs_Req_DEFAULT *relation.DouyinRelationFriendListRequest
+
+func (p *RelationFriendListArgs) GetReq() *relation.DouyinRelationFriendListRequest {
+	if !p.IsSetReq() {
+		return RelationFriendListArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *RelationFriendListArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+type RelationFriendListResult struct {
+	Success *relation.DouyinRelationFriendListResponse
+}
+
+var RelationFriendListResult_Success_DEFAULT *relation.DouyinRelationFriendListResponse
+
+func (p *RelationFriendListResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, fmt.Errorf("No req in RelationFriendListResult")
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *RelationFriendListResult) Unmarshal(in []byte) error {
+	msg := new(relation.DouyinRelationFriendListResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *RelationFriendListResult) GetSuccess() *relation.DouyinRelationFriendListResponse {
+	if !p.IsSetSuccess() {
+		return RelationFriendListResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *RelationFriendListResult) SetSuccess(x interface{}) {
+	p.Success = x.(*relation.DouyinRelationFriendListResponse)
+}
+
+func (p *RelationFriendListResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -384,6 +488,16 @@ func (p *kClient) RelationFollowerList(ctx context.Context, Req *relation.Douyin
 	_args.Req = Req
 	var _result RelationFollowerListResult
 	if err = p.c.Call(ctx, "RelationFollowerList", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) RelationFriendList(ctx context.Context, Req *relation.DouyinRelationFriendListRequest) (r *relation.DouyinRelationFriendListResponse, err error) {
+	var _args RelationFriendListArgs
+	_args.Req = Req
+	var _result RelationFriendListResult
+	if err = p.c.Call(ctx, "RelationFriendList", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

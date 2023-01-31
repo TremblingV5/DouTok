@@ -20,7 +20,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinCommentActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildCommendActionResp(errno.ErrBind))
 		return
 	}
 
@@ -31,9 +31,10 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := rpc.CommentAction(ctx, &rpcReq)
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildCommendActionResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
 
@@ -44,7 +45,7 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinCommentListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildCommendListResp(errno.ErrBind))
 		return
 	}
 
@@ -52,8 +53,9 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 		VideoId: req.VideoId,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildCommendListResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
