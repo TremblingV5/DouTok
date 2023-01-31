@@ -20,7 +20,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinFavoriteActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildFavoriteActionResp(errno.ErrBind))
 		return
 	}
 
@@ -29,9 +29,10 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 		ActionType: req.ActionType,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildFavoriteActionResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
 
@@ -42,7 +43,7 @@ func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinFavoriteListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildFavoriteListResp(errno.ErrBind))
 		return
 	}
 
@@ -50,8 +51,9 @@ func FavoriteList(ctx context.Context, c *app.RequestContext) {
 		UserId: req.UserId,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildFavoriteListResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }

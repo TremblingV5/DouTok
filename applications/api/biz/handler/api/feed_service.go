@@ -20,7 +20,7 @@ func GetUserFeed(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinFeedRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildGetUserFeedResp(errno.ErrBind))
 		return
 	}
 
@@ -28,8 +28,9 @@ func GetUserFeed(ctx context.Context, c *app.RequestContext) {
 		LatestTime: req.LatestTime,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildGetUserFeedResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
