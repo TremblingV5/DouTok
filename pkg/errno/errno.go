@@ -40,11 +40,7 @@ var (
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	BadRequest             = NewErrNo(BadRequestErrCode, "Request Failed")
-<<<<<<< HEAD
-	ErrBind                = NewErrNo(ErrBind, "Error occurred while binding the request body to the struct")
-=======
 	ErrBind                = NewErrNo(ErrBindErrCode, "Error occurred while binding the request body to the struct")
->>>>>>> 04ce33b0b8f7fc06f7d86e0bf6dcb54b331f85e2
 )
 
 // ConvertErr convert error to Errno
