@@ -20,7 +20,7 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinMessageChatRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildMessageChatResp(errno.ErrBind))
 		return
 	}
 
@@ -28,9 +28,10 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 		ToUserId: req.ToUserId,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildMessageChatResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
 
@@ -41,7 +42,7 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinMessageActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildMessageActionResp(errno.ErrBind))
 		return
 	}
 
@@ -51,8 +52,9 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 		Content:    req.Content,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }

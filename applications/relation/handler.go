@@ -25,3 +25,9 @@ func (s *RelationServiceImpl) RelationFollowerList(ctx context.Context, req *rel
 	// TODO: Your code here...
 	return
 }
+
+// RelationFriendList implements the RelationServiceImpl interface.
+func (s *RelationServiceImpl) RelationFriendList(ctx context.Context, req *relation.DouyinRelationFriendListRequest) (resp *relation.DouyinRelationFriendListResponse, err error) {
+	// TODO: Your code here...
+	return
+}
