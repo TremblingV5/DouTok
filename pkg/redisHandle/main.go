@@ -11,11 +11,11 @@ type RedisClient struct {
 	Client *redis.Client
 }
 
-func InitRedis(dsn string, pwd string, dbs map[string]int) (map[string]RedisClient, error) {
-	redisCaches := make(map[string]RedisClient)
+func InitRedis(dsn string, pwd string, dbs map[string]int) (map[string]*RedisClient, error) {
+	redisCaches := make(map[string]*RedisClient)
 
 	for k, v := range dbs {
-		redisCaches[k] = RedisClient{
+		redisCaches[k] = &RedisClient{
 			Client: redis.NewClient(&redis.Options{
 				Addr:     dsn,
 				Password: pwd,
