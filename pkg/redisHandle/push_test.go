@@ -30,9 +30,22 @@ func TestPush(t *testing.T) {
 		panic(err)
 	}
 
+	// 一次性插入多个value
+	if err := redisCaches[constants.DbDefault].RPush(context.Background(), "test_push", "push1", "push2", "push3"); err != nil {
+		panic(err)
+	}
+
+	data := []string{
+		"push4", "push5", "push6",
+	}
+	// 一次性插入多个value
+	if err := redisCaches[constants.DbDefault].LPush(context.Background(), "test_push", data...); err != nil {
+		panic(err)
+	}
+
 	res, _ := redisCaches[constants.DbDefault].ListSize(context.Background(), "test_push")
 
-	if init+2 != res {
+	if init+8 != res {
 		panic("Defeat")
 	}
 
