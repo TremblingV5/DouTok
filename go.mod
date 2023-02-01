@@ -1,9 +1,8 @@
-module DouTok
+module github.com/TremblingV5/DouTok
 
 go 1.18
 
 require (
-	github.com/TremblingV5/DouTok v0.0.0-20230131104437-b8f667015224
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/cloudwego/hertz v0.5.1
@@ -62,7 +61,7 @@ require (
 	github.com/go-zookeeper/zk v1.0.3 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
+	github.com/golang-jwt/jwt/v4 v4.4.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/pprof v0.0.0-20220608213341-c488b8fa1db3 // indirect
@@ -125,7 +124,7 @@ require (
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
-	golang.org/x/time v0.3.0 // indirect
+	golang.org/x/time v0.1.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/genproto v0.0.0-20221227171554-f9683d7f8bef // indirect
 	google.golang.org/grpc v1.52.0 // indirect
