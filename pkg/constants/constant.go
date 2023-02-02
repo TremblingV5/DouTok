@@ -6,4 +6,6 @@ const (
 	DbDefault = "default"
 
 	ErrConfigFileNotFound = "Config file not found"
+
+	KeySep = ":"
 )

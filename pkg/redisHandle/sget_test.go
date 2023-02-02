@@ -6,6 +6,7 @@ import (
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
+	"github.com/TremblingV5/DouTok/pkg/utils"
 	"testing"
 )
 
@@ -29,7 +30,14 @@ func TestSGet(t *testing.T) {
 		return
 	}
 	fmt.Println(res)
-	if r, err := rd.SGet(context.Background(), "test_key"); err != nil {
+	k := utils.KeyGen(1, 1, 2)
+	fmt.Println(k)
+	if r, err := rd.SGet(context.Background(), k); err != nil {
+		panic(err)
+	} else {
+		fmt.Println(r)
+	}
+	if r, err := rd.SGetObj(context.Background(), k); err != nil {
 		panic(err)
 	} else {
 		fmt.Println(r)

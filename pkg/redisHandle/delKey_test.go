@@ -4,14 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/TremblingV5/DouTok/config/configStruct"
-	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/TremblingV5/DouTok/pkg/utils"
 	"testing"
 )
 
-func TestRedisClient_SAdd(t *testing.T) {
+func TestKeys(t *testing.T) {
 	redisConfig := configStruct.RedisConfig{}
 	err := configurator.InitConfig(&redisConfig, "relation_redis.yaml")
 	if err != nil {
@@ -30,11 +28,7 @@ func TestRedisClient_SAdd(t *testing.T) {
 		return
 	}
 	fmt.Println(res)
-	k := utils.KeyGen(1, 1, 2)
-	fmt.Println(k)
-
-	if err := rd.SAddObj(context.Background(), k, &user.User{Name: "t1", Id: 1000, FollowerCount: 1, FollowCount: 1, IsFollow: true},
-		&user.User{Name: "t2", Id: 1001, FollowerCount: 1, FollowCount: 1, IsFollow: true}); err != nil {
+	if err := rd.DelKey(context.Background(), "test_keyss"); err != nil {
 		panic(err)
 	}
 }
