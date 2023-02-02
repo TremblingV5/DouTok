@@ -36,6 +36,7 @@ message User {
   int64 follow_count = 3; // 关注总数
   int64 follower_count = 4; // 粉丝总数
   bool is_follow = 5; // true-已关注，false-未关注
+  string avatar = 6; // 用户头像Url
 }
 
 service UserService{
@@ -52,10 +53,9 @@ service UserService{
 
 // relation
 message DouyinRelationActionRequest {
-  int64 user_id = 1; // 用户id
-  string token = 2; // 用户鉴权token
-  int64 to_user_id = 3; // 对方用户id
-  int32 action_type = 4; // 1-关注，2-取消关注
+  string token = 1; // 用户鉴权token
+  int64 to_user_id = 2; // 对方用户id
+  int32 action_type = 3; // 1-关注，2-取消关注
 }
 
 message DouyinRelationActionResponse {
@@ -93,7 +93,13 @@ message DouyinRelationFriendListRequest {
 message DouyinRelationFriendListResponse {
   int32 status_code = 1; // 状态码，0-成功，其他值-失败
   string status_msg = 2; // 返回状态描述
-  repeated User user_list = 3; // 用户列表
+  repeated FriendUser user_list = 3; // 用户列表
+}
+
+message FriendUser {
+  User user = 1; // 评论用户信息
+  string message = 2; // 和该好友的最新聊天消息
+  int64 msgType = 3; // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息（用于聊天框显示一条信息）
 }
 
 service RelationService{
@@ -189,9 +195,11 @@ message DouyinMessageChatResponse {
 }
 
 message Message {
-  int64 id = 1;
-  string content = 2;
-  string create_time = 3;
+  int64 id = 1; // 消息id
+  int64 to_user_id = 2; // 该消息接收者的id
+  int64 from_user_id =3; // 该消息发送者的id
+  string content = 4; // 消息内容
+  string create_time = 5; // 消息创建时间
 }
 
 message DouyinMessageActionRequest {
@@ -217,10 +225,9 @@ service MessageService {
 
 // favorite
 message DouyinFavoriteActionRequest {
-  int64 user_id = 1; // 用户id
-  string token = 2; // 用户鉴权token
-  int64 video_id = 3; // 视频id
-  int32 action_type = 4; // 1-点赞，2-取消点赞
+  string token = 1; // 用户鉴权token
+  int64 video_id = 2; // 视频id
+  int32 action_type = 3; // 1-点赞，2-取消点赞
 }
 
 message DouyinFavoriteActionResponse {
@@ -250,12 +257,11 @@ service FavoriteService{
 
 // comment
 message DouyinCommentActionRequest {
-  int64 user_id = 1; // 用户id
-  string token = 2; // 用户鉴权token
-  int64 video_id = 3; // 视频id
-  int32 action_type = 4; // 1-发布评论，2-删除评论
-  string comment_text = 5; // 用户填写的评论内容，在action_type=1的时候使用
-  int64 comment_id = 6; // 要删除的评论id，在action_type=2的时候使用
+  string token = 1; // 用户鉴权token
+  int64 video_id = 2; // 视频id
+  int32 action_type = 3; // 1-发布评论，2-删除评论
+  string comment_text = 4; // 用户填写的评论内容，在action_type=1的时候使用
+  int64 comment_id = 5; // 要删除的评论id，在action_type=2的时候使用
 }
 
 message DouyinCommentActionResponse {

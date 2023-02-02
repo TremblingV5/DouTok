@@ -20,12 +20,12 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinUserRegisterRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildUserRegisterResp(errno.ErrBind))
 		return
 	}
 
 	if len(req.Username) == 0 || len(req.Password) == 0 {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildUserRegisterResp(errno.ErrBind))
 		return
 	}
 
@@ -34,9 +34,9 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		Password: req.Password,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildUserRegisterResp(errno.ConvertErr(err)))
 	}
-
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
 
@@ -65,7 +65,7 @@ func GetUserById(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinUserRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildGetUserResp(errno.ErrBind))
 		return
 	}
 
@@ -73,8 +73,9 @@ func GetUserById(ctx context.Context, c *app.RequestContext) {
 		UserId: req.UserId,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildGetUserResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }

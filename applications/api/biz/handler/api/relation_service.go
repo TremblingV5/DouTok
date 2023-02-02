@@ -20,8 +20,7 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinRelationActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildRelationActionResp(errno.ErrBind))
 		return
 	}
 
@@ -31,9 +30,10 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 	}
 	resp, err := rpc.RelationAction(ctx, &rpcReq)
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildRelationActionResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
 
@@ -44,7 +44,7 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinRelationFollowListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildRelationFollowListResp(errno.ErrBind))
 		return
 	}
 
@@ -52,9 +52,10 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 		UserId: req.UserId,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildRelationFollowListResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
 
@@ -65,7 +66,7 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinRelationFollowerListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildRelationFollowerListResp(errno.ErrBind))
 		return
 	}
 
@@ -73,9 +74,10 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 		UserId: req.UserId,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildRelationFollowerListResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
 
@@ -87,16 +89,17 @@ func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinRelationFriendListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		handler.SendResponse(c, errno.ErrBind)
+		handler.SendResponse(c, handler.BuildRelationFriendListResp(errno.ErrBind))
 		return
 	}
 
-	resp, err := rpc.RelationFollowerList(ctx, &relation.DouyinRelationFollowerListRequest{
+	resp, err := rpc.RelationFriendList(ctx, &relation.DouyinRelationFriendListRequest{
 		UserId: req.UserId,
 	})
 	if err != nil {
-		handler.SendResponse(c, errno.ConvertErr(err))
+		handler.SendResponse(c, handler.BuildRelationFriendListResp(errno.ConvertErr(err)))
 		return
 	}
+	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
 }
