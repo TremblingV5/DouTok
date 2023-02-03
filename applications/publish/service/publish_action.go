@@ -5,11 +5,13 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/TremblingV5/DouTok/applications/publish/dal/model"
+	"github.com/TremblingV5/DouTok/applications/publish/misc.go"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
-	"github.com/TremblingV5/DouTok/pkg/misc"
+	"github.com/TremblingV5/DouTok/pkg/utils"
 )
 
 func SavePublish(user_id int64, title string, data []byte) error {
@@ -48,6 +50,7 @@ func SavePublish(user_id int64, title string, data []byte) error {
 
 func SaveVideo2DB(user_id uint64, title string, play_url string, cover_url string) (uint64, error) {
 	newVideo := model.Video{
+		ID:       uint64(utils.GetSnowFlakeId().Int64()),
 		AuthorID: user_id,
 		Title:    title,
 		VideoUrl: play_url,
@@ -76,8 +79,9 @@ func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cove
 	// 	Timestamp:  timestamp,
 	// }
 
-	publish_rowkey := misc.LFill(fmt.Sprint(user_id), 6) + timestamp
-	feed_rowkey := timestamp + misc.LFill(fmt.Sprint(user_id), 6)
+	timestamp_int, _ := strconv.Atoi(timestamp)
+	publish_rowkey := misc.FillUserId(fmt.Sprint(user_id)) + misc.GetTimeRebound(int64(timestamp_int))
+	feed_rowkey := misc.GetTimeRebound(int64(timestamp_int)) + misc.FillUserId(fmt.Sprint(user_id))
 
 	hbData := map[string]map[string][]byte{
 		"data": {
@@ -87,6 +91,7 @@ func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cove
 			"title":       []byte(title),
 			"video_url":   []byte(play_url),
 			"cover_url":   []byte(cover_url),
+			"timestamp":   []byte(timestamp),
 		},
 	}
 

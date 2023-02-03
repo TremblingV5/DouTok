@@ -6,9 +6,9 @@ import (
 )
 
 func InitRPCConfig() error {
-	var config configStruct.PublishConfig
+	var config configStruct.FeedConfig
 	configurator.InitConfig(
-		&config, "publish.yaml",
+		&config, "feed.yaml",
 	)
 
 	ClientConfig = &config
@@ -17,6 +17,8 @@ func InitRPCConfig() error {
 }
 
 func InitPRCClient() error {
+	InitCommentRpc()
+	InitFavoriteRpc()
 	InitUserRpc()
 
 	return nil
