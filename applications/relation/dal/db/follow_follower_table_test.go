@@ -7,7 +7,7 @@ import (
 )
 
 func TestRelation(t *testing.T) {
-	Conn()
+	
 	//Insert2FollowTable(6, 5)
 	//err := Insert2FollowerTable(5, 4)
 	//if err != nil {

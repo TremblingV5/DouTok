@@ -1,7 +1,11 @@
 package redis
 
-import "testing"
+import (
+	"github.com/TremblingV5/DouTok/applications/relation/conf"
+	"testing"
+)
 
 func TestConnRedis(t *testing.T) {
-	Conn()
+	v := conf.InitConfig("./", "relation")
+	Conn(v)
 }

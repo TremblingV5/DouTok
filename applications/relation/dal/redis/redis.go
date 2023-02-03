@@ -1,35 +1,34 @@
 package redis
 
 import (
+	"context"
 	"fmt"
-	"github.com/TremblingV5/DouTok/config/configStruct"
-	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/utils"
+	"github.com/spf13/viper"
 )
 
 var RD *redishandle.RedisClient
 
-func Conn() {
-	redisConfig := configStruct.RedisConfig{}
-	err := configurator.InitConfig(&redisConfig, "relation_redis.yaml")
-	if err != nil {
-		fmt.Println(err)
-		return
+func Conn(v *viper.Viper) {
+	host := v.GetString("redis.host")
+	port := v.GetString("redis.port")
+	password := v.GetString("redis.password")
+	d := v.GetStringMap("redis.databases")
+	database := make(map[string]int)
+	//fmt.Println(host, port, d)
+	for k, val := range d {
+		database[k] = val.(int)
 	}
-
-	clientCache, err := redishandle.InitRedis(redisConfig.Host+":"+redisConfig.Port, redisConfig.Password, redisConfig.Databases)
+	clientCache, err := redishandle.InitRedis(host+":"+port, password, database)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	RD = clientCache[constants.DbDefault]
-
-}
-
-func init() {
-	Conn()
+	r, err := RD.Client.Ping(context.Background()).Result()
+	fmt.Println(r)
 }
 
 func Keys(userId, toUserId int64) []string {

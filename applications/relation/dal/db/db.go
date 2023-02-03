@@ -2,30 +2,27 @@ package db
 
 import (
 	"fmt"
-	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
-	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-func Conn() {
-	mysqlCig := configStruct.MySQLConfig{}
-	err := configurator.InitConfig(&mysqlCig, "relation_mysql.yaml")
-	if err != nil {
-		fmt.Println(err)
-	}
-	gormDB, err := mysqlIniter.InitDb(mysqlCig.Username, mysqlCig.Password, mysqlCig.Host, mysqlCig.Port, mysqlCig.Database)
+func Conn(v *viper.Viper) {
+	host := v.GetString("mysql.host")
+	port := v.GetString("mysql.port")
+	password := v.GetString("mysql.password")
+	username := v.GetString("mysql.username")
+	database := v.GetString("mysql.database")
+
+	gormDB, err := mysqlIniter.InitDb(username, password, host, port, database)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	DB = gormDB
-	//DB.AutoMigrate(&Follower{}, &Follow{}, &user.User{})
-}
-func init() {
-	Conn()
 	DB.AutoMigrate(&Follower{}, &Follow{}, &user.User{})
+	fmt.Println(DB.Name())
 }

@@ -18,7 +18,7 @@ func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.
 				resp.StatusMsg = "已关注,不要重复关注"
 				resp.StatusCode = 1
 			}
-			return
+			return resp, nil
 		}
 		//再删除缓存
 		k := redis.Keys(req.UserId, req.ToUserId)
@@ -33,7 +33,7 @@ func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.
 				resp.StatusMsg = "不能取关未关注用户"
 				resp.StatusCode = 1
 			}
-			return
+			return resp, nil
 		}
 		//再删除缓存
 		k := redis.Keys(req.UserId, req.ToUserId)

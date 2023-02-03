@@ -4,18 +4,26 @@ import (
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/errno"
 	"gorm.io/gorm"
+	"gorm.io/plugin/soft_delete"
+	"time"
 )
 
 type Follow struct {
-	gorm.Model
-	UserId   int64 `gorm:"uniqueIndex:idx_user_follow"`
-	FollowId int64 `gorm:"uniqueIndex:idx_user_follow"`
+	ID        uint `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt soft_delete.DeletedAt `gorm:"UniqueIndex:idx_user_follow_deleteAt"`
+	UserId    int64                 `gorm:"UniqueIndex:idx_user_follow_deleteAt"`
+	FollowId  int64                 `gorm:"UniqueIndex:idx_user_follow_deleteAt"`
 }
 
 type Follower struct {
-	gorm.Model
-	UserId     int64 `gorm:"uniqueIndex:idx_user_follower"`
-	FollowerId int64 `gorm:"uniqueIndex:idx_user_follower"`
+	ID         uint `gorm:"primarykey"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	DeletedAt  soft_delete.DeletedAt `gorm:"UniqueIndex:idx_user_follow_deleteAt"`
+	UserId     int64                 `gorm:"UniqueIndex:idx_user_follow_deleteAt"`
+	FollowerId int64                 `gorm:"UniqueIndex:idx_user_follow_deleteAt"`
 }
 
 func Insert2FollowTable(userID, followID int64) error {
@@ -34,6 +42,7 @@ func Insert2FollowerTable(userID, followerID int64) error {
 }
 
 func AddFollowNum(userID int64) error {
+
 	return DB.Model(&user.User{}).Where("id = ?", userID).Update("follow_count", gorm.Expr("follow_count + ?", 1)).Error
 }
 
@@ -42,7 +51,7 @@ func AddFollowerNum(userID int64) error {
 }
 
 func DeleteOnFollowTable(userID, followID int64) error {
-	return DB.Where("user_id = ? and follow_id = ?", userID, followID).Delete(&Follow{}).Error
+	return DB.Model(&Follow{}).Where("user_id = ? and follow_id = ?", userID, followID).Delete(&Follow{}).Error
 }
 
 func DeleteOnFollowerTable(userID, followerID int64) error {
