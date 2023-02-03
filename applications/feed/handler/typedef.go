@@ -1,4 +1,3 @@
 package handler
 
-type FeedServiceImpl struct {
-}
+type FeedServiceImpl struct{}
