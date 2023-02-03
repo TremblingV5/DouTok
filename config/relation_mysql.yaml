@@ -1,0 +1,5 @@
+host: "172.21.176.1"
+port: 3306
+database: "godsu"
+username: "root"
+password: "root"

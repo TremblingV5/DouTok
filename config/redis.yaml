@@ -3,3 +3,5 @@ port: 6379
 password: "root"
 databases:
     default: 0
+    feedlist: 1
+    feedmarkedtime: 2
