@@ -1,0 +1,32 @@
+version: "3"
+
+networks:
+    total:
+        driver: bridge
+
+services:
+    hbase:
+        # image: harisekhon/hbase:2.1
+        build: ./hbase
+        container_name: hbase
+        hostname: hb-master
+        networks:
+            - total
+        ports:
+            - "16000:16000"
+            - "16010:16010"
+            - "16020:16020"
+            - "16030:16030"
+            - "16201:16201"
+            - "9090:9090"
+            - "9095:9095"
+            - "2181:2181"
+        volumes:
+            # - hb_vol:/hbase-data
+            - ./hbase-data:/hbase-data
+            # - ./hbase-conf:/hbase-2.1.3/conf
+            # - ./hbase-conf:/hbase/conf
+            - ./hbase-zoo-data:/zookeeper-data
+        environment:
+            - HBASE_CONF_hbase_cluster_distributed=false
+        restart: always
