@@ -24,7 +24,7 @@ func (s *RelationServiceImpl) RelationFollowList(ctx context.Context, req *relat
 		return nil, err
 	}
 	//跟新缓存
-	redis.RD.SAddObj(ctx, k, users...)
+	go redis.RD.SAddObj(ctx, k, users...)
 
 	return &relation.DouyinRelationFollowListResponse{StatusMsg: "success", StatusCode: 0, UserList: users}, nil
 }

@@ -11,7 +11,7 @@ import (
 
 var RD *redishandle.RedisClient
 
-func Conn(v *viper.Viper) {
+func Conn(v *viper.Viper) error {
 	host := v.GetString("redis.host")
 	port := v.GetString("redis.port")
 	password := v.GetString("redis.password")
@@ -23,12 +23,12 @@ func Conn(v *viper.Viper) {
 	}
 	clientCache, err := redishandle.InitRedis(host+":"+port, password, database)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 	RD = clientCache[constants.DbDefault]
-	r, err := RD.Client.Ping(context.Background()).Result()
+	r, _ := RD.Client.Ping(context.Background()).Result()
 	fmt.Println(r)
+	return nil
 }
 
 func Keys(userId, toUserId int64) []string {

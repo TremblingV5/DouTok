@@ -56,27 +56,29 @@ func initRelationRpc(Config *viper.Viper) {
 }
 
 func main() {
-	v := conf.InitConfig("./config", "relation")
+	v, err := conf.InitConfig("./config", "relation")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	initRelationRpc(v)
-	resp3, err := relationClient.RelationAction(context.Background(), &relation.DouyinRelationActionRequest{
+	_, err = relationClient.RelationAction(context.Background(), &relation.DouyinRelationActionRequest{
 		UserId:     3,
 		ToUserId:   2,
-		ActionType: 1,
+		ActionType: 2,
 	})
 
-	fmt.Println(resp3)
-	resp1, err := relationClient.RelationFollowList(context.Background(), &relation.DouyinRelationFollowListRequest{
+	_, err = relationClient.RelationFollowList(context.Background(), &relation.DouyinRelationFollowListRequest{
 		UserId: 1,
 	})
 
-	fmt.Println(resp1)
-	resp2, err := relationClient.RelationFollowerList(context.Background(), &relation.DouyinRelationFollowerListRequest{
+	_, err = relationClient.RelationFollowerList(context.Background(), &relation.DouyinRelationFollowerListRequest{
 		UserId: 2,
 	})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(resp2)
 
 }

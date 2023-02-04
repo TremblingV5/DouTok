@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	"github.com/spf13/viper"
@@ -10,7 +9,7 @@ import (
 
 var DB *gorm.DB
 
-func Conn(v *viper.Viper) {
+func Conn(v *viper.Viper) error {
 	host := v.GetString("mysql.host")
 	port := v.GetString("mysql.port")
 	password := v.GetString("mysql.password")
@@ -19,10 +18,12 @@ func Conn(v *viper.Viper) {
 
 	gormDB, err := mysqlIniter.InitDb(username, password, host, port, database)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 	DB = gormDB
-	DB.AutoMigrate(&Follower{}, &Follow{}, &user.User{})
-	fmt.Println(DB.Name())
+	if err := DB.AutoMigrate(&Follower{}, &Follow{}, &user.User{}); err != nil {
+		return err
+	}
+	return nil
+
 }
