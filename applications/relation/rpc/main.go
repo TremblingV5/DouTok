@@ -40,6 +40,7 @@ func initRelationRpc(Config *viper.Viper) {
 		ServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
+		//多路复用会报错
 		//client.WithMuxConnection(1),                       // mux
 		client.WithRPCTimeout(30*time.Second),             // rpc timeout
 		client.WithConnectTimeout(30000*time.Millisecond), // conn timeout
