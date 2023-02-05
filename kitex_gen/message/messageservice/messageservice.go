@@ -250,7 +250,7 @@ func messageFriendListHandler(ctx context.Context, handler interface{}, arg, res
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
-		req := new(message.DouyinFriendLastMessageRequest)
+		req := new(message.DouyinFriendListMessageRequest)
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
@@ -280,7 +280,7 @@ func newMessageFriendListResult() interface{} {
 }
 
 type MessageFriendListArgs struct {
-	Req *message.DouyinFriendLastMessageRequest
+	Req *message.DouyinFriendListMessageRequest
 }
 
 func (p *MessageFriendListArgs) Marshal(out []byte) ([]byte, error) {
@@ -291,7 +291,7 @@ func (p *MessageFriendListArgs) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *MessageFriendListArgs) Unmarshal(in []byte) error {
-	msg := new(message.DouyinFriendLastMessageRequest)
+	msg := new(message.DouyinFriendListMessageRequest)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -299,9 +299,9 @@ func (p *MessageFriendListArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var MessageFriendListArgs_Req_DEFAULT *message.DouyinFriendLastMessageRequest
+var MessageFriendListArgs_Req_DEFAULT *message.DouyinFriendListMessageRequest
 
-func (p *MessageFriendListArgs) GetReq() *message.DouyinFriendLastMessageRequest {
+func (p *MessageFriendListArgs) GetReq() *message.DouyinFriendListMessageRequest {
 	if !p.IsSetReq() {
 		return MessageFriendListArgs_Req_DEFAULT
 	}
@@ -313,10 +313,10 @@ func (p *MessageFriendListArgs) IsSetReq() bool {
 }
 
 type MessageFriendListResult struct {
-	Success *message.DouyinFriendLastMessageResponse
+	Success *message.DouyinFriendListMessageResponse
 }
 
-var MessageFriendListResult_Success_DEFAULT *message.DouyinFriendLastMessageResponse
+var MessageFriendListResult_Success_DEFAULT *message.DouyinFriendListMessageResponse
 
 func (p *MessageFriendListResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
@@ -326,7 +326,7 @@ func (p *MessageFriendListResult) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *MessageFriendListResult) Unmarshal(in []byte) error {
-	msg := new(message.DouyinFriendLastMessageResponse)
+	msg := new(message.DouyinFriendListMessageResponse)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -334,7 +334,7 @@ func (p *MessageFriendListResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *MessageFriendListResult) GetSuccess() *message.DouyinFriendLastMessageResponse {
+func (p *MessageFriendListResult) GetSuccess() *message.DouyinFriendListMessageResponse {
 	if !p.IsSetSuccess() {
 		return MessageFriendListResult_Success_DEFAULT
 	}
@@ -342,7 +342,7 @@ func (p *MessageFriendListResult) GetSuccess() *message.DouyinFriendLastMessageR
 }
 
 func (p *MessageFriendListResult) SetSuccess(x interface{}) {
-	p.Success = x.(*message.DouyinFriendLastMessageResponse)
+	p.Success = x.(*message.DouyinFriendListMessageResponse)
 }
 
 func (p *MessageFriendListResult) IsSetSuccess() bool {
@@ -379,7 +379,7 @@ func (p *kClient) MessageAction(ctx context.Context, Req *message.DouyinRelation
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) MessageFriendList(ctx context.Context, Req *message.DouyinFriendLastMessageRequest) (r *message.DouyinFriendLastMessageResponse, err error) {
+func (p *kClient) MessageFriendList(ctx context.Context, Req *message.DouyinFriendListMessageRequest) (r *message.DouyinFriendListMessageResponse, err error) {
 	var _args MessageFriendListArgs
 	_args.Req = Req
 	var _result MessageFriendListResult
