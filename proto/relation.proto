@@ -49,6 +49,8 @@ message FriendUser {
     user.User user = 1; // 评论用户信息
     string message = 2; // 和该好友的最新聊天消息
     int64 msgType = 3; // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息（用于聊天框显示一条信息）
+}
+
 message douyin_relation_count_request {
     int64 user_id = 1;
 }
