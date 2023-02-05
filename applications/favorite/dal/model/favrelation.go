@@ -5,3 +5,8 @@ type FavRelation struct {
 	VideoId uint64
 	Status  bool
 }
+
+type VideoCount struct {
+	VideoId  uint64
+	FavCount uint64
+}

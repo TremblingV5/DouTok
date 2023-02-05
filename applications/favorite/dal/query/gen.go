@@ -18,17 +18,20 @@ import (
 var (
 	Q           = new(Query)
 	FavRelation *favRelation
+	VideoCount  *videoCount
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 	FavRelation = &Q.FavRelation
+	VideoCount = &Q.VideoCount
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:          db,
 		FavRelation: newFavRelation(db, opts...),
+		VideoCount:  newVideoCount(db, opts...),
 	}
 }
 
@@ -36,6 +39,7 @@ type Query struct {
 	db *gorm.DB
 
 	FavRelation favRelation
+	VideoCount  videoCount
 }
 
 func (q *Query) Available() bool { return q.db != nil }
@@ -44,6 +48,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:          db,
 		FavRelation: q.FavRelation.clone(db),
+		VideoCount:  q.VideoCount.clone(db),
 	}
 }
 
@@ -59,16 +64,19 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:          db,
 		FavRelation: q.FavRelation.replaceDB(db),
+		VideoCount:  q.VideoCount.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
 	FavRelation IFavRelationDo
+	VideoCount  IVideoCountDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
 		FavRelation: q.FavRelation.WithContext(ctx),
+		VideoCount:  q.VideoCount.WithContext(ctx),
 	}
 }
 

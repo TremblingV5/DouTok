@@ -33,7 +33,9 @@ func main() {
 
 	g.UseDB(db)
 	g.ApplyBasic(model.FavRelation{})
+	g.ApplyBasic(model.VideoCount{})
 	g.ApplyInterface(func() {}, model.FavRelation{})
+	g.ApplyInterface(func() {}, model.VideoCount{})
 
 	g.Execute()
 }
