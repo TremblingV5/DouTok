@@ -24,6 +24,8 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	methods := map[string]kitex.MethodInfo{
 		"FavoriteAction": kitex.NewMethodInfo(favoriteActionHandler, newFavoriteActionArgs, newFavoriteActionResult, false),
 		"FavoriteList":   kitex.NewMethodInfo(favoriteListHandler, newFavoriteListArgs, newFavoriteListResult, false),
+		"IsFavorite":     kitex.NewMethodInfo(isFavoriteHandler, newIsFavoriteArgs, newIsFavoriteResult, false),
+		"FavoriteCount":  kitex.NewMethodInfo(favoriteCountHandler, newFavoriteCountArgs, newFavoriteCountResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "favorite",
@@ -245,6 +247,212 @@ func (p *FavoriteListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
+func isFavoriteHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(favorite.DouyinIsFavoriteRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(favorite.FavoriteService).IsFavorite(ctx, req)
+		if err != nil {
+			return err
+		}
+		if err := st.SendMsg(resp); err != nil {
+			return err
+		}
+	case *IsFavoriteArgs:
+		success, err := handler.(favorite.FavoriteService).IsFavorite(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*IsFavoriteResult)
+		realResult.Success = success
+	}
+	return nil
+}
+func newIsFavoriteArgs() interface{} {
+	return &IsFavoriteArgs{}
+}
+
+func newIsFavoriteResult() interface{} {
+	return &IsFavoriteResult{}
+}
+
+type IsFavoriteArgs struct {
+	Req *favorite.DouyinIsFavoriteRequest
+}
+
+func (p *IsFavoriteArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, fmt.Errorf("No req in IsFavoriteArgs")
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *IsFavoriteArgs) Unmarshal(in []byte) error {
+	msg := new(favorite.DouyinIsFavoriteRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var IsFavoriteArgs_Req_DEFAULT *favorite.DouyinIsFavoriteRequest
+
+func (p *IsFavoriteArgs) GetReq() *favorite.DouyinIsFavoriteRequest {
+	if !p.IsSetReq() {
+		return IsFavoriteArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *IsFavoriteArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+type IsFavoriteResult struct {
+	Success *favorite.DouyinIsFavoriteResponse
+}
+
+var IsFavoriteResult_Success_DEFAULT *favorite.DouyinIsFavoriteResponse
+
+func (p *IsFavoriteResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, fmt.Errorf("No req in IsFavoriteResult")
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *IsFavoriteResult) Unmarshal(in []byte) error {
+	msg := new(favorite.DouyinIsFavoriteResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *IsFavoriteResult) GetSuccess() *favorite.DouyinIsFavoriteResponse {
+	if !p.IsSetSuccess() {
+		return IsFavoriteResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *IsFavoriteResult) SetSuccess(x interface{}) {
+	p.Success = x.(*favorite.DouyinIsFavoriteResponse)
+}
+
+func (p *IsFavoriteResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func favoriteCountHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(favorite.DouyinFavoriteCountRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(favorite.FavoriteService).FavoriteCount(ctx, req)
+		if err != nil {
+			return err
+		}
+		if err := st.SendMsg(resp); err != nil {
+			return err
+		}
+	case *FavoriteCountArgs:
+		success, err := handler.(favorite.FavoriteService).FavoriteCount(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*FavoriteCountResult)
+		realResult.Success = success
+	}
+	return nil
+}
+func newFavoriteCountArgs() interface{} {
+	return &FavoriteCountArgs{}
+}
+
+func newFavoriteCountResult() interface{} {
+	return &FavoriteCountResult{}
+}
+
+type FavoriteCountArgs struct {
+	Req *favorite.DouyinFavoriteCountRequest
+}
+
+func (p *FavoriteCountArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, fmt.Errorf("No req in FavoriteCountArgs")
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *FavoriteCountArgs) Unmarshal(in []byte) error {
+	msg := new(favorite.DouyinFavoriteCountRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var FavoriteCountArgs_Req_DEFAULT *favorite.DouyinFavoriteCountRequest
+
+func (p *FavoriteCountArgs) GetReq() *favorite.DouyinFavoriteCountRequest {
+	if !p.IsSetReq() {
+		return FavoriteCountArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *FavoriteCountArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+type FavoriteCountResult struct {
+	Success *favorite.DouyinFavoriteCountResponse
+}
+
+var FavoriteCountResult_Success_DEFAULT *favorite.DouyinFavoriteCountResponse
+
+func (p *FavoriteCountResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, fmt.Errorf("No req in FavoriteCountResult")
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *FavoriteCountResult) Unmarshal(in []byte) error {
+	msg := new(favorite.DouyinFavoriteCountResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *FavoriteCountResult) GetSuccess() *favorite.DouyinFavoriteCountResponse {
+	if !p.IsSetSuccess() {
+		return FavoriteCountResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *FavoriteCountResult) SetSuccess(x interface{}) {
+	p.Success = x.(*favorite.DouyinFavoriteCountResponse)
+}
+
+func (p *FavoriteCountResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -270,6 +478,26 @@ func (p *kClient) FavoriteList(ctx context.Context, Req *favorite.DouyinFavorite
 	_args.Req = Req
 	var _result FavoriteListResult
 	if err = p.c.Call(ctx, "FavoriteList", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) IsFavorite(ctx context.Context, Req *favorite.DouyinIsFavoriteRequest) (r *favorite.DouyinIsFavoriteResponse, err error) {
+	var _args IsFavoriteArgs
+	_args.Req = Req
+	var _result IsFavoriteResult
+	if err = p.c.Call(ctx, "IsFavorite", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) FavoriteCount(ctx context.Context, Req *favorite.DouyinFavoriteCountRequest) (r *favorite.DouyinFavoriteCountResponse, err error) {
+	var _args FavoriteCountArgs
+	_args.Req = Req
+	var _result FavoriteCountResult
+	if err = p.c.Call(ctx, "FavoriteCount", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

@@ -13,9 +13,11 @@ import (
 type Client interface {
 	FavoriteAction(ctx context.Context, Req *favorite.DouyinFavoriteActionRequest, callOptions ...callopt.Option) (r *favorite.DouyinFavoriteActionResponse, err error)
 	FavoriteList(ctx context.Context, Req *favorite.DouyinFavoriteListRequest, callOptions ...callopt.Option) (r *favorite.DouyinFavoriteListResponse, err error)
+	IsFavorite(ctx context.Context, Req *favorite.DouyinIsFavoriteRequest, callOptions ...callopt.Option) (r *favorite.DouyinIsFavoriteResponse, err error)
+	FavoriteCount(ctx context.Context, Req *favorite.DouyinFavoriteCountRequest, callOptions ...callopt.Option) (r *favorite.DouyinFavoriteCountResponse, err error)
 }
 
-// NewClient creates a rpc for the service defined in IDL.
+// NewClient creates a client for the service defined in IDL.
 func NewClient(destService string, opts ...client.Option) (Client, error) {
 	var options []client.Option
 	options = append(options, client.WithDestService(destService))
@@ -31,7 +33,7 @@ func NewClient(destService string, opts ...client.Option) (Client, error) {
 	}, nil
 }
 
-// MustNewClient creates a rpc for the service defined in IDL. It panics if any error occurs.
+// MustNewClient creates a client for the service defined in IDL. It panics if any error occurs.
 func MustNewClient(destService string, opts ...client.Option) Client {
 	kc, err := NewClient(destService, opts...)
 	if err != nil {
@@ -52,4 +54,14 @@ func (p *kFavoriteServiceClient) FavoriteAction(ctx context.Context, Req *favori
 func (p *kFavoriteServiceClient) FavoriteList(ctx context.Context, Req *favorite.DouyinFavoriteListRequest, callOptions ...callopt.Option) (r *favorite.DouyinFavoriteListResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.FavoriteList(ctx, Req)
+}
+
+func (p *kFavoriteServiceClient) IsFavorite(ctx context.Context, Req *favorite.DouyinIsFavoriteRequest, callOptions ...callopt.Option) (r *favorite.DouyinIsFavoriteResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.IsFavorite(ctx, Req)
+}
+
+func (p *kFavoriteServiceClient) FavoriteCount(ctx context.Context, Req *favorite.DouyinFavoriteCountRequest, callOptions ...callopt.Option) (r *favorite.DouyinFavoriteCountResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.FavoriteCount(ctx, Req)
 }

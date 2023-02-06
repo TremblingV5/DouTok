@@ -14,9 +14,10 @@ type Client interface {
 	RelationAction(ctx context.Context, Req *relation.DouyinRelationActionRequest, callOptions ...callopt.Option) (r *relation.DouyinRelationActionResponse, err error)
 	RelationFollowList(ctx context.Context, Req *relation.DouyinRelationFollowListRequest, callOptions ...callopt.Option) (r *relation.DouyinRelationFollowListResponse, err error)
 	RelationFollowerList(ctx context.Context, Req *relation.DouyinRelationFollowerListRequest, callOptions ...callopt.Option) (r *relation.DouyinRelationFollowerListResponse, err error)
+	RelationFriendList(ctx context.Context, Req *relation.DouyinRelationFriendListRequest, callOptions ...callopt.Option) (r *relation.DouyinRelationFriendListResponse, err error)
 }
 
-// NewClient creates a rpc for the service defined in IDL.
+// NewClient creates a client for the service defined in IDL.
 func NewClient(destService string, opts ...client.Option) (Client, error) {
 	var options []client.Option
 	options = append(options, client.WithDestService(destService))
@@ -32,7 +33,7 @@ func NewClient(destService string, opts ...client.Option) (Client, error) {
 	}, nil
 }
 
-// MustNewClient creates a rpc for the service defined in IDL. It panics if any error occurs.
+// MustNewClient creates a client for the service defined in IDL. It panics if any error occurs.
 func MustNewClient(destService string, opts ...client.Option) Client {
 	kc, err := NewClient(destService, opts...)
 	if err != nil {
@@ -58,4 +59,9 @@ func (p *kRelationServiceClient) RelationFollowList(ctx context.Context, Req *re
 func (p *kRelationServiceClient) RelationFollowerList(ctx context.Context, Req *relation.DouyinRelationFollowerListRequest, callOptions ...callopt.Option) (r *relation.DouyinRelationFollowerListResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.RelationFollowerList(ctx, Req)
+}
+
+func (p *kRelationServiceClient) RelationFriendList(ctx context.Context, Req *relation.DouyinRelationFriendListRequest, callOptions ...callopt.Option) (r *relation.DouyinRelationFriendListResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.RelationFriendList(ctx, Req)
 }

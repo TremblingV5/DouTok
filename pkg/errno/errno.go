@@ -12,6 +12,10 @@ const (
 	UserAlreadyExistErrCode    = 10003
 	AuthorizationFailedErrCode = 10004
 	BadRequestErrCode          = 10005
+	ErrBindErrCode             = 10006
+	InternalErrCode            = 10007
+	RedisSetErrorCode          = 10008
+	RedisGetErrorCode          = 10009
 )
 
 type ErrNo struct {
@@ -39,6 +43,10 @@ var (
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	BadRequest             = NewErrNo(BadRequestErrCode, "Request Failed")
+	ErrBind                = NewErrNo(ErrBindErrCode, "Error occurred while binding the request body to the struct")
+	InternalErr            = NewErrNo(InternalErrCode, "Internal server error")
+	RedisSetErr            = NewErrNo(RedisSetErrorCode, "Set data to redis error")
+	RedisGetErr            = NewErrNo(RedisGetErrorCode, "Get data from redis error")
 )
 
 // ConvertErr convert error to Errno

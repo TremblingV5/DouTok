@@ -5,19 +5,20 @@ import (
 	"encoding/json"
 )
 
-func (c RedisClient) Get(ctx context.Context, key string) (string, error) {
+func (c *RedisClient) Get(ctx context.Context, key string) (string, error) {
 	return c.Client.Get(ctx, key).Result()
 }
 
-func (c RedisClient) GetObj(ctx context.Context, key string, out any) (any, error) {
+func (c *RedisClient) GetObj(ctx context.Context, key string, out any) error {
 	result, err := c.Get(ctx, key)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if err := json.Unmarshal([]byte(result), out); err != nil {
-		return nil, err
+	err = json.Unmarshal([]byte(result), &out)
+	if err != nil {
+		return err
 	}
 
-	return out, nil
+	return nil
 }

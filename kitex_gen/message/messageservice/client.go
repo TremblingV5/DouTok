@@ -13,9 +13,10 @@ import (
 type Client interface {
 	MessageChat(ctx context.Context, Req *message.DouyinMessageChatRequest, callOptions ...callopt.Option) (r *message.DouyinMessageChatResponse, err error)
 	MessageAction(ctx context.Context, Req *message.DouyinRelationActionRequest, callOptions ...callopt.Option) (r *message.DouyinRelationActionResponse, err error)
+	MessageFriendList(ctx context.Context, Req *message.DouyinFriendListMessageRequest, callOptions ...callopt.Option) (r *message.DouyinFriendListMessageResponse, err error)
 }
 
-// NewClient creates a rpc for the service defined in IDL.
+// NewClient creates a client for the service defined in IDL.
 func NewClient(destService string, opts ...client.Option) (Client, error) {
 	var options []client.Option
 	options = append(options, client.WithDestService(destService))
@@ -31,7 +32,7 @@ func NewClient(destService string, opts ...client.Option) (Client, error) {
 	}, nil
 }
 
-// MustNewClient creates a rpc for the service defined in IDL. It panics if any error occurs.
+// MustNewClient creates a client for the service defined in IDL. It panics if any error occurs.
 func MustNewClient(destService string, opts ...client.Option) Client {
 	kc, err := NewClient(destService, opts...)
 	if err != nil {
@@ -52,4 +53,9 @@ func (p *kMessageServiceClient) MessageChat(ctx context.Context, Req *message.Do
 func (p *kMessageServiceClient) MessageAction(ctx context.Context, Req *message.DouyinRelationActionRequest, callOptions ...callopt.Option) (r *message.DouyinRelationActionResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.MessageAction(ctx, Req)
+}
+
+func (p *kMessageServiceClient) MessageFriendList(ctx context.Context, Req *message.DouyinFriendListMessageRequest, callOptions ...callopt.Option) (r *message.DouyinFriendListMessageResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.MessageFriendList(ctx, Req)
 }

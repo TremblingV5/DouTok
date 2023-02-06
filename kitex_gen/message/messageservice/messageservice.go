@@ -22,8 +22,9 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "MessageService"
 	handlerType := (*message.MessageService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"MessageChat":   kitex.NewMethodInfo(messageChatHandler, newMessageChatArgs, newMessageChatResult, false),
-		"MessageAction": kitex.NewMethodInfo(messageActionHandler, newMessageActionArgs, newMessageActionResult, false),
+		"MessageChat":       kitex.NewMethodInfo(messageChatHandler, newMessageChatArgs, newMessageChatResult, false),
+		"MessageAction":     kitex.NewMethodInfo(messageActionHandler, newMessageActionArgs, newMessageActionResult, false),
+		"MessageFriendList": kitex.NewMethodInfo(messageFriendListHandler, newMessageFriendListArgs, newMessageFriendListResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "message",
@@ -245,6 +246,109 @@ func (p *MessageActionResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
+func messageFriendListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(message.DouyinFriendListMessageRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(message.MessageService).MessageFriendList(ctx, req)
+		if err != nil {
+			return err
+		}
+		if err := st.SendMsg(resp); err != nil {
+			return err
+		}
+	case *MessageFriendListArgs:
+		success, err := handler.(message.MessageService).MessageFriendList(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*MessageFriendListResult)
+		realResult.Success = success
+	}
+	return nil
+}
+func newMessageFriendListArgs() interface{} {
+	return &MessageFriendListArgs{}
+}
+
+func newMessageFriendListResult() interface{} {
+	return &MessageFriendListResult{}
+}
+
+type MessageFriendListArgs struct {
+	Req *message.DouyinFriendListMessageRequest
+}
+
+func (p *MessageFriendListArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, fmt.Errorf("No req in MessageFriendListArgs")
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *MessageFriendListArgs) Unmarshal(in []byte) error {
+	msg := new(message.DouyinFriendListMessageRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var MessageFriendListArgs_Req_DEFAULT *message.DouyinFriendListMessageRequest
+
+func (p *MessageFriendListArgs) GetReq() *message.DouyinFriendListMessageRequest {
+	if !p.IsSetReq() {
+		return MessageFriendListArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *MessageFriendListArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+type MessageFriendListResult struct {
+	Success *message.DouyinFriendListMessageResponse
+}
+
+var MessageFriendListResult_Success_DEFAULT *message.DouyinFriendListMessageResponse
+
+func (p *MessageFriendListResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, fmt.Errorf("No req in MessageFriendListResult")
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *MessageFriendListResult) Unmarshal(in []byte) error {
+	msg := new(message.DouyinFriendListMessageResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *MessageFriendListResult) GetSuccess() *message.DouyinFriendListMessageResponse {
+	if !p.IsSetSuccess() {
+		return MessageFriendListResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *MessageFriendListResult) SetSuccess(x interface{}) {
+	p.Success = x.(*message.DouyinFriendListMessageResponse)
+}
+
+func (p *MessageFriendListResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -270,6 +374,16 @@ func (p *kClient) MessageAction(ctx context.Context, Req *message.DouyinRelation
 	_args.Req = Req
 	var _result MessageActionResult
 	if err = p.c.Call(ctx, "MessageAction", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MessageFriendList(ctx context.Context, Req *message.DouyinFriendListMessageRequest) (r *message.DouyinFriendListMessageResponse, err error) {
+	var _args MessageFriendListArgs
+	_args.Req = Req
+	var _result MessageFriendListResult
+	if err = p.c.Call(ctx, "MessageFriendList", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

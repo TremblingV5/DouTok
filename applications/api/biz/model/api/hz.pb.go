@@ -25,7 +25,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50101,
-		Name:          "api.yaml.raw_body",
+		Name:          "api.raw_body",
 		Tag:           "bytes,50101,opt,name=raw_body",
 		Filename:      "hz.proto",
 	},
@@ -33,7 +33,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50102,
-		Name:          "api.yaml.query",
+		Name:          "api.query",
 		Tag:           "bytes,50102,opt,name=query",
 		Filename:      "hz.proto",
 	},
@@ -41,7 +41,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50103,
-		Name:          "api.yaml.header",
+		Name:          "api.header",
 		Tag:           "bytes,50103,opt,name=header",
 		Filename:      "hz.proto",
 	},
@@ -49,7 +49,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50104,
-		Name:          "api.yaml.cookie",
+		Name:          "api.cookie",
 		Tag:           "bytes,50104,opt,name=cookie",
 		Filename:      "hz.proto",
 	},
@@ -57,7 +57,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50105,
-		Name:          "api.yaml.body",
+		Name:          "api.body",
 		Tag:           "bytes,50105,opt,name=body",
 		Filename:      "hz.proto",
 	},
@@ -65,7 +65,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50106,
-		Name:          "api.yaml.path",
+		Name:          "api.path",
 		Tag:           "bytes,50106,opt,name=path",
 		Filename:      "hz.proto",
 	},
@@ -73,7 +73,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50107,
-		Name:          "api.yaml.vd",
+		Name:          "api.vd",
 		Tag:           "bytes,50107,opt,name=vd",
 		Filename:      "hz.proto",
 	},
@@ -81,7 +81,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50108,
-		Name:          "api.yaml.form",
+		Name:          "api.form",
 		Tag:           "bytes,50108,opt,name=form",
 		Filename:      "hz.proto",
 	},
@@ -89,7 +89,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         51001,
-		Name:          "api.yaml.go_tag",
+		Name:          "api.go_tag",
 		Tag:           "bytes,51001,opt,name=go_tag",
 		Filename:      "hz.proto",
 	},
@@ -97,7 +97,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50109,
-		Name:          "api.yaml.js_conv",
+		Name:          "api.js_conv",
 		Tag:           "bytes,50109,opt,name=js_conv",
 		Filename:      "hz.proto",
 	},
@@ -105,7 +105,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50201,
-		Name:          "api.yaml.get",
+		Name:          "api.get",
 		Tag:           "bytes,50201,opt,name=get",
 		Filename:      "hz.proto",
 	},
@@ -113,7 +113,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50202,
-		Name:          "api.yaml.post",
+		Name:          "api.post",
 		Tag:           "bytes,50202,opt,name=post",
 		Filename:      "hz.proto",
 	},
@@ -121,7 +121,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50203,
-		Name:          "api.yaml.put",
+		Name:          "api.put",
 		Tag:           "bytes,50203,opt,name=put",
 		Filename:      "hz.proto",
 	},
@@ -129,7 +129,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50204,
-		Name:          "api.yaml.delete",
+		Name:          "api.delete",
 		Tag:           "bytes,50204,opt,name=delete",
 		Filename:      "hz.proto",
 	},
@@ -137,7 +137,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50205,
-		Name:          "api.yaml.patch",
+		Name:          "api.patch",
 		Tag:           "bytes,50205,opt,name=patch",
 		Filename:      "hz.proto",
 	},
@@ -145,7 +145,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50206,
-		Name:          "api.yaml.options",
+		Name:          "api.options",
 		Tag:           "bytes,50206,opt,name=options",
 		Filename:      "hz.proto",
 	},
@@ -153,7 +153,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50207,
-		Name:          "api.yaml.head",
+		Name:          "api.head",
 		Tag:           "bytes,50207,opt,name=head",
 		Filename:      "hz.proto",
 	},
@@ -161,7 +161,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50208,
-		Name:          "api.yaml.any",
+		Name:          "api.any",
 		Tag:           "bytes,50208,opt,name=any",
 		Filename:      "hz.proto",
 	},
@@ -169,7 +169,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50301,
-		Name:          "api.yaml.gen_path",
+		Name:          "api.gen_path",
 		Tag:           "bytes,50301,opt,name=gen_path",
 		Filename:      "hz.proto",
 	},
@@ -177,7 +177,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50302,
-		Name:          "api.yaml.api_version",
+		Name:          "api.api_version",
 		Tag:           "bytes,50302,opt,name=api_version",
 		Filename:      "hz.proto",
 	},
@@ -185,7 +185,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50303,
-		Name:          "api.yaml.tag",
+		Name:          "api.tag",
 		Tag:           "bytes,50303,opt,name=tag",
 		Filename:      "hz.proto",
 	},
@@ -193,7 +193,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50304,
-		Name:          "api.yaml.name",
+		Name:          "api.name",
 		Tag:           "bytes,50304,opt,name=name",
 		Filename:      "hz.proto",
 	},
@@ -201,7 +201,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50305,
-		Name:          "api.yaml.api_level",
+		Name:          "api.api_level",
 		Tag:           "bytes,50305,opt,name=api_level",
 		Filename:      "hz.proto",
 	},
@@ -209,7 +209,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50306,
-		Name:          "api.yaml.serializer",
+		Name:          "api.serializer",
 		Tag:           "bytes,50306,opt,name=serializer",
 		Filename:      "hz.proto",
 	},
@@ -217,7 +217,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50307,
-		Name:          "api.yaml.param",
+		Name:          "api.param",
 		Tag:           "bytes,50307,opt,name=param",
 		Filename:      "hz.proto",
 	},
@@ -225,7 +225,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50308,
-		Name:          "api.yaml.baseurl",
+		Name:          "api.baseurl",
 		Tag:           "bytes,50308,opt,name=baseurl",
 		Filename:      "hz.proto",
 	},
@@ -233,7 +233,7 @@ var file_hz_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.EnumValueOptions)(nil),
 		ExtensionType: (*int32)(nil),
 		Field:         50401,
-		Name:          "api.yaml.http_code",
+		Name:          "api.http_code",
 		Tag:           "varint,50401,opt,name=http_code",
 		Filename:      "hz.proto",
 	},
@@ -407,10 +407,11 @@ var file_hz_proto_rawDesc = []byte{
 	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6e, 0x75,
 	0x6d, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0xe1, 0x89,
 	0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x68, 0x74, 0x74, 0x70, 0x43, 0x6f, 0x64, 0x65, 0x42,
-	0x3e, 0x5a, 0x3c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x54, 0x72,
+	0x43, 0x5a, 0x41, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x54, 0x72,
 	0x65, 0x6d, 0x62, 0x6c, 0x69, 0x6e, 0x67, 0x56, 0x35, 0x2f, 0x44, 0x6f, 0x75, 0x54, 0x6f, 0x6b,
 	0x2f, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x61, 0x70,
-	0x69, 0x2f, 0x62, 0x69, 0x7a, 0x2f, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x2f, 0x61, 0x70, 0x69,
+	0x69, 0x2f, 0x62, 0x69, 0x7a, 0x2f, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x2f, 0x61, 0x70, 0x69, 0x5f,
+	0x79, 0x61, 0x6d, 0x6c,
 }
 
 var file_hz_proto_goTypes = []interface{}{
@@ -419,33 +420,33 @@ var file_hz_proto_goTypes = []interface{}{
 	(*descriptorpb.EnumValueOptions)(nil), // 2: google.protobuf.EnumValueOptions
 }
 var file_hz_proto_depIdxs = []int32{
-	0,  // 0: api.yaml.raw_body:extendee -> google.protobuf.FieldOptions
-	0,  // 1: api.yaml.query:extendee -> google.protobuf.FieldOptions
-	0,  // 2: api.yaml.header:extendee -> google.protobuf.FieldOptions
-	0,  // 3: api.yaml.cookie:extendee -> google.protobuf.FieldOptions
-	0,  // 4: api.yaml.body:extendee -> google.protobuf.FieldOptions
-	0,  // 5: api.yaml.path:extendee -> google.protobuf.FieldOptions
-	0,  // 6: api.yaml.vd:extendee -> google.protobuf.FieldOptions
-	0,  // 7: api.yaml.form:extendee -> google.protobuf.FieldOptions
-	0,  // 8: api.yaml.go_tag:extendee -> google.protobuf.FieldOptions
-	0,  // 9: api.yaml.js_conv:extendee -> google.protobuf.FieldOptions
-	1,  // 10: api.yaml.get:extendee -> google.protobuf.MethodOptions
-	1,  // 11: api.yaml.post:extendee -> google.protobuf.MethodOptions
-	1,  // 12: api.yaml.put:extendee -> google.protobuf.MethodOptions
-	1,  // 13: api.yaml.delete:extendee -> google.protobuf.MethodOptions
-	1,  // 14: api.yaml.patch:extendee -> google.protobuf.MethodOptions
-	1,  // 15: api.yaml.options:extendee -> google.protobuf.MethodOptions
-	1,  // 16: api.yaml.head:extendee -> google.protobuf.MethodOptions
-	1,  // 17: api.yaml.any:extendee -> google.protobuf.MethodOptions
-	1,  // 18: api.yaml.gen_path:extendee -> google.protobuf.MethodOptions
-	1,  // 19: api.yaml.api_version:extendee -> google.protobuf.MethodOptions
-	1,  // 20: api.yaml.tag:extendee -> google.protobuf.MethodOptions
-	1,  // 21: api.yaml.name:extendee -> google.protobuf.MethodOptions
-	1,  // 22: api.yaml.api_level:extendee -> google.protobuf.MethodOptions
-	1,  // 23: api.yaml.serializer:extendee -> google.protobuf.MethodOptions
-	1,  // 24: api.yaml.param:extendee -> google.protobuf.MethodOptions
-	1,  // 25: api.yaml.baseurl:extendee -> google.protobuf.MethodOptions
-	2,  // 26: api.yaml.http_code:extendee -> google.protobuf.EnumValueOptions
+	0,  // 0: api.raw_body:extendee -> google.protobuf.FieldOptions
+	0,  // 1: api.query:extendee -> google.protobuf.FieldOptions
+	0,  // 2: api.header:extendee -> google.protobuf.FieldOptions
+	0,  // 3: api.cookie:extendee -> google.protobuf.FieldOptions
+	0,  // 4: api.body:extendee -> google.protobuf.FieldOptions
+	0,  // 5: api.path:extendee -> google.protobuf.FieldOptions
+	0,  // 6: api.vd:extendee -> google.protobuf.FieldOptions
+	0,  // 7: api.form:extendee -> google.protobuf.FieldOptions
+	0,  // 8: api.go_tag:extendee -> google.protobuf.FieldOptions
+	0,  // 9: api.js_conv:extendee -> google.protobuf.FieldOptions
+	1,  // 10: api.get:extendee -> google.protobuf.MethodOptions
+	1,  // 11: api.post:extendee -> google.protobuf.MethodOptions
+	1,  // 12: api.put:extendee -> google.protobuf.MethodOptions
+	1,  // 13: api.delete:extendee -> google.protobuf.MethodOptions
+	1,  // 14: api.patch:extendee -> google.protobuf.MethodOptions
+	1,  // 15: api.options:extendee -> google.protobuf.MethodOptions
+	1,  // 16: api.head:extendee -> google.protobuf.MethodOptions
+	1,  // 17: api.any:extendee -> google.protobuf.MethodOptions
+	1,  // 18: api.gen_path:extendee -> google.protobuf.MethodOptions
+	1,  // 19: api.api_version:extendee -> google.protobuf.MethodOptions
+	1,  // 20: api.tag:extendee -> google.protobuf.MethodOptions
+	1,  // 21: api.name:extendee -> google.protobuf.MethodOptions
+	1,  // 22: api.api_level:extendee -> google.protobuf.MethodOptions
+	1,  // 23: api.serializer:extendee -> google.protobuf.MethodOptions
+	1,  // 24: api.param:extendee -> google.protobuf.MethodOptions
+	1,  // 25: api.baseurl:extendee -> google.protobuf.MethodOptions
+	2,  // 26: api.http_code:extendee -> google.protobuf.EnumValueOptions
 	27, // [27:27] is the sub-list for method output_type
 	27, // [27:27] is the sub-list for method input_type
 	27, // [27:27] is the sub-list for extension type_name

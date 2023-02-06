@@ -19,3 +19,15 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Do
 	// TODO: Your code here...
 	return
 }
+
+// IsFavorite implements the FavoriteServiceImpl interface.
+func (s *FavoriteServiceImpl) IsFavorite(ctx context.Context, req *favorite.DouyinIsFavoriteRequest) (resp *favorite.DouyinIsFavoriteResponse, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// FavoriteCount implements the FavoriteServiceImpl interface.
+func (s *FavoriteServiceImpl) FavoriteCount(ctx context.Context, req *favorite.DouyinFavoriteCountRequest) (resp *favorite.DouyinFavoriteCountResponse, err error) {
+	// TODO: Your code here...
+	return
+}

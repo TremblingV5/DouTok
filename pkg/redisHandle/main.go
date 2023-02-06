@@ -11,11 +11,11 @@ type RedisClient struct {
 	Client *redis.Client
 }
 
-func InitRedis(dsn string, pwd string, dbs map[string]int) (map[string]RedisClient, error) {
-	redisCaches := make(map[string]RedisClient)
+func InitRedis(dsn string, pwd string, dbs map[string]int) (map[string]*RedisClient, error) {
+	redisCaches := make(map[string]*RedisClient)
 
 	for k, v := range dbs {
-		redisCaches[k] = RedisClient{
+		redisCaches[k] = &RedisClient{
 			Client: redis.NewClient(&redis.Options{
 				Addr:     dsn,
 				Password: pwd,
@@ -34,4 +34,22 @@ func InitRedis(dsn string, pwd string, dbs map[string]int) (map[string]RedisClie
 	}
 
 	return redisCaches, nil
+}
+
+func InitRedisClient(dsn string, pwd string, database int) (*redis.Client, error) {
+	Client := redis.NewClient(&redis.Options{
+		Addr:     dsn,
+		Password: pwd,
+		DB:       database,
+		PoolSize: 20,
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := Client.Ping(ctx).Result()
+	if err != nil {
+		return nil, err
+	}
+	return Client, nil
 }

@@ -26,3 +26,6 @@ Client:
   Servers:
     - "127.0.0.1"
     - "192.168.1.1"
+
+Snowflake:
+  Node: 40

@@ -13,9 +13,10 @@ import (
 type Client interface {
 	CommentAction(ctx context.Context, Req *comment.DouyinCommentActionRequest, callOptions ...callopt.Option) (r *comment.DouyinCommentActionResponse, err error)
 	CommentList(ctx context.Context, Req *comment.DouyinCommentListRequest, callOptions ...callopt.Option) (r *comment.DouyinCommentListResponse, err error)
+	CommentCount(ctx context.Context, Req *comment.DouyinCommentCountRequest, callOptions ...callopt.Option) (r *comment.DouyinCommentCountResponse, err error)
 }
 
-// NewClient creates a rpc for the service defined in IDL.
+// NewClient creates a client for the service defined in IDL.
 func NewClient(destService string, opts ...client.Option) (Client, error) {
 	var options []client.Option
 	options = append(options, client.WithDestService(destService))
@@ -31,7 +32,7 @@ func NewClient(destService string, opts ...client.Option) (Client, error) {
 	}, nil
 }
 
-// MustNewClient creates a rpc for the service defined in IDL. It panics if any error occurs.
+// MustNewClient creates a client for the service defined in IDL. It panics if any error occurs.
 func MustNewClient(destService string, opts ...client.Option) Client {
 	kc, err := NewClient(destService, opts...)
 	if err != nil {
@@ -52,4 +53,9 @@ func (p *kCommentServiceClient) CommentAction(ctx context.Context, Req *comment.
 func (p *kCommentServiceClient) CommentList(ctx context.Context, Req *comment.DouyinCommentListRequest, callOptions ...callopt.Option) (r *comment.DouyinCommentListResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.CommentList(ctx, Req)
+}
+
+func (p *kCommentServiceClient) CommentCount(ctx context.Context, Req *comment.DouyinCommentCountRequest, callOptions ...callopt.Option) (r *comment.DouyinCommentCountResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.CommentCount(ctx, Req)
 }

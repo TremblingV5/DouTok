@@ -4,10 +4,13 @@ package api
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
+	"github.com/TremblingV5/DouTok/kitex_gen/favorite"
+	"github.com/TremblingV5/DouTok/pkg/errno"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // FavoriteAction .
@@ -17,13 +20,20 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinFavoriteActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, handler.BuildFavoriteActionResp(errno.ErrBind))
 		return
 	}
 
-	resp := new(api.DouyinFavoriteActionResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err := rpc.FavoriteAction(ctx, &favorite.DouyinFavoriteActionRequest{
+		VideoId:    req.VideoId,
+		ActionType: req.ActionType,
+	})
+	if err != nil {
+		handler.SendResponse(c, handler.BuildFavoriteActionResp(errno.ConvertErr(err)))
+		return
+	}
+	// TODO 此处直接返回了 rpc 的 resp
+	handler.SendResponse(c, resp)
 }
 
 // FavoriteList .
@@ -33,11 +43,17 @@ func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	var req api.DouyinFavoriteListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		handler.SendResponse(c, handler.BuildFavoriteListResp(errno.ErrBind))
 		return
 	}
 
-	resp := new(api.DouyinFavoriteListResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err := rpc.FavoriteList(ctx, &favorite.DouyinFavoriteListRequest{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		handler.SendResponse(c, handler.BuildFavoriteListResp(errno.ConvertErr(err)))
+		return
+	}
+	// TODO 此处直接返回了 rpc 的 resp
+	handler.SendResponse(c, resp)
 }
