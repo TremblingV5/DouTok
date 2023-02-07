@@ -13,14 +13,17 @@ import (
 func TestRelation(t *testing.T) {
 
 	//读取配置
-	v := conf.InitConfig("./", "relation")
+	v, err := conf.InitConfig("./", "relation")
+	if err != nil {
+		return
+	}
 	//连接数据库
 	db.Conn(v)
 	//连接redis
 	redis.Conn(v)
 
 	r := RelationServiceImpl{}
-	resp3, err := r.RelationAction(context.Background(), &relation.DouyinRelationActionRequest{UserId: 1, ToUserId: 2, ActionType: 2})
+	resp3, err := r.RelationAction(context.Background(), &relation.DouyinRelationActionRequest{UserId: 1, ToUserId: 2, ActionType: 1})
 	fmt.Println("关注结果", resp3)
 
 	resp1, err := r.RelationFollowList(context.Background(), &relation.DouyinRelationFollowListRequest{UserId: 1})
@@ -34,5 +37,4 @@ func TestRelation(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println("粉丝列表：", resp2)
-
 }

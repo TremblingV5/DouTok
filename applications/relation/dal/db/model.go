@@ -1,9 +1,11 @@
 package db
 
 import (
+	"fmt"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/model"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/query"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/errno"
-	"gorm.io/gorm"
 	"gorm.io/plugin/soft_delete"
 	"time"
 )
@@ -42,12 +44,11 @@ func Insert2FollowerTable(userID, followerID int64) error {
 }
 
 func AddFollowNum(userID int64) error {
-
-	return DB.Model(&user.User{}).Where("id = ?", userID).Update("follow_count", gorm.Expr("follow_count + ?", 1)).Error
+	return query.FollowFollowerCount.AddFollowCount(userID)
 }
 
 func AddFollowerNum(userID int64) error {
-	return DB.Model(&user.User{}).Where("id = ?", userID).Update("follower_count", gorm.Expr("follower_count + ?", 1)).Error
+	return query.FollowFollowerCount.AddFollowerCount(userID)
 }
 
 func DeleteOnFollowTable(userID, followID int64) error {
@@ -59,12 +60,15 @@ func DeleteOnFollowerTable(userID, followerID int64) error {
 }
 
 func DecrFollowNum(userID int64) error {
-	return DB.Model(&user.User{}).Where("id = ?", userID).Update("follow_count", gorm.Expr("follow_count - ?", 1)).Error
+	return query.FollowFollowerCount.DecrFollowCount(userID)
 
 }
 func DecrFollowerNum(userID int64) error {
-	return DB.Model(&user.User{}).Where("id = ?", userID).Update("follower_count", gorm.Expr("follower_count - ?", 1)).Error
+	return query.FollowFollowerCount.DecrFollowerCount(userID)
 
+}
+func QUeryFollowFollowerCOunt(userId int64) (model.FollowFollowerCount, error) {
+	return query.FollowFollowerCount.QueryWihtUserId(userId)
 }
 func IsRelation(userID, toUserID int64) error {
 	return DB.Where("user_id = ? and follow_id = ?", userID, toUserID).First(&Follow{}).Error
@@ -130,28 +134,55 @@ func CancelRelation(userId, toUserId int64) error {
 
 func GetFollowList(userId int64) ([]*user.User, error) {
 	var userIds []int64
-	var users []*user.User
+
 	err := DB.Model(&Follow{}).Select("follow_id").Where("user_id = ?", userId).Find(&userIds).Error
 	if err != nil {
 		return nil, err
 	}
 	if len(userIds) == 0 {
-		return users, nil
+		return nil, nil
 	}
-	err = DB.Find(&users, userIds).Error
+	users := make([]*user.User, len(userIds))
+	for i, _ := range users {
+		users[i] = &user.User{Id: userIds[i]}
+		c, err := QUeryFollowFollowerCOunt(userIds[i])
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+		//v.Id = userIds[i]
+		users[i].FollowCount = c.FollowCount
+		users[i].FollowerCount = c.FollowerCount
+
+	}
+	//todo rpc调用添加用户其他信息
+
 	return users, err
 }
 
 func GetFollowerList(userId int64) ([]*user.User, error) {
 	var userIds []int64
-	var users []*user.User
+
 	err := DB.Model(&Follower{}).Select("follower_id").Where("user_id = ?", userId).Find(&userIds).Error
 	if err != nil {
 		return nil, err
 	}
 	if len(userIds) == 0 {
-		return users, nil
+		return nil, nil
 	}
-	err = DB.Find(&users, userIds).Error
+	users := make([]*user.User, len(userIds))
+	for i, _ := range userIds {
+		users[i] = &user.User{Id: userIds[i]}
+		c, err := QUeryFollowFollowerCOunt(userIds[i])
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+		//v.Id = userIds[i]
+		users[i].FollowCount = c.FollowCount
+		users[i].FollowerCount = c.FollowerCount
+		//todo rpc调用添加用户其他信息
+	}
+
 	return users, err
 }
