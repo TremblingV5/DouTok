@@ -15,6 +15,9 @@ const (
 	ErrBindErrCode             = 10006
 	InternalErrCode            = 10007
 
+	RedisSetErrorCode = 10008
+	RedisGetErrorCode = 10009
+
 	RelationRepeatedCode   = 60001
 	RelationUnfollowedCode = 60002
 )
@@ -47,8 +50,8 @@ var (
 	ErrBind                = NewErrNo(ErrBindErrCode, "Error occurred while binding the request body to the struct")
 	InternalErr            = NewErrNo(InternalErrCode, "Internal server error")
 
-	RelationRepeatedErr   = NewErrNo(RelationRepeatedCode, "relation repeated error")
-	RelationUnfollowedErr = NewErrNo(RelationUnfollowedCode, "unfollowed user error ")
+	RedisSetErr = NewErrNo(RedisSetErrorCode, "Set data to redis error")
+	RedisGetErr = NewErrNo(RedisGetErrorCode, "Get data from redis error")
 )
 
 // ConvertErr convert error to Errno
