@@ -8,7 +8,7 @@ import (
 	"github.com/tsuna/gohbase/hrpc"
 )
 
-func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[string]map[string]any, error) {
+func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[string]map[string][]byte, error) {
 	req, err := hrpc.NewScanStr(
 		context.Background(), table, options...,
 	)
@@ -19,7 +19,7 @@ func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[
 
 	scanner := c.Client.Scan(req)
 
-	packed := make(map[string]map[string]any)
+	packed := make(map[string]map[string][]byte)
 
 	for {
 		res, err := scanner.Next()
@@ -28,11 +28,11 @@ func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[
 		}
 
 		var rowKey string
-		temp := make(map[string]any)
+		temp := make(map[string][]byte)
 
 		for _, v := range res.Cells {
 			rowKey = string(v.Row)
-			temp[string(v.Qualifier)] = string(v.Value)
+			temp[string(v.Qualifier)] = []byte(v.Value)
 		}
 
 		packed[rowKey] = temp
