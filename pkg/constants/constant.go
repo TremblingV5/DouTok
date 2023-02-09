@@ -10,5 +10,9 @@ const (
 	FeedSendBox = "feedlist"
 	TimeCache   = "feedmarkedtime"
 
+	AddrPrefix = "user_addr"
+
 	ErrConfigFileNotFound = "Config file not found"
+
+	KeySep = ":"
 )

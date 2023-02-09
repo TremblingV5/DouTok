@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
 	"github.com/cloudwego/hertz/pkg/common/config"
@@ -25,10 +24,9 @@ import (
 )
 
 var (
-	Config      = dtviper.ConfigInit("DOUTOK_API", "api")
-	ServiceName = Config.Viper.GetString("Server.Name")
-	ServiceAddr = fmt.Sprintf("%s:%d", Config.Viper.GetString("Server.Address"), Config.Viper.GetInt("Server.Port"))
-	EtcdAddress = fmt.Sprintf("%s:%d", Config.Viper.GetString("Etcd.Address"), Config.Viper.GetInt("Etcd.Port"))
+	ServiceName string
+	ServiceAddr string
+	EtcdAddress string
 	hertzCfg    HertzCfg
 )
 
@@ -83,12 +81,18 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 
 // 初始化 API 配置
 func Init() {
-	rpc.InitRPC(&Config)
+	InitViper()
+	rpc.InitRPC()
 	InitJwt()
+	InitRedisClient()
 }
 
 func InitHertzCfg() {
-	hertzV, err := json.Marshal(Config.Viper.Sub("Hertz").AllSettings())
+	ServiceName = ViperConfig.Viper.GetString("Server.Name")
+	ServiceAddr = fmt.Sprintf("%s:%d", ViperConfig.Viper.GetString("Server.Address"), ViperConfig.Viper.GetInt("Server.Port"))
+	EtcdAddress = fmt.Sprintf("%s:%d", ViperConfig.Viper.GetString("Etcd.Address"), ViperConfig.Viper.GetInt("Etcd.Port"))
+
+	hertzV, err := json.Marshal(ViperConfig.Viper.Sub("Hertz").AllSettings())
 	if err != nil {
 		hlog.Fatalf("Error marshalling Hertz config %s", err)
 	}
@@ -104,7 +108,7 @@ func InitHertz() *server.Hertz {
 	opts := []config.Option{server.WithHostPorts(ServiceAddr)}
 
 	// 服务注册
-	if Config.Viper.GetBool("Etcd.Enable") {
+	if ViperConfig.Viper.GetBool("Etcd.Enable") {
 		r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
 		if err != nil {
 			hlog.Fatal(err)

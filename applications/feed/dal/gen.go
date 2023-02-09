@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/TremblingV5/DouTok/applications/feed/dal/model"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/model"
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
@@ -32,8 +32,8 @@ func main() {
 	}
 
 	g.UseDB(db)
-	g.ApplyBasic(model.Video{})
-	g.ApplyInterface(func() {}, model.Video{})
+	g.ApplyBasic(model.User{})
+	g.ApplyInterface(func() {}, model.User{})
 
 	g.Execute()
 }

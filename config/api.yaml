@@ -33,3 +33,10 @@ Client:
   Servers:
     - "127.0.0.1"
     - "192.168.1.1"
+
+Redis:
+  Host: "127.0.0.1"
+  Port: 6379
+  Password: "root"
+  DataBases:
+    Default: 0

@@ -26,3 +26,9 @@ package main
 //	// TODO: Your code here...
 //	return
 //}
+
+// GetFollowCount implements the RelationServiceImpl interface.
+//func (s *RelationServiceImpl) GetFollowCount(ctx context.Context, req *relation.DouyinRelationCountRequest) (resp *relation.DouyinRelationCountRequest, err error) {
+//	// TODO: Your code here...
+//	return
+//}

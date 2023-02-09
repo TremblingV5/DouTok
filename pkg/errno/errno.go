@@ -14,6 +14,12 @@ const (
 	BadRequestErrCode          = 10005
 	ErrBindErrCode             = 10006
 	InternalErrCode            = 10007
+
+	RedisSetErrorCode = 10008
+	RedisGetErrorCode = 10009
+
+	RelationRepeatedCode   = 60001
+	RelationUnfollowedCode = 60002
 )
 
 type ErrNo struct {
@@ -43,6 +49,9 @@ var (
 	BadRequest             = NewErrNo(BadRequestErrCode, "Request Failed")
 	ErrBind                = NewErrNo(ErrBindErrCode, "Error occurred while binding the request body to the struct")
 	InternalErr            = NewErrNo(InternalErrCode, "Internal server error")
+
+	RedisSetErr = NewErrNo(RedisSetErrorCode, "Set data to redis error")
+	RedisGetErr = NewErrNo(RedisGetErrorCode, "Get data from redis error")
 )
 
 // ConvertErr convert error to Errno

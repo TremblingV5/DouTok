@@ -5,6 +5,7 @@ package api
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/chat"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/pkg/errno"
@@ -38,23 +39,23 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 // MessageAction .
 // @router /douyin/message/action [POST]
 func MessageAction(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req api.DouyinMessageActionRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		handler.SendResponse(c, handler.BuildMessageActionResp(errno.ErrBind))
-		return
-	}
-
-	resp, err := rpc.MessageAction(ctx, &message.DouyinRelationActionRequest{
-		ToUserId:   req.ToUserId,
-		ActionType: req.ActionType,
-		Content:    req.Content,
-	})
-	if err != nil {
-		handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
-		return
-	}
-	// TODO 此处直接返回了 rpc 的 resp
-	handler.SendResponse(c, resp)
+	//var err error
+	//var req api.DouyinMessageActionRequest
+	//err = c.BindAndValidate(&req)
+	//if err != nil {
+	//	handler.SendResponse(c, handler.BuildMessageActionResp(errno.ErrBind))
+	//	return
+	//}
+	//
+	//resp, err := rpc.MessageAction(ctx, &message.DouyinRelationActionRequest{
+	//	ToUserId:   req.ToUserId,
+	//	ActionType: req.ActionType,
+	//	Content:    req.Content,
+	//})
+	//if err != nil {
+	//	handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
+	//	return
+	//}
+	//handler.SendResponse(c, resp)
+	chat.ServeWs(ctx, c)
 }

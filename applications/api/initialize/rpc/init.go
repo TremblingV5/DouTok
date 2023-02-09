@@ -5,7 +5,7 @@ import (
 )
 
 // InitRPC init rpc client
-func InitRPC(Config *dtviper.Config) {
+func InitRPC() {
 	UserConfig := dtviper.ConfigInit("DOUTOK_USER", "user")
 	initUserRpc(&UserConfig)
 
