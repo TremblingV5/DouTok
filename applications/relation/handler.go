@@ -1,9 +1,5 @@
 package main
 
-import (
-	"github.com/TremblingV5/DouTok/kitex_gen/relation"
-)
-
 // RelationServiceImpl implements the last service interface defined in the IDL.
 //type RelationServiceImpl struct{}
 //
@@ -32,7 +28,7 @@ import (
 //}
 
 // GetFollowCount implements the RelationServiceImpl interface.
-func (s *RelationServiceImpl) GetFollowCount(ctx context.Context, req *relation.DouyinRelationCountRequest) (resp *relation.DouyinRelationCountRequest, err error) {
-	// TODO: Your code here...
-	return
-}
+//func (s *RelationServiceImpl) GetFollowCount(ctx context.Context, req *relation.DouyinRelationCountRequest) (resp *relation.DouyinRelationCountRequest, err error) {
+//	// TODO: Your code here...
+//	return
+//}

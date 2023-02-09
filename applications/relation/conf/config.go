@@ -6,7 +6,15 @@ import (
 	"github.com/spf13/viper"
 )
 
-func InitConfig(path, name string) (*viper.Viper, error) {
+var UserConfig, MessageConfig, RelationConfig *viper.Viper
+
+func InitConfig(path string) {
+	UserConfig, _ = getConfig(path, "user")
+	MessageConfig, _ = getConfig(path, "message")
+	RelationConfig, _ = getConfig(path, "relation")
+}
+
+func getConfig(path, name string) (*viper.Viper, error) {
 	v := viper.New()
 	v.SetConfigName(name)
 	v.AddConfigPath(path)

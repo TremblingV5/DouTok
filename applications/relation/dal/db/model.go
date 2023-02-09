@@ -1,11 +1,13 @@
 package db
 
 import (
+	"context"
 	"fmt"
 	"github.com/TremblingV5/DouTok/applications/relation/dal/model"
 	"github.com/TremblingV5/DouTok/applications/relation/dal/query"
+	"github.com/TremblingV5/DouTok/applications/relation/misc"
+	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
-	"github.com/TremblingV5/DouTok/pkg/errno"
 	"gorm.io/plugin/soft_delete"
 	"time"
 )
@@ -82,7 +84,7 @@ func Relation(userID, toUserID int64) error {
 	}()
 	if err := IsRelation(userID, toUserID); err == nil {
 		tx.Rollback()
-		return errno.RelationRepeatedErr
+		return misc.RelationRepeatedErr
 	}
 	if err := Insert2FollowTable(userID, toUserID); err != nil {
 		tx.Rollback()
@@ -111,7 +113,7 @@ func CancelRelation(userId, toUserId int64) error {
 	}()
 	if err := IsRelation(userId, toUserId); err != nil {
 		tx.Rollback()
-		return errno.RelationUnfollowedErr
+		return misc.RelationUnfollowedErr
 	}
 	if err := DeleteOnFollowTable(userId, toUserId); err != nil {
 		tx.Rollback()
@@ -132,7 +134,7 @@ func CancelRelation(userId, toUserId int64) error {
 	return tx.Commit().Error
 }
 
-func GetFollowList(userId int64) ([]*user.User, error) {
+func GetFollowList(ctx context.Context, userId int64) ([]*user.User, error) {
 	var userIds []int64
 
 	err := DB.Model(&Follow{}).Select("follow_id").Where("user_id = ?", userId).Find(&userIds).Error
@@ -153,17 +155,20 @@ func GetFollowList(userId int64) ([]*user.User, error) {
 		//v.Id = userIds[i]
 		users[i].FollowCount = c.FollowCount
 		users[i].FollowerCount = c.FollowerCount
-
+		users[i].IsFollow = true
+		resp, err := rpc.UserClient.GetUserById(ctx, &user.DouyinUserRequest{UserId: userIds[i]})
+		if err != nil {
+			return users, err
+		}
+		users[i].Name = resp.User.Name
+		users[i].Avatar = resp.User.Avatar
 	}
 	//todo rpc调用添加用户其他信息
-
 	return users, err
 }
 
-func GetFollowerList(userId int64) ([]*user.User, error) {
-	var userIds []int64
-
-	err := DB.Model(&Follower{}).Select("follower_id").Where("user_id = ?", userId).Find(&userIds).Error
+func GetFollowerList(ctx context.Context, userId int64) ([]*user.User, error) {
+	userIds, err := GetFollowerIds(userId)
 	if err != nil {
 		return nil, err
 	}
@@ -181,8 +186,32 @@ func GetFollowerList(userId int64) ([]*user.User, error) {
 		//v.Id = userIds[i]
 		users[i].FollowCount = c.FollowCount
 		users[i].FollowerCount = c.FollowerCount
-		//todo rpc调用添加用户其他信息
+		users[i].IsFollow = IsFollow(userId, userIds[i])
+		//rpc调用查询用户信息
+		resp, err := rpc.UserClient.GetUserById(ctx, &user.DouyinUserRequest{UserId: userIds[i]})
+		if err != nil {
+			return users, err
+		}
+		users[i].Name = resp.User.Name
+		users[i].Avatar = resp.User.Avatar
 	}
-
 	return users, err
+}
+
+func IsFollow(userId, followUserId int64) bool {
+	err := DB.Model(&Follow{}).Where("user_id = ? and to_user_id = ?", userId, followUserId).First(&Follow{}).Error
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func GetFollowerIds(userId int64) ([]int64, error) {
+	var userIds []int64
+
+	err := DB.Model(&Follower{}).Select("follower_id").Where("user_id = ?", userId).Find(&userIds).Error
+	if err != nil {
+		return nil, err
+	}
+	return userIds, nil
 }

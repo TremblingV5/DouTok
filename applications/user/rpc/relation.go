@@ -31,6 +31,6 @@ func InitRelationRpc() {
 }
 
 func GetFollowCount(ctx context.Context, req *relation.DouyinRelationCountRequest) (resp *relation.DouyinRelationCountResponse, err error) {
-	return relationClient.GetFollowCount(ctx, req)
+	return relationClient.GetFollowCount()
 
 }

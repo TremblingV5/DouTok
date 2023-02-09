@@ -1,6 +1,7 @@
 package db
 
 import (
+	"github.com/TremblingV5/DouTok/applications/relation/conf"
 	"github.com/TremblingV5/DouTok/applications/relation/dal/query"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
@@ -9,6 +10,12 @@ import (
 )
 
 var DB *gorm.DB
+
+func InitDB() {
+	if err := Conn(conf.RelationConfig); err != nil {
+		return
+	}
+}
 
 func Conn(v *viper.Viper) error {
 	host := v.GetString("mysql.host")

@@ -5,6 +5,7 @@ import (
 	"github.com/TremblingV5/DouTok/applications/relation/dal/db"
 	"github.com/TremblingV5/DouTok/applications/relation/dal/redis"
 	"github.com/TremblingV5/DouTok/applications/relation/handler"
+	rpc6 "github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/bytedance/gopkg/util/logger"
@@ -16,24 +17,18 @@ import (
 
 var Logger = dlog.InitLog(6)
 
+func Init() {
+	conf.InitConfig("./config")
+	db.InitDB()
+	redis.InitRedis()
+	rpc6.InitUserRpc()
+	rpc6.InitMessageRpc()
+}
+
 func main() {
 
-	//读取配置
-	v, err := conf.InitConfig("./config", "relation")
-	if err != nil {
-		Logger.Fatal(err)
-	}
-	//连接数据库
-	if err := db.Conn(v); err != nil {
-		Logger.Fatal(err)
-	}
-	//连接redis
-	if err := redis.Conn(v); err != nil {
-		Logger.Fatal(err)
-	}
-
-	etcdConf := v.GetStringMapString("etcd")
-	serviceConf := v.GetStringMapString("server")
+	etcdConf := conf.RelationConfig.GetStringMapString("etcd")
+	serviceConf := conf.RelationConfig.GetStringMapString("server")
 	logger.Info(serviceConf)
 	r, err := etcd.NewEtcdRegistry([]string{etcdConf["host"] + ":" + etcdConf["port"]})
 	addr, _ := net.ResolveTCPAddr("tcp", serviceConf["host"]+":"+serviceConf["port"])
@@ -50,5 +45,4 @@ func main() {
 	if err := s.Run(); err != nil {
 		Logger.Fatal(err)
 	}
-
 }

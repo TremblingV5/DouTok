@@ -21,7 +21,7 @@ func (s *RelationServiceImpl) RelationFollowerList(ctx context.Context, req *rel
 		return &relation.DouyinRelationFollowerListResponse{UserList: result, StatusCode: 0, StatusMsg: "success"}, nil
 	}
 	//查数据库
-	result, err = db.GetFollowerList(req.UserId)
+	result, err = db.GetFollowerList(ctx, req.UserId)
 	if err != nil {
 		return
 	}

@@ -37,4 +37,10 @@ func TestRelation(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println("粉丝列表：", resp2)
+
+	resp4, err := r.GetFollowCount(context.Background(), &relation.DouyinRelationCountRequest{UserId: 1})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("关注粉丝数：", resp4)
 }

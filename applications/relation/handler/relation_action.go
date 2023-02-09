@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/relation/dal/db"
 	"github.com/TremblingV5/DouTok/applications/relation/dal/redis"
+	"github.com/TremblingV5/DouTok/applications/relation/misc"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation"
-	"github.com/TremblingV5/DouTok/pkg/errno"
 )
 
 func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.DouyinRelationActionRequest) (resp *relation.DouyinRelationActionResponse, err error) {
@@ -14,7 +14,7 @@ func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.
 	if req.ActionType == 1 {
 		//先跟新数据库
 		if err = db.Relation(req.UserId, req.ToUserId); err != nil {
-			if err == errno.RelationRepeatedErr {
+			if err == misc.RelationRepeatedErr {
 				resp.StatusMsg = "已关注,不要重复关注"
 				resp.StatusCode = 1
 			}
@@ -29,7 +29,7 @@ func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.
 	} else {
 		//先跟新数据库
 		if err = db.CancelRelation(req.UserId, req.ToUserId); err != nil {
-			if err == errno.RelationUnfollowedErr {
+			if err == misc.RelationUnfollowedErr {
 				resp.StatusMsg = "不能取关未关注用户"
 				resp.StatusCode = 1
 			}

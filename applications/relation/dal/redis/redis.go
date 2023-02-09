@@ -3,6 +3,7 @@ package redis
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/applications/relation/conf"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/utils"
@@ -10,6 +11,12 @@ import (
 )
 
 var RD *redishandle.RedisClient
+
+func InitRedis() {
+	if err := Conn(conf.RelationConfig); err != nil {
+		return
+	}
+}
 
 func Conn(v *viper.Viper) error {
 	host := v.GetString("redis.host")
