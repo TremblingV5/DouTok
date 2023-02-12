@@ -17,7 +17,7 @@ var AuthMiddleware *jwt.HertzJWTMiddleware
 
 func InitJwt() {
 	AuthMiddleware, _ = jwt.New(&jwt.HertzJWTMiddleware{
-		Key:        []byte(Config.Viper.GetString("JWT.signingKey")),
+		Key:        []byte(ViperConfig.Viper.GetString("JWT.signingKey")),
 		Timeout:    time.Hour,
 		MaxRefresh: time.Hour,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
@@ -39,6 +39,16 @@ func InitJwt() {
 		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, token string, expire time.Time) {
 			claims := jwt.ExtractClaims(ctx, c)
 			userId := int64(claims[constants.IdentityKey].(float64))
+			// 记录用户的ip/port等信息到redis中 设定超时时间（一个月）
+			err := RedisClient.Set(ctx, constants.AddrPrefix+string(userId), c.RemoteAddr().String(), 720*time.Hour).Err()
+			if err != nil {
+				c.JSON(consts.StatusOK, map[string]interface{}{
+					"status_code": errno.RedisSetErrorCode,
+					"status_msg":  errno.RedisSetErr,
+					"user_id":     userId,
+					"token":       token,
+				})
+			}
 			c.JSON(consts.StatusOK, map[string]interface{}{
 				"status_code": errno.SuccessCode,
 				"status_msg":  errno.Success,
