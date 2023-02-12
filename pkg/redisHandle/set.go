@@ -23,3 +23,11 @@ func (c *RedisClient) SetObj(ctx context.Context, key string, value any, expire 
 
 	return nil
 }
+
+func (c *RedisClient) HSet(ctx context.Context, key string, hKey string, hValue string) error {
+	return c.Client.HSet(ctx, key, hKey, hValue).Err()
+}
+
+func (c *RedisClient) HSetMore(ctx context.Context, key string, values ...string) error {
+	return c.Client.HSet(ctx, key, values).Err()
+}
