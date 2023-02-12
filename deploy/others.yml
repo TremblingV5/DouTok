@@ -1,0 +1,17 @@
+version: "3"
+
+networks:
+    total:
+        driver: bridge
+
+services:
+    mongo:
+        image: mongo:6.0.3
+        networks:
+            - total
+        ports:
+            - "27017:27017"
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=root
+        restart: always
