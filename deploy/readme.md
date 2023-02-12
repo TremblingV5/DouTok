@@ -2,6 +2,16 @@
 
 [TOC]
 
+## 不同尺寸的环境配置
+
+|类型|配置文件|备注|
+|:---:|:---:|:---:|
+|全部环境|env.yml||
+|基础环境，MySQL Redis Etcd|basic.yml||
+|HBase环境|hbase.yml|采用alone版本的HBase,自带zookeeper,故简单隔离。试用时需将访问机的hosts添加一个名为“hb-master”的远端记录|
+|链路追踪所需环境|pro.yml|吃配置，慎重！|
+|其他配置|others.yml|目前仅包含mongo|
+
 ## 依赖环境
 
 `env.yml`即使用`docker-compose`进行依赖环境创建的配置文件。
