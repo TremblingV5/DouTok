@@ -5,3 +5,5 @@ databases:
     default: 0
     feedlist: 1
     feedmarkedtime: 2
+    favcache: 3
+    favcountcache: 4
