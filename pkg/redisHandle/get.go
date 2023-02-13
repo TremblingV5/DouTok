@@ -22,3 +22,11 @@ func (c *RedisClient) GetObj(ctx context.Context, key string, out any) error {
 
 	return nil
 }
+
+func (c *RedisClient) HGet(ctx context.Context, key string, hKey string) (string, error) {
+	return c.Client.HGet(ctx, key, hKey).Result()
+}
+
+func (c *RedisClient) HGetAll(ctx context.Context, key string) (map[string]string, error) {
+	return c.Client.HGetAll(ctx, key).Result()
+}
