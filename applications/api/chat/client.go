@@ -9,6 +9,7 @@ import (
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/pkg/errno"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/websocket"
 	"github.com/jellydator/ttlcache/v2"
 	"log"
@@ -76,6 +77,7 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 				}
 				break
 			}
+			// TODO 这里消息编解码可能有问题，需要考虑到客户端的处理方式
 			clientMsg := ClientMsg{}
 			json.Unmarshal(msg, &clientMsg)
 			clientFrom, err := hub.clients.Get(string(clientMsg.UserId))
@@ -105,11 +107,12 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 			clientTo, err := hub.clients.Get(string(clientMsg.ToUserId))
 			if errors.Is(err, ttlcache.ErrNotFound) {
 				// B 不在线
-
+				handler.SendResponse(c, handler.BuildMessageActionResp(errno.Success))
+				return
 			} else {
 				if err != nil {
 					if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-						log.Printf("error: %v", err)
+						hlog.Info("error: %v", err)
 					}
 					break
 				} else {
@@ -120,7 +123,8 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 					}
 					data, err := json.Marshal(serverMsg)
 					if err != nil {
-
+						handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
+						return
 					}
 					clientTo.(Client).conn.WriteMessage(websocket.TextMessage, data)
 				}
@@ -128,12 +132,13 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 			// 返回 websocket 响应
 			data, err := json.Marshal(resp)
 			if err != nil {
-
+				handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
+				return
 			}
 			clientFrom.(Client).conn.WriteMessage(websocket.TextMessage, data)
 		}
 	})
 	if err != nil {
-
+		handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
 	}
 }
