@@ -30,3 +30,10 @@ Redis:
   Password: "root"
   DataBases:
     Default: 0
+
+Kafka:
+  Brokers:
+    - "150.158.237.39:50004"
+  Topics:
+    - "test"
+  GroupId: "test01"
