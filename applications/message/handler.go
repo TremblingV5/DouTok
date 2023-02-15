@@ -28,8 +28,8 @@ func (s *MessageServiceImpl) MessageChat(ctx context.Context, req *message.Douyi
 }
 
 // MessageAction implements the MessageServiceImpl interface.
-func (s *MessageServiceImpl) MessageAction(ctx context.Context, req *message.DouyinRelationActionRequest) (resp *message.DouyinRelationActionResponse, err error) {
-	resp = new(message.DouyinRelationActionResponse)
+func (s *MessageServiceImpl) MessageAction(ctx context.Context, req *message.DouyinMessageActionRequest) (resp *message.DouyinMessageActionResponse, err error) {
+	resp = new(message.DouyinMessageActionResponse)
 
 	err = service.NewMessageActionService(ctx).MessageAction(req)
 	if err != nil {

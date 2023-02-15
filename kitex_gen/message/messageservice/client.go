@@ -12,7 +12,7 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	MessageChat(ctx context.Context, Req *message.DouyinMessageChatRequest, callOptions ...callopt.Option) (r *message.DouyinMessageChatResponse, err error)
-	MessageAction(ctx context.Context, Req *message.DouyinRelationActionRequest, callOptions ...callopt.Option) (r *message.DouyinRelationActionResponse, err error)
+	MessageAction(ctx context.Context, Req *message.DouyinMessageActionRequest, callOptions ...callopt.Option) (r *message.DouyinMessageActionResponse, err error)
 	MessageFriendList(ctx context.Context, Req *message.DouyinFriendListMessageRequest, callOptions ...callopt.Option) (r *message.DouyinFriendListMessageResponse, err error)
 }
 
@@ -50,7 +50,7 @@ func (p *kMessageServiceClient) MessageChat(ctx context.Context, Req *message.Do
 	return p.kClient.MessageChat(ctx, Req)
 }
 
-func (p *kMessageServiceClient) MessageAction(ctx context.Context, Req *message.DouyinRelationActionRequest, callOptions ...callopt.Option) (r *message.DouyinRelationActionResponse, err error) {
+func (p *kMessageServiceClient) MessageAction(ctx context.Context, Req *message.DouyinMessageActionRequest, callOptions ...callopt.Option) (r *message.DouyinMessageActionResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.MessageAction(ctx, Req)
 }

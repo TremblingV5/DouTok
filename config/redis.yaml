@@ -7,3 +7,5 @@ databases:
     feedmarkedtime: 2
     favcache: 3
     favcountcache: 4
+    message: 5
+    relation: 6

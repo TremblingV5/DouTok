@@ -22,9 +22,10 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "UserService"
 	handlerType := (*user.UserService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"Register":    kitex.NewMethodInfo(registerHandler, newRegisterArgs, newRegisterResult, false),
-		"Login":       kitex.NewMethodInfo(loginHandler, newLoginArgs, newLoginResult, false),
-		"GetUserById": kitex.NewMethodInfo(getUserByIdHandler, newGetUserByIdArgs, newGetUserByIdResult, false),
+		"Register":         kitex.NewMethodInfo(registerHandler, newRegisterArgs, newRegisterResult, false),
+		"Login":            kitex.NewMethodInfo(loginHandler, newLoginArgs, newLoginResult, false),
+		"GetUserById":      kitex.NewMethodInfo(getUserByIdHandler, newGetUserByIdArgs, newGetUserByIdResult, false),
+		"GetUserListByIds": kitex.NewMethodInfo(getUserListByIdsHandler, newGetUserListByIdsArgs, newGetUserListByIdsResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "user",
@@ -349,6 +350,109 @@ func (p *GetUserByIdResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
+func getUserListByIdsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(user.DouyinUserListRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(user.UserService).GetUserListByIds(ctx, req)
+		if err != nil {
+			return err
+		}
+		if err := st.SendMsg(resp); err != nil {
+			return err
+		}
+	case *GetUserListByIdsArgs:
+		success, err := handler.(user.UserService).GetUserListByIds(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*GetUserListByIdsResult)
+		realResult.Success = success
+	}
+	return nil
+}
+func newGetUserListByIdsArgs() interface{} {
+	return &GetUserListByIdsArgs{}
+}
+
+func newGetUserListByIdsResult() interface{} {
+	return &GetUserListByIdsResult{}
+}
+
+type GetUserListByIdsArgs struct {
+	Req *user.DouyinUserListRequest
+}
+
+func (p *GetUserListByIdsArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, fmt.Errorf("No req in GetUserListByIdsArgs")
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *GetUserListByIdsArgs) Unmarshal(in []byte) error {
+	msg := new(user.DouyinUserListRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var GetUserListByIdsArgs_Req_DEFAULT *user.DouyinUserListRequest
+
+func (p *GetUserListByIdsArgs) GetReq() *user.DouyinUserListRequest {
+	if !p.IsSetReq() {
+		return GetUserListByIdsArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *GetUserListByIdsArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+type GetUserListByIdsResult struct {
+	Success *user.DouyinUserListResponse
+}
+
+var GetUserListByIdsResult_Success_DEFAULT *user.DouyinUserListResponse
+
+func (p *GetUserListByIdsResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, fmt.Errorf("No req in GetUserListByIdsResult")
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *GetUserListByIdsResult) Unmarshal(in []byte) error {
+	msg := new(user.DouyinUserListResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *GetUserListByIdsResult) GetSuccess() *user.DouyinUserListResponse {
+	if !p.IsSetSuccess() {
+		return GetUserListByIdsResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *GetUserListByIdsResult) SetSuccess(x interface{}) {
+	p.Success = x.(*user.DouyinUserListResponse)
+}
+
+func (p *GetUserListByIdsResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -384,6 +488,16 @@ func (p *kClient) GetUserById(ctx context.Context, Req *user.DouyinUserRequest) 
 	_args.Req = Req
 	var _result GetUserByIdResult
 	if err = p.c.Call(ctx, "GetUserById", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetUserListByIds(ctx context.Context, Req *user.DouyinUserListRequest) (r *user.DouyinUserListResponse, err error) {
+	var _args GetUserListByIdsArgs
+	_args.Req = Req
+	var _result GetUserListByIdsResult
+	if err = p.c.Call(ctx, "GetUserListByIds", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

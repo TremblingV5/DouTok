@@ -29,7 +29,7 @@ func Init() {
 func main() {
 	Init()
 
-	// 启动 kafka 消费者协程
+	// 启动 kafka 消费者协程，消费 IM 消息
 	go service.ConsumeMsg()
 
 	var logger = dlog.InitLog(3)

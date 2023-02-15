@@ -521,10 +521,10 @@ func (p *GetFollowCountArgs) IsSetReq() bool {
 }
 
 type GetFollowCountResult struct {
-	Success *relation.DouyinRelationCountRequest
+	Success *relation.DouyinRelationCountResponse
 }
 
-var GetFollowCountResult_Success_DEFAULT *relation.DouyinRelationCountRequest
+var GetFollowCountResult_Success_DEFAULT *relation.DouyinRelationCountResponse
 
 func (p *GetFollowCountResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
@@ -534,7 +534,7 @@ func (p *GetFollowCountResult) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *GetFollowCountResult) Unmarshal(in []byte) error {
-	msg := new(relation.DouyinRelationCountRequest)
+	msg := new(relation.DouyinRelationCountResponse)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -542,7 +542,7 @@ func (p *GetFollowCountResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *GetFollowCountResult) GetSuccess() *relation.DouyinRelationCountRequest {
+func (p *GetFollowCountResult) GetSuccess() *relation.DouyinRelationCountResponse {
 	if !p.IsSetSuccess() {
 		return GetFollowCountResult_Success_DEFAULT
 	}
@@ -550,7 +550,7 @@ func (p *GetFollowCountResult) GetSuccess() *relation.DouyinRelationCountRequest
 }
 
 func (p *GetFollowCountResult) SetSuccess(x interface{}) {
-	p.Success = x.(*relation.DouyinRelationCountRequest)
+	p.Success = x.(*relation.DouyinRelationCountResponse)
 }
 
 func (p *GetFollowCountResult) IsSetSuccess() bool {
@@ -607,7 +607,7 @@ func (p *kClient) RelationFriendList(ctx context.Context, Req *relation.DouyinRe
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetFollowCount(ctx context.Context, Req *relation.DouyinRelationCountRequest) (r *relation.DouyinRelationCountRequest, err error) {
+func (p *kClient) GetFollowCount(ctx context.Context, Req *relation.DouyinRelationCountRequest) (r *relation.DouyinRelationCountResponse, err error) {
 	var _args GetFollowCountArgs
 	_args.Req = Req
 	var _result GetFollowCountResult
