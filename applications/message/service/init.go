@@ -32,12 +32,12 @@ func InitHB() {
 }
 
 func InitSyncProducer() {
-	producer := kafka.InitSynProducer()
+	producer := kafka.InitSynProducer(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"))
 	SyncProducer = producer
 }
 
 func InitConsumerGroup() {
-	cGroup := kafka.InitConsumerGroup()
+	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetString("Kafka.GroupId"))
 	ConsumerGroup = cGroup
 }
 
