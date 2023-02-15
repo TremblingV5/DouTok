@@ -23,6 +23,16 @@ message douyin_user_response {
     User user = 3; // 用户信息
 }
 
+message douyin_user_list_request {
+    repeated int64 user_list = 1; // 用户列表
+}
+
+message douyin_user_list_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    string status_msg = 2; // 返回状态描述
+    repeated User user_list = 3; // 用户信息
+}
+
 message User {
     int64 id = 1; // 用户id
     string name = 2; // 用户名称
@@ -36,4 +46,5 @@ service UserService{
     rpc Register (douyin_user_register_request) returns (douyin_user_register_response);
     rpc Login (douyin_user_register_request) returns (douyin_user_register_response);
     rpc GetUserById (douyin_user_request) returns (douyin_user_response);
+    rpc GetUserListByIds (douyin_user_list_request) returns (douyin_user_list_response);
 }

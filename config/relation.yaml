@@ -2,9 +2,6 @@ Global:
   Source: "config(local)"
   ChangeMe: "v1"
 
-JWT:
-  signingKey: "signingKey"
-
 Etcd:
   Address: "127.0.0.1"
   Port: 2379
@@ -23,3 +20,27 @@ Client:
 
 Snowflake:
   Node: 30
+
+Hbase:
+  Table: "message"
+
+Redis:
+  Host: "127.0.0.1"
+  Port: 6379
+  Password: "root"
+  DataBases:
+    Default: 6
+
+Kafka:
+  Brokers:
+    - "150.158.237.39:50004"
+  Topics:
+    - "test"
+  GroupId: "test01"
+
+MySQL:
+  Host: "127.0.0.1"
+  Port: "3307"
+  Database: "DouTok"
+  Username: "root"
+  Password: "root"
