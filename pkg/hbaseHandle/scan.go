@@ -8,7 +8,7 @@ import (
 	"github.com/tsuna/gohbase/hrpc"
 )
 
-func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[string]map[string]interface{}, error) {
+func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[string]map[string][]byte, error) {
 	req, err := hrpc.NewScanStr(
 		context.Background(), table, options...,
 	)
@@ -19,7 +19,7 @@ func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[
 
 	scanner := c.Client.Scan(req)
 
-	packed := make(map[string]map[string]interface{})
+	packed := make(map[string]map[string][]byte)
 
 	for {
 		res, err := scanner.Next()
@@ -28,7 +28,7 @@ func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[
 		}
 
 		var rowKey string
-		temp := make(map[string]interface{})
+		temp := make(map[string][]byte)
 
 		for _, v := range res.Cells {
 			rowKey = string(v.Row)
@@ -41,7 +41,7 @@ func (c *HBaseClient) Scan(table string, options ...func(hrpc.Call) error) (map[
 	return packed, nil
 }
 
-func (c *HBaseClient) ScanRange(table string, start string, end string, options ...func(hrpc.Call) error) (map[string]map[string]any, error) {
+func (c *HBaseClient) ScanRange(table string, start string, end string, options ...func(hrpc.Call) error) (map[string]map[string][]byte, error) {
 	req, err := hrpc.NewScanRangeStr(
 		context.Background(), table, start, end, options...,
 	)
@@ -52,7 +52,7 @@ func (c *HBaseClient) ScanRange(table string, start string, end string, options 
 
 	scanner := c.Client.Scan(req)
 
-	packed := make(map[string]map[string]any)
+	packed := make(map[string]map[string][]byte)
 
 	for {
 		res, err := scanner.Next()
@@ -61,11 +61,11 @@ func (c *HBaseClient) ScanRange(table string, start string, end string, options 
 		}
 
 		var rowKey string
-		temp := make(map[string]any)
+		temp := make(map[string][]byte)
 
 		for _, v := range res.Cells {
 			rowKey = string(v.Row)
-			temp[string(v.Qualifier)] = string(v.Value)
+			temp[string(v.Qualifier)] = v.Value
 		}
 
 		packed[rowKey] = temp

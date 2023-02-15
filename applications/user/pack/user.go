@@ -1,4 +1,4 @@
-package service
+package pack
 
 import (
 	"context"
@@ -36,16 +36,6 @@ func PackUserResp(code int32, msg string, u *model.User) (resp *user.DouyinUserR
 	}
 
 	resp.User = &info
-
-	return resp, nil
-}
-
-func PackLRResp(code int32, msg string, user_id int64) (resp *user.DouyinUserRegisterResponse, err error) {
-	resp = &user.DouyinUserRegisterResponse{
-		StatusCode: code,
-		StatusMsg:  msg,
-		UserId:     user_id,
-	}
 
 	return resp, nil
 }

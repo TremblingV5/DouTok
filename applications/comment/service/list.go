@@ -22,7 +22,7 @@ func ListComment(video_id int64) ([]*model.CommentInHB, errno.ErrNo, error) {
 
 	for _, v := range res {
 		temp := model.CommentInHB{}
-		err := tools.Map2Struct(v, &temp)
+		err := tools.Map2Struct4HB(v, &temp)
 		if err != nil {
 			continue
 		}

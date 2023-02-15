@@ -23,7 +23,7 @@ func PackFeedListResp(list []VideoInHB, code int32, msg string, user_id int64) (
 
 	var video_id_list []int64
 	for _, v := range list {
-		video_id_list = append(video_id_list, v.Id)
+		video_id_list = append(video_id_list, v.GetId())
 	}
 
 	is_favorite_resp, err := rpc.IsFavorite(context.Background(), &favorite.DouyinIsFavoriteRequest{
@@ -54,18 +54,18 @@ func PackFeedListResp(list []VideoInHB, code int32, msg string, user_id int64) (
 	for _, v := range list {
 		var temp feed.Video
 
-		temp.Id = v.Id
-		temp.PlayUrl = v.VideoUrl
-		temp.CoverUrl = v.CoverUrl
-		temp.Title = v.Title
+		temp.Id = v.GetId()
+		temp.PlayUrl = v.GetVideoUrl()
+		temp.CoverUrl = v.GetCoverUrl()
+		temp.Title = v.GetTitle()
 
-		temp.FavoriteCount = favorite_count[v.Id]
-		temp.CommentCount = comment_count[v.Id]
-		temp.IsFavorite = is_favorite[v.Id]
+		temp.FavoriteCount = favorite_count[v.GetId()]
+		temp.CommentCount = comment_count[v.GetId()]
+		temp.IsFavorite = is_favorite[v.GetId()]
 
 		resp, err := rpc.GetUserById(
 			context.Background(), &user.DouyinUserRequest{
-				UserId: v.AuthorId,
+				UserId: v.GetAuthorId(),
 			},
 		)
 
@@ -77,8 +77,8 @@ func PackFeedListResp(list []VideoInHB, code int32, msg string, user_id int64) (
 
 		video_list = append(video_list, &temp)
 
-		if v.Timestamp < next_time {
-			next_time = v.Timestamp
+		if v.GetTimestamp() < next_time {
+			next_time = v.GetTimestamp()
 		}
 	}
 
