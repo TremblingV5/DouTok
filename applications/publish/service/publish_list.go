@@ -25,7 +25,7 @@ func QueryPublishListInHBase(user_id int64) ([]typedef.VideoInHB, error) {
 
 	for _, v := range video_list {
 		temp := typedef.VideoInHB{}
-		err := misc.Map2Struct(v, &temp)
+		err := misc.Map2Struct4HB(v, &temp)
 		if err != nil {
 			continue
 		}

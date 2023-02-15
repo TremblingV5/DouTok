@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
@@ -27,7 +28,7 @@ func (s *MessageChatService) MessageChat(req *message.DouyinMessageChatRequest) 
 	}
 	for _, v := range res {
 		packMsg := pack.Message{}
-		err := misc.Map2Struct(v, &packMsg)
+		err := misc.Map2Struct4HB(v, &packMsg)
 		if err != nil {
 			continue
 		}
