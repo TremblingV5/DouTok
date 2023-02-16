@@ -15,13 +15,13 @@ type Message struct {
 	CreateTime  string `json:"create_time"`
 }
 
-func NewMessage(msg *message.DouyinRelationActionRequest) *Message {
+func NewMessage(req *message.DouyinMessageActionRequest) *Message {
 	message := Message{
 		Id:          int64(utils.GetSnowFlakeId()),
-		FromUserId:  msg.UserId,
-		ToUserId:    msg.ToUserId,
-		Content:     msg.Content,
-		ContentType: msg.ActionType,
+		FromUserId:  req.UserId,
+		ToUserId:    req.ToUserId,
+		Content:     req.Content,
+		ContentType: req.ActionType,
 		CreateTime:  string(time.Now().Unix()),
 	}
 	return &message
