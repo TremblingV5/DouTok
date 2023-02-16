@@ -5,7 +5,7 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/errno"
 )
 
-func BuildMessageActionResp(err error, resp *message.DouyinRelationActionResponse) {
+func BuildMessageActionResp(err error, resp *message.DouyinMessageActionResponse) {
 	e := errno.ConvertErr(err)
 	resp.StatusMsg = e.ErrMsg
 	resp.StatusCode = int32(e.ErrCode)

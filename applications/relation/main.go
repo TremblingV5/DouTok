@@ -2,38 +2,75 @@ package main
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/kitex_gen/relation"
+	"fmt"
+	"github.com/TremblingV5/DouTok/applications/relation/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
+	"github.com/TremblingV5/DouTok/pkg/dlog"
+	"github.com/TremblingV5/DouTok/pkg/middleware"
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/cloudwego/kitex/pkg/limit"
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/cloudwego/kitex/server"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
+	etcd "github.com/kitex-contrib/registry-etcd"
+	"net"
 )
 
-type RelationServiceImpl struct{}
-
-// RelationAction implements the RelationServiceImpl interface.
-func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.DouyinRelationActionRequest) (resp *relation.DouyinRelationActionResponse, err error) {
-	// TODO: Your code here...
-	return
-}
-
-// RelationFollowList implements the RelationServiceImpl interface.
-func (s *RelationServiceImpl) RelationFollowList(ctx context.Context, req *relation.DouyinRelationFollowListRequest) (resp *relation.DouyinRelationFollowListResponse, err error) {
-	// TODO: Your code here...
-	return
-}
-
-// RelationFollowerList implements the RelationServiceImpl interface.
-func (s *RelationServiceImpl) RelationFollowerList(ctx context.Context, req *relation.DouyinRelationFollowerListRequest) (resp *relation.DouyinRelationFollowerListResponse, err error) {
-	// TODO: Your code here...
-	return
-}
-
-// RelationFriendList implements the RelationServiceImpl interface.
-func (s *RelationServiceImpl) RelationFriendList(ctx context.Context, req *relation.DouyinRelationFriendListRequest) (resp *relation.DouyinRelationFriendListResponse, err error) {
-	// TODO: Your code here...
-	return
+func Init() {
+	service.InitViper()
+	service.InitRedisClient()
+	service.InitSyncProducer()
+	service.InitConsumerGroup()
+	service.InitId()
+	service.InitDB()
 }
 
 func main() {
-	s := relationservice.NewServer(&RelationServiceImpl{})
+	Init()
 
-	s.Run()
+	// 启动 kafka 消费者协程，消费点赞消息
+	go service.ConsumeMsg()
+
+	var logger = dlog.InitLog(3)
+	defer logger.Sync()
+
+	klog.SetLogger(logger)
+
+	ServiceName := service.ViperConfig.Viper.GetString("Server.Name")
+	ServiceAddr := fmt.Sprintf("%s:%d", service.ViperConfig.Viper.GetString("Server.Address"), service.ViperConfig.Viper.GetInt("Server.Port"))
+	EtcdAddress := fmt.Sprintf("%s:%d", service.ViperConfig.Viper.GetString("Etcd.Address"), service.ViperConfig.Viper.GetInt("Etcd.Port"))
+
+	r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
+	if err != nil {
+		klog.Fatal(err)
+	}
+	addr, err := net.ResolveTCPAddr("tcp", ServiceAddr)
+	if err != nil {
+		klog.Fatal(err)
+	}
+
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(ServiceName),
+		provider.WithExportEndpoint("localhost:4317"),
+		provider.WithInsecure(),
+	)
+	defer p.Shutdown(context.Background())
+
+	svr := relationservice.NewServer(
+		new(RelationServiceImpl),
+		server.WithServiceAddr(addr),                                       // address
+		server.WithMiddleware(middleware.CommonMiddleware),                 // middleware
+		server.WithMiddleware(middleware.ServerMiddleware),                 // middleware
+		server.WithRegistry(r),                                             // registry
+		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
+		server.WithMuxTransport(),                                          // Multiplex
+		server.WithSuite(tracing.NewServerSuite()),                         // trace
+		// Please keep the same as provider.WithServiceName
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: ServiceName}),
+	)
+
+	if err := svr.Run(); err != nil {
+		klog.Fatalf("%s stopped with error:", ServiceName, err)
+	}
 }

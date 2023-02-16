@@ -29,7 +29,7 @@ Redis:
   Port: 6379
   Password: "root"
   DataBases:
-    Default: 0
+    Default: 5
 
 Kafka:
   Brokers:

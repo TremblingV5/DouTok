@@ -147,7 +147,7 @@ func messageActionHandler(ctx context.Context, handler interface{}, arg, result 
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
-		req := new(message.DouyinRelationActionRequest)
+		req := new(message.DouyinMessageActionRequest)
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
@@ -177,7 +177,7 @@ func newMessageActionResult() interface{} {
 }
 
 type MessageActionArgs struct {
-	Req *message.DouyinRelationActionRequest
+	Req *message.DouyinMessageActionRequest
 }
 
 func (p *MessageActionArgs) Marshal(out []byte) ([]byte, error) {
@@ -188,7 +188,7 @@ func (p *MessageActionArgs) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *MessageActionArgs) Unmarshal(in []byte) error {
-	msg := new(message.DouyinRelationActionRequest)
+	msg := new(message.DouyinMessageActionRequest)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -196,9 +196,9 @@ func (p *MessageActionArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var MessageActionArgs_Req_DEFAULT *message.DouyinRelationActionRequest
+var MessageActionArgs_Req_DEFAULT *message.DouyinMessageActionRequest
 
-func (p *MessageActionArgs) GetReq() *message.DouyinRelationActionRequest {
+func (p *MessageActionArgs) GetReq() *message.DouyinMessageActionRequest {
 	if !p.IsSetReq() {
 		return MessageActionArgs_Req_DEFAULT
 	}
@@ -210,10 +210,10 @@ func (p *MessageActionArgs) IsSetReq() bool {
 }
 
 type MessageActionResult struct {
-	Success *message.DouyinRelationActionResponse
+	Success *message.DouyinMessageActionResponse
 }
 
-var MessageActionResult_Success_DEFAULT *message.DouyinRelationActionResponse
+var MessageActionResult_Success_DEFAULT *message.DouyinMessageActionResponse
 
 func (p *MessageActionResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
@@ -223,7 +223,7 @@ func (p *MessageActionResult) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *MessageActionResult) Unmarshal(in []byte) error {
-	msg := new(message.DouyinRelationActionResponse)
+	msg := new(message.DouyinMessageActionResponse)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -231,7 +231,7 @@ func (p *MessageActionResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *MessageActionResult) GetSuccess() *message.DouyinRelationActionResponse {
+func (p *MessageActionResult) GetSuccess() *message.DouyinMessageActionResponse {
 	if !p.IsSetSuccess() {
 		return MessageActionResult_Success_DEFAULT
 	}
@@ -239,7 +239,7 @@ func (p *MessageActionResult) GetSuccess() *message.DouyinRelationActionResponse
 }
 
 func (p *MessageActionResult) SetSuccess(x interface{}) {
-	p.Success = x.(*message.DouyinRelationActionResponse)
+	p.Success = x.(*message.DouyinMessageActionResponse)
 }
 
 func (p *MessageActionResult) IsSetSuccess() bool {
@@ -369,7 +369,7 @@ func (p *kClient) MessageChat(ctx context.Context, Req *message.DouyinMessageCha
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) MessageAction(ctx context.Context, Req *message.DouyinRelationActionRequest) (r *message.DouyinRelationActionResponse, err error) {
+func (p *kClient) MessageAction(ctx context.Context, Req *message.DouyinMessageActionRequest) (r *message.DouyinMessageActionResponse, err error) {
 	var _args MessageActionArgs
 	_args.Req = Req
 	var _result MessageActionResult

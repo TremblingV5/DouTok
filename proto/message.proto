@@ -22,14 +22,14 @@ message Message {
     string create_time = 6; // 消息创建时间
 }
 
-message douyin_relation_action_request {
+message douyin_message_action_request {
     int64 to_user_id = 1; // 对方用户id
     int64 user_id = 2;  // 发消息的user id
     int32 action_type = 3; // 1-发送消息
     string content = 4; // 消息内容
 }
 
-message douyin_relation_action_response {
+message douyin_message_action_response {
     int32 status_code = 1; // 状态码，0-成功，其他-失败
     string status_msg = 2; // 返回状态描述
 }
@@ -47,6 +47,6 @@ message douyin_friend_list_message_response {
 
 service MessageService {
     rpc MessageChat(douyin_message_chat_request) returns (douyin_message_chat_response); // 聊天记录
-    rpc MessageAction(douyin_relation_action_request) returns (douyin_relation_action_response); // 消息操作
+    rpc MessageAction(douyin_message_action_request) returns (douyin_message_action_response); // 消息操作
     rpc MessageFriendList(douyin_friend_list_message_request) returns (douyin_friend_list_message_response); // 最新消息
 }
