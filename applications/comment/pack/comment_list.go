@@ -19,13 +19,13 @@ func PackCommentListResp(code int32, msg string, comments []*model.CommentInHB) 
 
 	for _, v := range comments {
 		temp := comment.Comment{
-			Id:         v.Id,
-			Content:    v.Content,
-			CreateDate: v.Timestamp,
+			Id:         v.GetId(),
+			Content:    v.GetContent(),
+			CreateDate: v.GetContent(),
 		}
 
 		reqUser, err := rpc.GetUserById(context.Background(), &user.DouyinUserRequest{
-			UserId: v.UserId,
+			UserId: v.GetUserId(),
 		})
 		if err != nil {
 			continue
