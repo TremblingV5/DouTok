@@ -56,6 +56,11 @@ func InitJwt() {
 				"token":       token,
 			})
 		},
+		IdentityKey: constants.IdentityKey,
+		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {
+			claims := jwt.ExtractClaims(ctx, c)
+			return claims[constants.IdentityKey].(int64)
+		},
 		Unauthorized: func(ctx context.Context, c *app.RequestContext, code int, message string) {
 			c.JSON(code, map[string]interface{}{
 				"code":    errno.AuthorizationFailedErrCode,
