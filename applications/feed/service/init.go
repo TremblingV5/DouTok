@@ -4,25 +4,18 @@ import (
 	"context"
 
 	"github.com/TremblingV5/DouTok/applications/feed/dal/query"
-	"github.com/TremblingV5/DouTok/config/configStruct"
-	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 )
 
-func InitDb() error {
-	var config configStruct.MySQLConfig
-	configurator.InitConfig(
-		&config, "mysql.yaml",
-	)
-
+func InitDb(username string, password string, host string, port string, database string) error {
 	db, err := mysqlIniter.InitDb(
-		config.Username,
-		config.Password,
-		config.Host,
-		config.Port,
-		config.Database,
+		username,
+		password,
+		host,
+		port,
+		database,
 	)
 
 	if err != nil {
@@ -38,26 +31,16 @@ func InitDb() error {
 	return nil
 }
 
-func InitHB() error {
-	var config configStruct.HBaseConfig
-	configurator.InitConfig(
-		&config, "hbase.yaml",
-	)
-
-	client := hbaseHandle.InitHB(config.Host)
+func InitHB(host string) error {
+	client := hbaseHandle.InitHB(host)
 	HBClient = &client
 
 	return nil
 }
 
-func InitRedis() error {
-	var config configStruct.RedisConfig
-	configurator.InitConfig(
-		&config, "redis.yaml",
-	)
-
+func InitRedis(dest string, password string, dbs map[string]int) error {
 	redisCaches, _ := redishandle.InitRedis(
-		config.Host+":"+config.Port, config.Password, config.Databases,
+		dest, password, dbs,
 	)
 
 	RedisClients = redisCaches

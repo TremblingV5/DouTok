@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/TremblingV5/DouTok/applications/favorite/misc"
 	"net"
 
 	"github.com/TremblingV5/DouTok/applications/publish/handler"
@@ -18,10 +19,24 @@ var (
 )
 
 func Init() {
-	service.InitDb()
-	service.InitHB()
-	service.InitOSS()
-	rpc.InitRPCConfig()
+	misc.InitViperConfig()
+
+	service.InitDb(
+		misc.GetConfig("MySQL.Username"),
+		misc.GetConfig("MySQL.Password"),
+		misc.GetConfig("MySQL.Host"),
+		misc.GetConfig("MySQL.Port"),
+		misc.GetConfig("MySQL.HBase"),
+	)
+	service.InitHB(
+		misc.GetConfig("HBase.Host"),
+	)
+	service.InitOSS(
+		misc.GetConfig("OSS.Endpoint"),
+		misc.GetConfig("OSS.Key"),
+		misc.GetConfig("OSS.Secret"),
+		misc.GetConfig("OSS.Bucket"),
+	)
 	rpc.InitPRCClient()
 	utils.InitSnowFlake(1024)
 }
@@ -30,13 +45,13 @@ func main() {
 	Init()
 
 	registry, err := etcd.NewEtcdRegistry([]string{
-		rpc.ClientConfig.Etcd.Address + ":" + rpc.ClientConfig.Etcd.Port,
+		misc.GetConfig("Etcd.Address") + ":" + misc.GetConfig("Etcd.Port"),
 	})
 	if err != nil {
 		Logger.Fatal(err)
 	}
 
-	addr, err := net.ResolveTCPAddr("tcp", rpc.ClientConfig.Server.Address+":"+rpc.ClientConfig.Server.Port)
+	addr, err := net.ResolveTCPAddr("tcp", misc.GetConfig("Server.Address")+":"+misc.GetConfig("Server.Port"))
 	if err != nil {
 		Logger.Fatal(err)
 	}

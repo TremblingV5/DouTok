@@ -21,5 +21,25 @@ Client:
     - "127.0.0.1"
     - "192.168.1.1"
 
+HBase:
+  Host: "localhost"
+
 Snowflake:
-  Node: 20
+  Node: 510
+
+OSS:
+  Endpoint: "oss-cn-shanghai.aliyuncs.com"
+  Key: "LTAI5tE4KuLv9mURV2C73Umi"
+  Secret: ""
+  Bucket: "doutok-video"
+  Callback: ""
+
+MySQL:
+  Host: "127.0.0.1"
+  Port: 8091
+  User: "tiktok"
+  Password: "password"
+  Database: "Tiktok"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"

@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
 
 	"github.com/TremblingV5/DouTok/kitex_gen/relation"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
@@ -12,7 +13,9 @@ import (
 var relationClient relationservice.Client
 
 func InitRelationRpc() {
-	addr := ClientConfig.Etcd.Address + ":" + ClientConfig.Etcd.Port
+	config := dtviper.ConfigInit("DOUTOK_RELATION", "relation")
+
+	addr := config.Viper.GetString("Etcd.Address") + ":" + config.Viper.GetString("Etcd.Port")
 	registry, err := etcd.NewEtcdResolver([]string{addr})
 	if err != nil {
 		panic(err)
@@ -32,5 +35,4 @@ func InitRelationRpc() {
 
 func GetFollowCount(ctx context.Context, req *relation.DouyinRelationCountRequest) (resp *relation.DouyinRelationCountResponse, err error) {
 	return relationClient.GetFollowCount(ctx, req)
-
 }

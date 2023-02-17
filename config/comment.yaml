@@ -21,5 +21,18 @@ Client:
     - "127.0.0.1"
     - "192.168.1.1"
 
+MySQL:
+  Host: "127.0.0.1"
+  Port: 8091
+  User: "tiktok"
+  Password: "password"
+  Database: "Tiktok"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
+
 Snowflake:
   Node: 70
+
+HBase:
+  Host: "localhost"

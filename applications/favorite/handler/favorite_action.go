@@ -12,11 +12,11 @@ import (
 func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.DouyinFavoriteActionRequest) (resp *favorite.DouyinFavoriteActionResponse, err error) {
 	if req.ActionType == 1 {
 		// 点赞
-		errNo, _ := service.CreateFavorite(req.UserId, req.VideoId)
+		errNo, _ := service.ActionFavorite(req.UserId, req.VideoId, true)
 		return pack.PackFavoriteActionResp(int32(errNo.ErrCode), errNo.ErrMsg)
 	} else if req.ActionType == 2 {
 		// 取消点赞
-		errNo, _ := service.RemoveFavorite(req.UserId, req.VideoId)
+		errNo, _ := service.ActionFavorite(req.UserId, req.VideoId, false)
 		return pack.PackFavoriteActionResp(int32(errNo.ErrCode), errNo.ErrMsg)
 	} else {
 		return pack.PackFavoriteActionResp(int32(misc.BindingInvalidErr.ErrCode), misc.BindingInvalidErr.ErrMsg)

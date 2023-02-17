@@ -6,7 +6,7 @@ JWT:
   signingKey: "signingKey"
 
 Etcd:
-  Address: "127.0.0.1"
+  Address: "47.115.230.248"
   Port: 2379
 
 Server:
@@ -22,4 +22,22 @@ Client:
     - "192.168.1"
 
 Snowflake:
-  Node: 60
+  Node: 602
+
+MySQL:
+  Host: "127.0.0.1"
+  Port: 8091
+  User: "tiktok"
+  Password: "password"
+  Database: "Tiktok"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
+
+Redis:
+  Dest: "127.0.0.1:6379"
+  Password: ""
+  FavCache:
+    Num: 3
+  FavCntCache:
+    Num: 4
