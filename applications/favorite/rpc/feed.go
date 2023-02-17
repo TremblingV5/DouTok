@@ -3,6 +3,7 @@ package rpc
 import (
 	"context"
 
+	"github.com/TremblingV5/DouTok/applications/favorite/misc"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed/feedservice"
 	"github.com/cloudwego/kitex/client"
@@ -12,7 +13,7 @@ import (
 var feedClient feedservice.Client
 
 func InitRelationRpc() {
-	addr := ClientConfig.Etcd.Address + ":" + ClientConfig.Etcd.Port
+	addr := misc.GetConfig("Etcd.Address") + ":" + misc.GetConfig("Etcd.Port")
 	registry, err := etcd.NewEtcdResolver([]string{addr})
 	if err != nil {
 		panic(err)

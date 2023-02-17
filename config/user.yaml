@@ -6,7 +6,7 @@ JWT:
   signingKey: "signingKey"
 
 Etcd:
-  Address: "127.0.0.1"
+  Address: "47.115.230.248"
   Port: 2379
 
 Server:
@@ -29,3 +29,13 @@ Client:
 
 Snowflake:
   Node: 40
+
+MySQL:
+  Host: "47.115.230.248"
+  Port: 3307
+  User: "root"
+  Password: "root"
+  Database: "DouTok"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
