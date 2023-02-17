@@ -24,7 +24,7 @@ func FindFeedInHB(start_time string, end_time string) ([]VideoInHB, error) {
 	video_list := []VideoInHB{}
 	for _, v := range res {
 		temp := VideoInHB{}
-		err := tools.Map2Struct(v, &temp)
+		err := tools.Map2Struct4HB(v, &temp)
 		if err != nil {
 			continue
 		}

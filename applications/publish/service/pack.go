@@ -30,9 +30,9 @@ func PackPublishListRes(list []typedef.VideoInHB, code int32, msg string, req *p
 	for _, v := range list {
 		var temp feed.Video
 
-		temp.Title = v.Title
-		temp.PlayUrl = v.VideoUrl
-		temp.CoverUrl = v.CoverUrl
+		temp.Title = v.GetTitle()
+		temp.PlayUrl = v.GetVideoUrl()
+		temp.CoverUrl = v.GetCoverUrl()
 
 		newReq := user.DouyinUserRequest{
 			UserId: req.UserId,

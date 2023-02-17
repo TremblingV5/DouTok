@@ -7,9 +7,9 @@ import (
 
 func TestVideoList2String(t *testing.T) {
 	video := VideoInHB{
-		Id:         1,
-		AuthorId:   2,
-		AuthorName: "Tom",
+		Id:         []byte("1"),
+		AuthorId:   []byte("1"),
+		AuthorName: []byte("Tom"),
 	}
 	list := []VideoInHB{
 		video,

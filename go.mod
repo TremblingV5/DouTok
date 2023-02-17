@@ -23,6 +23,7 @@ require (
 	github.com/kitex-contrib/obs-opentelemetry v0.1.0
 	github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20221109071748-a433b0b57972
 	github.com/kitex-contrib/registry-etcd v0.1.0
+	github.com/orcaman/concurrent-map v1.0.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.15.0
