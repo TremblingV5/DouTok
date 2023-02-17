@@ -11,7 +11,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "TiktokAPIServer"
+  Name: "DoutokAPIServer"
   Address: "0.0.0.0"
   Port: 8088
 
