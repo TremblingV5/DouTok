@@ -55,7 +55,7 @@ func initMessageRpc(Config *dtviper.Config) {
 }
 
 // 传递 发布视频操作 的上下文, 并获取 RPC Server 端的响应.
-func MessageAction(ctx context.Context, req *message.DouyinRelationActionRequest) (resp *message.DouyinRelationActionResponse, err error) {
+func MessageAction(ctx context.Context, req *message.DouyinMessageActionRequest) (resp *message.DouyinMessageActionResponse, err error) {
 	resp, err = messageClient.MessageAction(ctx, req)
 	if err != nil {
 		return nil, err

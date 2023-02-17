@@ -33,6 +33,8 @@ message Comment {
     user.User user =2; // 评论用户信息
     string content = 3; // 评论内容
     string create_date = 4; // 评论发布日期，格式 mm-dd
+    int64 like_count = 5; // 该评论的点赞数
+    int64 tease_count = 6; // 该评论diss数量
 }
 
 message douyin_comment_count_request {
