@@ -62,6 +62,7 @@ type ServerMsg struct {
 	MsgContent string `json:"msg_content"`
 }
 
+// websocket 服务端的实现
 // serveWs handles websocket requests from the peer.
 func ServeWs(ctx context.Context, c *app.RequestContext) {
 
@@ -94,7 +95,7 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 				}
 			}
 			// 向 message 模块发送消息
-			resp, err := rpc.MessageAction(ctx, &message.DouyinRelationActionRequest{
+			resp, err := rpc.MessageAction(ctx, &message.DouyinMessageActionRequest{
 				ToUserId:   clientMsg.ToUserId,
 				ActionType: 1,
 				Content:    clientMsg.MsgContent,
@@ -141,4 +142,14 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
 	}
+}
+
+// 实现 socket 消息推送中心
+func SocketChat(ctx context.Context, c *app.RequestContext) {
+	/**
+	conn 等价于最初 hertz-server 握手之后创建的 conn，
+	如果能够维护一个map，在保证对应conn在keep-alive期间，是可以实现消息的转发操作的
+	是否有必要？
+	*/
+	//conn := c.GetConn()
 }
