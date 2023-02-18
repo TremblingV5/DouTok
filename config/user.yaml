@@ -33,7 +33,7 @@ Snowflake:
 MySQL:
   Host: "47.115.230.248"
   Port: 3307
-  User: "root"
+  Username: "admin"
   Password: "root"
   Database: "DouTok"
   CharSet: "utf8mb4"
