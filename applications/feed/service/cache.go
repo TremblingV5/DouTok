@@ -29,13 +29,13 @@ func GetFeedCache(ctx context.Context, user_id string, num int64) ([]VideoInHB, 
 /*
 	将新的feed列表存储到Redis中，method参数只允许l或r，代表选择不同的方法Push到Redis
 */
-func SetFeedCache(ctx context.Context, method string, user_id string, values ...VideoInHB) error {
-	video_list := VideoList2String(values)
+func SetFeedCache(ctx context.Context, method string, userId string, values ...VideoInHB) error {
+	videoList := VideoList2String(values)
 	switch method {
 	case "l":
-		return RedisClients[constants.FeedSendBox].LPush(ctx, user_id, video_list...)
+		return RedisClients[constants.FeedSendBox].LPush(ctx, userId, videoList...)
 	case "r":
-		return RedisClients[constants.FeedSendBox].RPush(ctx, user_id, video_list...)
+		return RedisClients[constants.FeedSendBox].RPush(ctx, userId, videoList...)
 	default:
 		return errors.New("unknown method, only accept 'l' or 'r'")
 	}

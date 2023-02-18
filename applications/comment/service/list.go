@@ -8,6 +8,9 @@ import (
 	tools "github.com/TremblingV5/DouTok/pkg/misc"
 )
 
+/*
+	根据video_id列出评论列表
+*/
 func ListComment(video_id int64) ([]*model.CommentInHB, errno.ErrNo, error) {
 	res, err := HBClient.Scan(
 		"comment",

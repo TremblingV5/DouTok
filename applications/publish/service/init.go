@@ -3,10 +3,34 @@ package service
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/publish/dal/query"
+	"github.com/TremblingV5/DouTok/applications/publish/misc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
+	"github.com/TremblingV5/DouTok/pkg/utils"
 )
+
+func Init() {
+	misc.InitViperConfig()
+
+	InitDb(
+		misc.GetConfig("MySQL.Username"),
+		misc.GetConfig("MySQL.Password"),
+		misc.GetConfig("MySQL.Host"),
+		misc.GetConfig("MySQL.Port"),
+		misc.GetConfig("MySQL.Database"),
+	)
+	InitHB(
+		misc.GetConfig("HBase.Host"),
+	)
+	InitOSS(
+		misc.GetConfig("OSS.Endpoint"),
+		misc.GetConfig("OSS.Key"),
+		misc.GetConfig("OSS.Secret"),
+		misc.GetConfig("OSS.Bucket"),
+	)
+	utils.InitSnowFlake(misc.GetConfigNum("Snowflake.Node"))
+}
 
 func InitDb(username string, password string, host string, port string, database string) error {
 	db, err := mysqlIniter.InitDb(

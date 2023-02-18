@@ -89,7 +89,7 @@ func SearchFeedLaterInHB(marked_time string, current_time string) (res []VideoIn
 		// 终止条件1：视频列表长度已经大于30；长度列表已经至少满足3次feed的数量，且为一个feed list的最大允许长度
 		// 故可以以此为停止条件，以减少资源的使用
 		// 终止条件2：时间差小于6个小时
-		if len(video_list) > 30 || !JudgeTimeDiff(next_marked_time_int, fmt.Sprint(current_time_int), 6*60*60) {
+		if len(video_list) > 30 || JudgeTimeDiff(next_marked_time_int, fmt.Sprint(current_time_int), 6*60*60) {
 			break
 		}
 

@@ -4,11 +4,10 @@ import (
 	"context"
 	"errors"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/initHelper"
 
 	"github.com/TremblingV5/DouTok/kitex_gen/favorite"
 	"github.com/TremblingV5/DouTok/kitex_gen/favorite/favoriteservice"
-	"github.com/cloudwego/kitex/client"
-	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 var favoriteClient favoriteservice.Client
@@ -16,15 +15,9 @@ var favoriteClient favoriteservice.Client
 func InitFavoriteRpc() {
 	config := dtviper.ConfigInit("DOUTOK_FAVORITE", "favorite")
 
-	addr := config.Viper.GetString("Etcd.Address") + ":" + config.Viper.GetString("Etcd.Port")
-	registry, err := etcd.NewEtcdResolver([]string{addr})
-	if err != nil {
-		panic(err)
-	}
-
 	c, err := favoriteservice.NewClient(
-		"favorite",
-		client.WithResolver(registry),
+		config.Viper.GetString("Server.Name"),
+		initHelper.InitRPCClientArgs(&config)...,
 	)
 
 	if err != nil {
