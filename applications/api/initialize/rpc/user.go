@@ -67,7 +67,7 @@ func Register(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *u
 }
 
 // 传递 登录操作 的上下文, 并获取 RPC Server 端的响应.
-func Login(ctx context.Context, req *user.DouyinUserRegisterRequest) (int64, error) {
+func Login(ctx context.Context, req *user.DouyinUserLoginRequest) (int64, error) {
 	resp, err := userClient.Login(ctx, req)
 	if err != nil {
 		return 0, err

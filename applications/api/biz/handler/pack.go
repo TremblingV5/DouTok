@@ -45,6 +45,10 @@ func userRegisterResp(err errno.ErrNo) *api.DouyinUserRegisterResponse {
 	return &api.DouyinUserRegisterResponse{StatusCode: int32(err.ErrCode), StatusMsg: err.ErrMsg}
 }
 
+func userLoginResp(err errno.ErrNo) *api.DouyinUserLoginResponse {
+	return &api.DouyinUserLoginResponse{StatusCode: int32(err.ErrCode), StatusMsg: err.ErrMsg}
+}
+
 func getUserResp(err errno.ErrNo) *api.DouyinUserResponse {
 	return &api.DouyinUserResponse{StatusCode: int32(err.ErrCode), StatusMsg: err.ErrMsg}
 }
@@ -56,6 +60,15 @@ func BuildUserRegisterResp(err error) *api.DouyinUserRegisterResponse {
 	}
 	e = errno.InternalErr.WithMessage(err.Error())
 	return userRegisterResp(e)
+}
+
+func BuildUserLoginResp(err error) *api.DouyinUserLoginResponse {
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return userLoginResp(e)
+	}
+	e = errno.InternalErr.WithMessage(err.Error())
+	return userLoginResp(e)
 }
 
 func BuildGetUserResp(err error) *api.DouyinUserResponse {

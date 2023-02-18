@@ -7,7 +7,7 @@ JWT:
 
 Etcd:
   Enable: true
-  Address: "127.0.0.1"
+  Address: "47.115.230.248"
   Port: 2379
 
 Server:
@@ -35,7 +35,7 @@ Client:
     - "192.168.1.1"
 
 Redis:
-  Host: "127.0.0.1"
+  Host: "47.115.230.248"
   Port: 6379
   Password: "root"
   DataBases:
