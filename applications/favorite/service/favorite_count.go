@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/applications/favorite/dal/model"
 	"strconv"
 	"time"
 
@@ -13,11 +14,11 @@ import (
 func QueryFavoriteCount(video_id []int64) (map[int64]int64, error) {
 	resMap := make(map[int64]int64)
 
-	// 1. 从Redis中查找喜欢数
+	// 1. 从内存中查找喜欢数
 	find_again := []int64{}
 
 	for _, v := range video_id {
-		cnt, ok, err := ReadCountFromCache(v)
+		cnt, ok, err := ReadFavTotalCount(v)
 		if err != nil {
 			return nil, err
 		}
@@ -29,9 +30,26 @@ func QueryFavoriteCount(video_id []int64) (map[int64]int64, error) {
 		resMap[v] = cnt
 	}
 
-	// 2. 从MySQL中查找喜欢数
+	find_again_again := []int64{}
+
+	// 2. 从Redis中查找喜欢数
+	for _, v := range find_again {
+		cnt, ok, err := ReadCountFromCache(v)
+		if err != nil {
+			return nil, err
+		}
+
+		if !ok {
+			find_again_again = append(find_again_again, v)
+		}
+
+		resMap[v] = cnt
+		FavTotalCount.Set(fmt.Sprint(v), cnt)
+	}
+
+	// 3. 从MySQL中查找喜欢数
 	res, err := DoFavoriteCnt.Where(
-		FavoriteCnt.VideoId.In(find_again...),
+		FavoriteCnt.VideoId.In(find_again_again...),
 	).Find()
 
 	if err != nil {
@@ -47,7 +65,7 @@ func QueryFavoriteCount(video_id []int64) (map[int64]int64, error) {
 }
 
 func ReadCountFromCache(video_id int64) (int64, bool, error) {
-	data, err := RedisClients[misc.FavCntCache].Get(context.Background(), fmt.Sprint(video_id))
+	data, err := RedisClients[misc.FavTotalCntCache].Get(context.Background(), fmt.Sprint(video_id))
 
 	if err == redis.Nil {
 		return -1, false, nil
@@ -58,6 +76,15 @@ func ReadCountFromCache(video_id int64) (int64, bool, error) {
 	data_i, _ := strconv.Atoi(data)
 
 	return int64(data_i), true, nil
+}
+
+func ReadFavTotalCount(videoId int64) (int64, bool, error) {
+	data, ok := FavTotalCount.Get(fmt.Sprint(videoId))
+	if !ok {
+		return 0, false, nil
+	}
+
+	return int64(data.(int)), true, nil
 }
 
 func WriteCount2Cache(video_id int64, cnt int64) error {
@@ -83,10 +110,32 @@ func ReduceCount(video_id int64) error {
 }
 
 func UpdateCount(video_id int64, cnt int64) error {
-	_, err := DoFavoriteCnt.Where(
+	data, _ := DoFavoriteCnt.Where(
 		FavoriteCnt.VideoId.Eq(video_id),
-	).Update(FavoriteCnt.Number, cnt)
-	return err
+	).First()
+
+	if data != nil {
+		_, err := DoFavoriteCnt.Where(
+			FavoriteCnt.VideoId.Eq(video_id),
+		).Update(FavoriteCnt.Number, FavoriteCnt.Number.Add(cnt))
+
+		if err != nil {
+			return err
+		}
+	} else {
+		err := DoFavoriteCnt.Create(
+			&model.FavoriteCount{
+				VideoId: video_id,
+				Number:  cnt,
+			},
+		)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func UpdateCacheCount(video_id int64, is_fav bool) error {

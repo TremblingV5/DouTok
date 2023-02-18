@@ -6,7 +6,7 @@ JWT:
   signingKey: "signingKey"
 
 Etcd:
-  Address: "127.0.0.1"
+  Address: "47.115.230.248"
   Port: 2379
 
 Server:
@@ -22,17 +22,17 @@ Client:
     - "192.168.1.1"
 
 MySQL:
-  Host: "127.0.0.1"
-  Port: 8091
-  User: "tiktok"
-  Password: "password"
-  Database: "Tiktok"
+  Host: "47.115.230.248"
+  Port: 3307
+  Username: "admin"
+  Password: "root"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
 
 HBase:
-  Host: "localhost"
+  Host: "139.9.80.79"
 
 Snowflake:
   Node: 501
@@ -45,8 +45,8 @@ OSS:
   Callback: ""
 
 Redis:
-  Dest: "127.0.0.1:6379"
-  Password: ""
+  Dest: "47.115.230.248:6379"
+  Password: "root"
   SendBox:
     Num: 1
   MarkdedTime:
