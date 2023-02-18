@@ -2,26 +2,15 @@ package service
 
 import (
 	"context"
-
 	"github.com/TremblingV5/DouTok/applications/publish/dal/query"
 	"github.com/TremblingV5/DouTok/config/configStruct"
-	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 )
 
-func InitDb() error {
-	var config configStruct.MySQLConfig
-	configurator.InitConfig(
-		&config, "mysql.yaml",
-	)
-
+func InitDb(username string, password string, host string, port string, database string) error {
 	db, err := mysqlIniter.InitDb(
-		config.Username,
-		config.Password,
-		config.Host,
-		config.Port,
-		config.Database,
+		username, password, host, port, database,
 	)
 
 	if err != nil {
@@ -37,27 +26,25 @@ func InitDb() error {
 	return nil
 }
 
-func InitHB() error {
-	var config configStruct.HBaseConfig
-	configurator.InitConfig(
-		&config, "hbase.yaml",
-	)
-
-	client := hbaseHandle.InitHB(config.Host)
+func InitHB(host string) error {
+	client := hbaseHandle.InitHB(host)
 	HBClient = &client
 
 	return nil
 }
 
-func InitOSS() error {
-	var config configStruct.OssConfig
-	configurator.InitConfig(
-		&config, "oss.yaml",
+func InitOSS(endpoint string, key string, secret string, bucketName string) error {
+	OSSClient.Init(
+		endpoint, key, secret, bucketName,
 	)
 
-	OSSClient.Init(
-		config.Endpoint, config.Key, config.Secret, config.BucketName,
-	)
+	config := configStruct.OssConfig{
+		Endpoint:   endpoint,
+		Key:        key,
+		Secret:     secret,
+		BucketName: bucketName,
+		//Callback:   callback,
+	}
 
 	OssCfg = &config
 

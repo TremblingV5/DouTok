@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/TremblingV5/DouTok/applications/publish/misc.go"
+	"github.com/TremblingV5/DouTok/applications/publish/misc"
 	tools "github.com/TremblingV5/DouTok/pkg/misc"
 )
 

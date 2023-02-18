@@ -25,5 +25,5 @@ var FavCount *safeMap.SafeMap
 var FavRelationU2V *safeMap.SafeMap
 var FavRelationV2U *safeMap.SafeMap
 
-var FavCountKafkaProducer *sarama.SyncProducer
-var FavCountKafkaConsumer *sarama.ConsumerGroup
+var FavCountKafkaProducer sarama.SyncProducer
+var FavCountKafkaConsumer sarama.ConsumerGroup

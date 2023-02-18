@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/TremblingV5/DouTok/applications/publish/dal/model"
-	"github.com/TremblingV5/DouTok/applications/publish/misc.go"
+	"github.com/TremblingV5/DouTok/applications/publish/misc"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 )

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/TremblingV5/DouTok/applications/user/misc"
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"net"
 
 	"github.com/TremblingV5/DouTok/applications/user/handler"
@@ -18,22 +20,32 @@ var (
 )
 
 func Init() {
-	service.InitDb()
-	rpc.InitRPCConfig()
-	utils.InitSnowFlake(1010)
+	misc.InitViperConfig()
+
+	service.InitDb(
+		misc.GetConfig("MySQL.Username"),
+		misc.GetConfig("MySQL.Password"),
+		misc.GetConfig("MySQL.Host"),
+		misc.GetConfig("MySQL.Port"),
+		misc.GetConfig("MySQL.Database"),
+	)
+
+	rpc.InitPRCClient()
+
+	utils.InitSnowFlake(misc.GetConfigNum("Snowflake.Node"))
 }
 
 func main() {
 	Init()
 
 	registry, err := etcd.NewEtcdRegistry([]string{
-		rpc.ClientConfig.Etcd.Address + ":" + rpc.ClientConfig.Etcd.Port,
+		misc.GetConfig("Etcd.Address") + ":" + misc.GetConfig("Etcd.Port"),
 	})
 	if err != nil {
 		Logger.Fatal(err)
 	}
 
-	addr, err := net.ResolveTCPAddr("tcp", rpc.ClientConfig.Server.Address+":"+rpc.ClientConfig.Server.Port)
+	addr, err := net.ResolveTCPAddr("tcp", misc.GetConfig("Server.Address")+":"+misc.GetConfig("Server.Port"))
 	if err != nil {
 		Logger.Fatal(err)
 	}
@@ -42,6 +54,11 @@ func main() {
 		new(handler.UserServiceImpl),
 		server.WithServiceAddr(addr),
 		server.WithRegistry(registry),
+		server.WithServerBasicInfo(
+			&rpcinfo.EndpointBasicInfo{
+				ServiceName: misc.GetConfig("Server.Name"),
+			},
+		),
 	)
 
 	if err := svr.Run(); err != nil {

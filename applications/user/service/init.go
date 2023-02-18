@@ -4,23 +4,12 @@ import (
 	"context"
 
 	"github.com/TremblingV5/DouTok/applications/user/dal/query"
-	"github.com/TremblingV5/DouTok/config/configStruct"
-	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 )
 
-func InitDb() error {
-	var config configStruct.MySQLConfig
-	configurator.InitConfig(
-		&config, "mysql.yaml",
-	)
-
+func InitDb(username string, password string, host string, port string, database string) error {
 	db, err := mysqlIniter.InitDb(
-		config.Username,
-		config.Password,
-		config.Host,
-		config.Port,
-		config.Database,
+		username, password, host, port, database,
 	)
 
 	if err != nil {
