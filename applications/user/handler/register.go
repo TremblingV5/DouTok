@@ -12,10 +12,10 @@ import (
 func (s *UserServiceImpl) Register(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *user.DouyinUserRegisterResponse, err error) {
 	// 1. 检查参数是否非空
 	if req.Username == "" || req.Password == "" {
-		return pack.PackLRResp(int32(misc.EmptyErr.ErrCode), misc.EmptyErr.ErrMsg, 0)
+		return pack.PackRegisterResp(int32(misc.EmptyErr.ErrCode), misc.EmptyErr.ErrMsg, 0)
 	}
 
 	// 2. 写库
 	user_id, _, errNo := service.WriteNewUser(req.Username, req.Password)
-	return pack.PackLRResp(int32(errNo.ErrCode), errNo.ErrMsg, user_id)
+	return pack.PackRegisterResp(int32(errNo.ErrCode), errNo.ErrMsg, user_id)
 }

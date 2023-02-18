@@ -13,6 +13,17 @@ message douyin_user_register_response {
     int64 user_id = 3; // 用户id
 }
 
+message douyin_user_login_request {
+    string username = 1; // 登陆用户名，最长32个字符
+    string password = 2; // 密码，最长32个字符
+}
+
+message douyin_user_login_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    string status_msg = 2; // 返回状态描述
+    int64 user_id = 3; // 用户id
+}
+
 message douyin_user_request {
     int64 user_id = 1; // 用户id
 }
@@ -42,14 +53,14 @@ message User {
     string avatar = 6; // 用户头像Url
     string background_image = 7; // 用户个人页顶部大图
     string signature = 8; // 个人简介
-    int64 total_favorited = 9; // 作品数量
-    int64 work_count = 10; // 获赞数量
+    int64 total_favorited = 9; // 获赞数量
+    int64 work_count = 10; // 作品数量
     int64 favorite_count = 11; // 点赞数量
 }
 
 service UserService{
     rpc Register (douyin_user_register_request) returns (douyin_user_register_response);
-    rpc Login (douyin_user_register_request) returns (douyin_user_register_response);
+    rpc Login (douyin_user_login_request) returns (douyin_user_login_response);
     rpc GetUserById (douyin_user_request) returns (douyin_user_response);
     rpc GetUserListByIds (douyin_user_list_request) returns (douyin_user_list_response);
 }

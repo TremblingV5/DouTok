@@ -11,7 +11,7 @@ type Message struct {
 	FromUserId int64  `json:"from_user_id"`
 	ToUserId   int64  `json:"to_user_id"`
 	Content    string `json:"content"`
-	CreateTime string `json:"create_time"`
+	CreateTime int64  `json:"create_time"`
 }
 
 func NewMessage(req *message.DouyinMessageActionRequest) *Message {
@@ -20,7 +20,7 @@ func NewMessage(req *message.DouyinMessageActionRequest) *Message {
 		FromUserId: req.UserId,
 		ToUserId:   req.ToUserId,
 		Content:    req.Content,
-		CreateTime: string(time.Now().Unix()),
+		CreateTime: time.Now().Unix(),
 	}
 	return &message
 }

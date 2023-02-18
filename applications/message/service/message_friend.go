@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/pkg/utils"
+	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 type MessageFriendService struct {
@@ -19,12 +20,14 @@ func (s *MessageFriendService) MessageFriendList(req *message.DouyinFriendListMe
 	result := make(map[int64]*message.Message)
 	for _, friendId := range req.GetFriendIdList() {
 		sessionId := utils.GenerateSessionId(req.UserId, friendId)
-		content := RedisClient.HGet(context.Background(), sessionId, "content").String()
-		actionType, _ := RedisClient.HGet(context.Background(), sessionId, "action_type").Int()
+		content, err := RedisClient.HGet(context.Background(), sessionId, "content").Result()
+		if err != nil {
+			klog.Errorf("get friend list message error, err = %s", err)
+			// TODO 从 hbase获取最新一条聊天记录（慢）应该使用基于 redis 的存储（集群确保可用性）
+		}
 
 		message := message.Message{
-			Content:    content,
-			ActionType: int32(actionType),
+			Content: content,
 		}
 		result[friendId] = &message
 	}
