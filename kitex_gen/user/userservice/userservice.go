@@ -148,7 +148,7 @@ func loginHandler(ctx context.Context, handler interface{}, arg, result interfac
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
-		req := new(user.DouyinUserRegisterRequest)
+		req := new(user.DouyinUserLoginRequest)
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
@@ -178,7 +178,7 @@ func newLoginResult() interface{} {
 }
 
 type LoginArgs struct {
-	Req *user.DouyinUserRegisterRequest
+	Req *user.DouyinUserLoginRequest
 }
 
 func (p *LoginArgs) Marshal(out []byte) ([]byte, error) {
@@ -189,7 +189,7 @@ func (p *LoginArgs) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *LoginArgs) Unmarshal(in []byte) error {
-	msg := new(user.DouyinUserRegisterRequest)
+	msg := new(user.DouyinUserLoginRequest)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -197,9 +197,9 @@ func (p *LoginArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var LoginArgs_Req_DEFAULT *user.DouyinUserRegisterRequest
+var LoginArgs_Req_DEFAULT *user.DouyinUserLoginRequest
 
-func (p *LoginArgs) GetReq() *user.DouyinUserRegisterRequest {
+func (p *LoginArgs) GetReq() *user.DouyinUserLoginRequest {
 	if !p.IsSetReq() {
 		return LoginArgs_Req_DEFAULT
 	}
@@ -211,10 +211,10 @@ func (p *LoginArgs) IsSetReq() bool {
 }
 
 type LoginResult struct {
-	Success *user.DouyinUserRegisterResponse
+	Success *user.DouyinUserLoginResponse
 }
 
-var LoginResult_Success_DEFAULT *user.DouyinUserRegisterResponse
+var LoginResult_Success_DEFAULT *user.DouyinUserLoginResponse
 
 func (p *LoginResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
@@ -224,7 +224,7 @@ func (p *LoginResult) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *LoginResult) Unmarshal(in []byte) error {
-	msg := new(user.DouyinUserRegisterResponse)
+	msg := new(user.DouyinUserLoginResponse)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -232,7 +232,7 @@ func (p *LoginResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *LoginResult) GetSuccess() *user.DouyinUserRegisterResponse {
+func (p *LoginResult) GetSuccess() *user.DouyinUserLoginResponse {
 	if !p.IsSetSuccess() {
 		return LoginResult_Success_DEFAULT
 	}
@@ -240,7 +240,7 @@ func (p *LoginResult) GetSuccess() *user.DouyinUserRegisterResponse {
 }
 
 func (p *LoginResult) SetSuccess(x interface{}) {
-	p.Success = x.(*user.DouyinUserRegisterResponse)
+	p.Success = x.(*user.DouyinUserLoginResponse)
 }
 
 func (p *LoginResult) IsSetSuccess() bool {
@@ -473,7 +473,7 @@ func (p *kClient) Register(ctx context.Context, Req *user.DouyinUserRegisterRequ
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) Login(ctx context.Context, Req *user.DouyinUserRegisterRequest) (r *user.DouyinUserRegisterResponse, err error) {
+func (p *kClient) Login(ctx context.Context, Req *user.DouyinUserLoginRequest) (r *user.DouyinUserLoginResponse, err error) {
 	var _args LoginArgs
 	_args.Req = Req
 	var _result LoginResult

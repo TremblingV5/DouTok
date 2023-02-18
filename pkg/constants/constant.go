@@ -14,11 +14,11 @@ const (
 
 	ErrConfigFileNotFound = "Config file not found"
 	// Redis 关注数字段
-	FollowCount = "follow_count"
+	FollowCount = "follow_count-"
 	// Redis 粉丝数字段
-	FollowerCount = "follower_count"
+	FollowerCount = "follower_count-"
 	// 关注列表
-	FollowListPrefix = "follow_list"
+	FollowListPrefix = "follow_list-"
 	// 粉丝列表
-	FollowerListPrefix = "follower_list"
+	FollowerListPrefix = "follower_list-"
 )

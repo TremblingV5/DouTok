@@ -39,16 +39,6 @@ func InitJwt() {
 		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, token string, expire time.Time) {
 			claims := jwt.ExtractClaims(ctx, c)
 			userId := int64(claims[constants.IdentityKey].(float64))
-			// 记录用户的ip/port等信息到redis中 设定超时时间（一个月）
-			err := RedisClient.Set(ctx, constants.AddrPrefix+string(userId), c.RemoteAddr().String(), 720*time.Hour).Err()
-			if err != nil {
-				c.JSON(consts.StatusOK, map[string]interface{}{
-					"status_code": errno.RedisSetErrorCode,
-					"status_msg":  errno.RedisSetErr,
-					"user_id":     userId,
-					"token":       token,
-				})
-			}
 			c.JSON(consts.StatusOK, map[string]interface{}{
 				"status_code": errno.SuccessCode,
 				"status_msg":  errno.Success,
@@ -63,12 +53,12 @@ func InitJwt() {
 		},
 		Unauthorized: func(ctx context.Context, c *app.RequestContext, code int, message string) {
 			c.JSON(code, map[string]interface{}{
-				"code":    errno.AuthorizationFailedErrCode,
-				"message": message,
+				"status_code": errno.AuthorizationFailedErrCode,
+				"status_msg":  message,
 			})
 		},
 		Authenticator: func(ctx context.Context, c *app.RequestContext) (interface{}, error) {
-			var loginVar api.DouyinUserRegisterRequest
+			var loginVar api.DouyinUserLoginRequest
 			if err := c.Bind(&loginVar); err != nil {
 				return "", jwt.ErrMissingLoginValues
 			}
@@ -76,7 +66,7 @@ func InitJwt() {
 			if len(loginVar.Username) == 0 || len(loginVar.Password) == 0 {
 				return "", jwt.ErrMissingLoginValues
 			}
-			return rpc.Login(context.Background(), &user.DouyinUserRegisterRequest{Username: loginVar.Username, Password: loginVar.Password})
+			return rpc.Login(context.Background(), &user.DouyinUserLoginRequest{Username: loginVar.Username, Password: loginVar.Password})
 		},
 		TokenLookup: "query: token",
 		TimeFunc:    time.Now,

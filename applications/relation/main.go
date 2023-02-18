@@ -24,6 +24,8 @@ func Init() {
 	service.InitConsumerGroup()
 	service.InitId()
 	service.InitDB()
+	service.InitSafeMap()
+	go service.Flush()
 }
 
 func main() {

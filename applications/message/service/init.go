@@ -37,7 +37,7 @@ func InitSyncProducer() {
 }
 
 func InitConsumerGroup() {
-	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetString("Kafka.GroupId"))
+	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetStringSlice("Kafka.GroupId")[0])
 	ConsumerGroup = cGroup
 }
 
