@@ -8,8 +8,10 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/kafka"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
+	"github.com/TremblingV5/DouTok/pkg/safeMap"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 	"github.com/go-redis/redis/v8"
+	"sync"
 )
 
 var (
@@ -17,6 +19,8 @@ var (
 	SyncProducer  sarama.SyncProducer
 	ViperConfig   dtviper.Config
 	ConsumerGroup sarama.ConsumerGroup
+	ConcurrentMap *safeMap.SafeMap
+	mu            *sync.Mutex
 )
 
 func InitViper() {
@@ -29,7 +33,7 @@ func InitSyncProducer() {
 }
 
 func InitConsumerGroup() {
-	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetString("Kafka.GroupId"))
+	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetStringSlice("Kafka.GroupId")[0])
 	ConsumerGroup = cGroup
 }
 
@@ -62,4 +66,8 @@ func InitDB() {
 		panic(err)
 	}
 	query.SetDefault(db)
+}
+
+func InitSafeMap() {
+	ConcurrentMap = safeMap.New()
 }

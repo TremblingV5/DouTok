@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"math"
 
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
@@ -22,7 +23,11 @@ func (s *MessageChatService) MessageChat(req *message.DouyinMessageChatRequest) 
 	// 从 hbase 获取聊天记录
 	messageList := make([]*message.Message, 0)
 	sessionId := utils.GenerateSessionId(req.UserId, req.ToUserId)
-	res, err := HBClient.Scan(ViperConfig.Viper.GetString("Hbase.Table"), hbaseHandle.GetFilterByRowKeyPrefix(sessionId)...)
+	start := sessionId + string(req.PreMsgTime)
+	end := sessionId + string(math.MaxInt)
+	num := ViperConfig.Viper.GetInt("Hbase.MessageNum")
+	res, err := HBClient.Scan(ViperConfig.Viper.GetString("Hbase.Table"),
+		hbaseHandle.GetFilterByRowKeyRange(num, start, end)...)
 	if err != nil {
 		return err, nil
 	}
@@ -37,7 +42,6 @@ func (s *MessageChatService) MessageChat(req *message.DouyinMessageChatRequest) 
 			ToUserId:   packMsg.ToUserId,
 			FromUserId: packMsg.FromUserId,
 			Content:    packMsg.Content,
-			ActionType: packMsg.ContentType,
 			CreateTime: packMsg.CreateTime,
 		}
 		messageList = append(messageList, &message)

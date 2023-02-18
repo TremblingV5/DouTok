@@ -9,8 +9,6 @@ import (
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/pkg/misc"
 	"github.com/TremblingV5/DouTok/pkg/utils"
-	"math"
-	"strconv"
 )
 
 type msgConsumerGroup struct{}
@@ -34,12 +32,8 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 			return err
 		}
 		// 将消息存入 hbase
-		timestamp, err := strconv.ParseInt(message.CreateTime, 10, 64)
-		if err != nil {
-			return err
-		}
 		// 生成 rowkey
-		rowKey := sessionId + string(math.MaxInt-timestamp)
+		rowKey := sessionId + string(message.CreateTime)
 		// 构造 hbase 一条数据
 		hbData := map[string]map[string][]byte{
 			"data": {
@@ -47,8 +41,7 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 				"from_user_id": []byte(fmt.Sprintf("%d", message.FromUserId)),
 				"to_user_id":   []byte(fmt.Sprintf("%d", message.ToUserId)),
 				"content":      []byte(message.Content),
-				"content_type": []byte(fmt.Sprintf("%d", message.ContentType)),
-				"create_time":  []byte(message.CreateTime),
+				"create_time":  []byte(fmt.Sprintf("%d", message.CreateTime)),
 			},
 		}
 
@@ -70,7 +63,7 @@ var consumerGroup msgConsumerGroup
 func ConsumeMsg() {
 
 	for {
-		err := ConsumerGroup.Consume(context.Background(), []string{"test"}, consumerGroup)
+		err := ConsumerGroup.Consume(context.Background(), ViperConfig.Viper.GetStringSlice("Kafka.Topics"), consumerGroup)
 		if err != nil {
 			fmt.Println(err.Error())
 			break

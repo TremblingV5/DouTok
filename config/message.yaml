@@ -3,7 +3,7 @@ Global:
   ChangeMe: "v1"
 
 Etcd:
-  Address: "127.0.0.1"
+  Address: "47.115.230.248"
   Port: 2379
 
 Server:
@@ -23,9 +23,10 @@ Snowflake:
 
 Hbase:
   Table: "message"
+  MessageNum: 50
 
 Redis:
-  Host: "127.0.0.1"
+  Host: "47.115.230.248"
   Port: 6379
   Password: "root"
   DataBases:
@@ -35,5 +36,11 @@ Kafka:
   Brokers:
     - "150.158.237.39:50004"
   Topics:
-    - "test"
-  GroupId: "test01"
+    - "message_1"
+    - "message_2"
+  GroupId:
+    - "message01"
+    - "message02"
+    - "message03"
+    - "message04"
+    - "message05"
