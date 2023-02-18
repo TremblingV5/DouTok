@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/TremblingV5/DouTok/applications/feed/misc"
+	"github.com/TremblingV5/DouTok/pkg/constants"
 	"net"
 
 	"github.com/TremblingV5/DouTok/applications/feed/handler"
@@ -18,12 +20,33 @@ var (
 )
 
 func Init() {
-	service.InitDb()
-	service.InitHB()
-	service.InitRedis()
-	rpc.InitRPCConfig()
+	misc.InitViperConfig()
+
+	service.InitDb(
+		misc.GetConfig("MySQL.Username"),
+		misc.GetConfig("MySQL.Password"),
+		misc.GetConfig("MySQL.Host"),
+		misc.GetConfig("MySQL.Port"),
+		misc.GetConfig("MySQL.HBase"),
+	)
+
+	service.InitHB(
+		misc.GetConfig("HBase.Host"),
+	)
+
+	redisMap := map[string]int{
+		constants.FeedSendBox: int(misc.GetConfigNum("Redis.SendBox.Num")),
+		constants.TimeCache:   int(misc.GetConfigNum("Redis.MarkdedTime.Num")),
+	}
+	service.InitRedis(
+		misc.GetConfig("Redis.Dest"),
+		misc.GetConfig("Redis.Password"),
+		redisMap,
+	)
+
 	rpc.InitPRCClient()
-	utils.InitSnowFlake(1111)
+
+	utils.InitSnowFlake(misc.GetConfigNum("Snowflake.Node"))
 }
 
 func main() {
