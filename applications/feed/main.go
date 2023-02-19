@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/TremblingV5/DouTok/applications/feed/misc"
 	"github.com/TremblingV5/DouTok/pkg/constants"
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"net"
 
 	"github.com/TremblingV5/DouTok/applications/feed/handler"
@@ -53,13 +54,13 @@ func main() {
 	Init()
 
 	registry, err := etcd.NewEtcdRegistry([]string{
-		rpc.ClientConfig.Etcd.Address + ":" + rpc.ClientConfig.Etcd.Port,
+		misc.GetConfig("Etcd.Address") + ":" + misc.GetConfig("Etcd.Port"),
 	})
 	if err != nil {
 		Logger.Fatal(err)
 	}
 
-	addr, err := net.ResolveTCPAddr("tcp", rpc.ClientConfig.Server.Address+":"+rpc.ClientConfig.Server.Port)
+	addr, err := net.ResolveTCPAddr("tcp", misc.GetConfig("Server.Address")+":"+misc.GetConfig("Server.Port"))
 	if err != nil {
 		Logger.Fatal(err)
 	}
@@ -68,6 +69,11 @@ func main() {
 		new(handler.FeedServiceImpl),
 		server.WithServiceAddr(addr),
 		server.WithRegistry(registry),
+		server.WithServerBasicInfo(
+			&rpcinfo.EndpointBasicInfo{
+				ServiceName: misc.GetConfig("Server.Name"),
+			},
+		),
 	)
 
 	if err := svr.Run(); err != nil {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/TremblingV5/DouTok/applications/favorite/misc"
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"net"
 
 	"github.com/TremblingV5/DouTok/applications/publish/handler"
@@ -60,6 +61,11 @@ func main() {
 		new(handler.PublishServiceImpl),
 		server.WithServiceAddr(addr),
 		server.WithRegistry(registry),
+		server.WithServerBasicInfo(
+			&rpcinfo.EndpointBasicInfo{
+				ServiceName: misc.GetConfig("Server.Name"),
+			},
+		),
 	)
 
 	if err := svr.Run(); err != nil {

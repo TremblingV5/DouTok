@@ -25,19 +25,22 @@ Snowflake:
   Node: 602
 
 MySQL:
-  Host: "127.0.0.1"
-  Port: 8091
-  User: "tiktok"
-  Password: "password"
-  Database: "Tiktok"
+  Host: "47.115.230.248"
+  Port: 3307
+  Username: "admin"
+  Password: "root"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
 
 Redis:
-  Dest: "127.0.0.1:6379"
+  Dest: "47.115.230.248:6379"
   Password: ""
   FavCache:
     Num: 3
   FavCntCache:
     Num: 4
+
+Kafka:
+  Broker: "150.158.237.39:50004"

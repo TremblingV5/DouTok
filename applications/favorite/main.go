@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"net"
 
 	"github.com/TremblingV5/DouTok/applications/favorite/handler"
@@ -73,6 +74,11 @@ func main() {
 		new(handler.FavoriteServiceImpl),
 		server.WithServiceAddr(addr),
 		server.WithRegistry(registry),
+		server.WithServerBasicInfo(
+			&rpcinfo.EndpointBasicInfo{
+				ServiceName: misc.GetConfig("Server.Name"),
+			},
+		),
 	)
 
 	if err := svr.Run(); err != nil {
