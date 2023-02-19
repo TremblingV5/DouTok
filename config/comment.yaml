@@ -40,8 +40,8 @@ HBase:
 Redis:
   Dest: "47.115.230.248:6379"
   Password: "root"
-  SendBox:
-    Num: 1
-  MarkdedTime:
-    Num: 2
+  ComCntCache:
+    Num: 8
+  ComTotalCntCache:
+    Num: 9
     

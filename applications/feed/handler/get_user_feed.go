@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/applications/feed/pack"
 	"time"
 
 	"github.com/TremblingV5/DouTok/applications/feed/misc"
@@ -25,13 +26,13 @@ func (s *FeedServiceImpl) GetUserFeed(ctx context.Context, req *feed.DouyinFeedR
 	if !ok {
 		listFromHB, err := service.SearchFeedEarlierInHB(req.LatestTime, req.LatestTime-14*86400)
 		if err != nil {
-			return service.PackFeedListResp([]service.VideoInHB{}, 1, "search hbase defeat", req.UserId)
+			return pack.PackFeedListResp([]service.VideoInHB{}, 1, "search hbase defeat", req.UserId)
 		}
 
 		// 3. 取前10条视频作为本次feed的数据，其余的通过RPush进入投递箱
 		err = service.SetFeedCache(ctx, "r", user_id_string, listFromHB...)
 		if err != nil {
-			return service.PackFeedListResp([]service.VideoInHB{}, 1, "set send box defeat", req.UserId)
+			return pack.PackFeedListResp([]service.VideoInHB{}, 1, "set send box defeat", req.UserId)
 		}
 
 		var newListNum int64
@@ -43,7 +44,7 @@ func (s *FeedServiceImpl) GetUserFeed(ctx context.Context, req *feed.DouyinFeedR
 		list, ok = service.GetFeedCache(ctx, user_id_string, newListNum)
 
 		if !ok {
-			return service.PackFeedListResp([]service.VideoInHB{}, 1, "get send box defeat", req.UserId)
+			return pack.PackFeedListResp([]service.VideoInHB{}, 1, "get send box defeat", req.UserId)
 		}
 	}
 
@@ -90,5 +91,5 @@ func (s *FeedServiceImpl) GetUserFeed(ctx context.Context, req *feed.DouyinFeedR
 	}
 	dlog.Warn(log_string)
 
-	return service.PackFeedListResp(list, 0, "Success", req.UserId)
+	return pack.PackFeedListResp(list, 0, "Success", req.UserId)
 }

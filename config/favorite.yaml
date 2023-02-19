@@ -36,11 +36,13 @@ MySQL:
 
 Redis:
   Dest: "47.115.230.248:6379"
-  Password: ""
+  Password: "root"
   FavCache:
     Num: 3
   FavCntCache:
     Num: 4
+  FavTotalCountCache:
+    Num: 8
 
 Kafka:
   Broker: "150.158.237.39:50004"

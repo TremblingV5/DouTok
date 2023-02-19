@@ -3,24 +3,13 @@ package service
 import (
 	"fmt"
 	"github.com/TremblingV5/DouTok/applications/user/misc"
-	"github.com/TremblingV5/DouTok/pkg/utils"
 	"log"
 	"testing"
 	"time"
 )
 
 func TestWriteNewUser(t *testing.T) {
-	misc.InitViperConfig()
-
-	InitDb(
-		misc.GetConfig("MySQL.Username"),
-		misc.GetConfig("MySQL.Password"),
-		misc.GetConfig("MySQL.Host"),
-		misc.GetConfig("MySQL.Port"),
-		misc.GetConfig("MySQL.Database"),
-	)
-
-	utils.InitSnowFlake(misc.GetConfigNum("Snowflake.Node"))
+	Init()
 
 	curr := fmt.Sprint(time.Now().Unix())
 
