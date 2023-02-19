@@ -25,7 +25,7 @@ HBase:
   Host: "139.9.80.79"
 
 Snowflake:
-  Node: 510
+  Node: 66
 
 OSS:
   Endpoint: "oss-cn-shanghai.aliyuncs.com"
