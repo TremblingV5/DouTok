@@ -56,6 +56,7 @@ func TestScanByRowKeyPrefix(t *testing.T) {
 	}
 }
 
+// TODO: 待修改，无法使用
 func TestScanByRowKeyRange(t *testing.T) {
 	var config configStruct.HBaseConfig
 	configurator.InitConfig(

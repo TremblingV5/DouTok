@@ -24,7 +24,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.FavoriteAction(ctx, &favorite.DouyinFavoriteActionRequest{
+	resp, err := rpc.FavoriteAction(ctx, rpc.FavoriteClient, &favorite.DouyinFavoriteActionRequest{
 		VideoId:    req.VideoId,
 		ActionType: req.ActionType,
 	})
@@ -47,7 +47,7 @@ func FavoriteList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.FavoriteList(ctx, &favorite.DouyinFavoriteListRequest{
+	resp, err := rpc.FavoriteList(ctx, rpc.FavoriteClient, &favorite.DouyinFavoriteListRequest{
 		UserId: req.UserId,
 	})
 	if err != nil {

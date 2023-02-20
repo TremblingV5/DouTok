@@ -20,7 +20,7 @@ func TestSize(t *testing.T) {
 		config.Host+":"+config.Port, config.Password, config.Databases,
 	)
 
-	l, err := redisCaches[constants.DbDefault].ListSize(context.Background(), "test")
+	l, err := redisCaches[constants.DbDefault].ListSize(context.Background(), "integration")
 	if err != nil {
 		panic(err)
 	}

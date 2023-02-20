@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var feedClient feedservice.Client
+var FeedClient feedservice.Client
 
 // Feed RPC 客户端初始化
 func initFeedRpc(Config *dtviper.Config) {
@@ -51,11 +51,11 @@ func initFeedRpc(Config *dtviper.Config) {
 	if err != nil {
 		panic(err)
 	}
-	feedClient = c
+	FeedClient = c
 }
 
 // 传递 获取视频流操作 的上下文, 并获取 RPC Server 端的响应.
-func GetUserFeed(ctx context.Context, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
+func GetUserFeed(ctx context.Context, feedClient feedservice.Client, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
 	resp, err = feedClient.GetUserFeed(ctx, req)
 	if err != nil {
 		return nil, err

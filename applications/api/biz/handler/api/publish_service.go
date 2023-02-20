@@ -25,7 +25,7 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	}
 
 	// TODO 这个绑定是否能够实现二进制文件的绑定（待测试）
-	resp, err := rpc.PublishAction(ctx, &publish.DouyinPublishActionRequest{
+	resp, err := rpc.PublishAction(ctx, rpc.PublishClient, &publish.DouyinPublishActionRequest{
 		Title: req.Title,
 		Data:  req.Data,
 	})
@@ -48,7 +48,7 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.PublishList(ctx, &publish.DouyinPublishListRequest{
+	resp, err := rpc.PublishList(ctx, rpc.PublishClient, &publish.DouyinPublishListRequest{
 		UserId: req.UserId,
 	})
 	if err != nil {

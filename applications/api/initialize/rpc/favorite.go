@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var favoriteClient favoriteservice.Client
+var FavoriteClient favoriteservice.Client
 
 // Favorite RPC 客户端初始化
 func initFavoriteRpc(Config *dtviper.Config) {
@@ -51,11 +51,11 @@ func initFavoriteRpc(Config *dtviper.Config) {
 	if err != nil {
 		panic(err)
 	}
-	favoriteClient = c
+	FavoriteClient = c
 }
 
 // 传递 点赞操作 的上下文, 并获取 RPC Server 端的响应.
-func FavoriteAction(ctx context.Context, req *favorite.DouyinFavoriteActionRequest) (resp *favorite.DouyinFavoriteActionResponse, err error) {
+func FavoriteAction(ctx context.Context, favoriteClient favoriteservice.Client, req *favorite.DouyinFavoriteActionRequest) (resp *favorite.DouyinFavoriteActionResponse, err error) {
 	resp, err = favoriteClient.FavoriteAction(ctx, req)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func FavoriteAction(ctx context.Context, req *favorite.DouyinFavoriteActionReque
 }
 
 // 传递 获取点赞列表操作 的上下文, 并获取 RPC Server 端的响应.
-func FavoriteList(ctx context.Context, req *favorite.DouyinFavoriteListRequest) (resp *favorite.DouyinFavoriteListResponse, err error) {
+func FavoriteList(ctx context.Context, favoriteClient favoriteservice.Client, req *favorite.DouyinFavoriteListRequest) (resp *favorite.DouyinFavoriteListResponse, err error) {
 	resp, err = favoriteClient.FavoriteList(ctx, req)
 	if err != nil {
 		return nil, err
