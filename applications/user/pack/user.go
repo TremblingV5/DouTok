@@ -27,12 +27,14 @@ func PackUserResp(code int32, msg string, u *model.User) (resp *user.DouyinUserR
 	}
 
 	info := user.User{
-		Id:            int64(u.ID),
-		Name:          u.UserName,
-		Avatar:        u.Avatar,
-		FollowCount:   userResp.FollowCount,
-		FollowerCount: userResp.FollowerCount,
-		IsFollow:      true,
+		Id:              int64(u.ID),
+		Name:            u.UserName,
+		Avatar:          u.Avatar,
+		BackgroundImage: u.BackgroundImage,
+		Signature:       u.Signature,
+		FollowCount:     userResp.FollowCount,
+		FollowerCount:   userResp.FollowerCount,
+		IsFollow:        true,
 	}
 
 	resp.User = &info

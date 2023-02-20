@@ -3,7 +3,11 @@
 package api
 
 import (
+	"bytes"
 	"context"
+	"io"
+	"log"
+
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/publish"
@@ -18,16 +22,28 @@ import (
 func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinPublishActionRequest
-	err = c.BindAndValidate(&req)
+	// err = c.BindAndValidate(&req)
+	// if err != nil {
+	// 	handler.SendResponse(c, handler.BuildPublishActionResp(errno.ErrBind))
+	// 	return
+	// }
+
+	req.Token = c.PostForm("token")
+	req.Title = c.PostForm("title")
+	fs, _ := c.FormFile("data")
+	f, _ := fs.Open()
+	buff := new(bytes.Buffer)
+	_, err = io.Copy(buff, f)
 	if err != nil {
-		handler.SendResponse(c, handler.BuildPublishActionResp(errno.ErrBind))
-		return
+		log.Panicln(err)
 	}
+	req.Data = buff.Bytes()
 
 	// TODO 这个绑定是否能够实现二进制文件的绑定（待测试）
 	resp, err := rpc.PublishAction(ctx, rpc.PublishClient, &publish.DouyinPublishActionRequest{
-		Title: req.Title,
-		Data:  req.Data,
+		Title:  req.Title,
+		Data:   req.Data,
+		UserId: int64(c.Keys["user_id"].(float64)),
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildPublishActionResp(errno.ConvertErr(err)))

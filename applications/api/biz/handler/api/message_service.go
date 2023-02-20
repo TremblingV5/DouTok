@@ -27,6 +27,7 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp, err := rpc.MessageChat(ctx, rpc.MessageClient, &message.DouyinMessageChatRequest{
+		UserId:   int64(c.Keys["user_id"].(float64)),
 		ToUserId: req.ToUserId,
 	})
 	if err != nil {
@@ -53,7 +54,7 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 		err = errors.New("identity not exist")
 	}
 	resp, err := rpc.MessageAction(ctx, rpc.MessageClient, &message.DouyinMessageActionRequest{
-		UserId:     userId.(int64),
+		UserId:     int64(userId.(float64)),
 		ToUserId:   req.ToUserId,
 		ActionType: req.ActionType,
 		Content:    req.Content,

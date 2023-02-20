@@ -25,6 +25,7 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 	}
 
 	rpcReq := relation.DouyinRelationActionRequest{
+		UserId:     int64(c.Keys["user_id"].(float64)),
 		ToUserId:   req.ToUserId,
 		ActionType: req.ActionType,
 	}

@@ -18,11 +18,13 @@ func PackCommentActionResp(code int32, msg string, cmt *comment.Comment, user_id
 		}
 
 		user := user.User{
-			Id:            reqUser.User.Id,
-			Name:          reqUser.User.Name,
-			Avatar:        reqUser.User.Avatar,
-			FollowCount:   reqUser.User.FollowCount,
-			FollowerCount: reqUser.User.FollowerCount,
+			Id:              reqUser.User.Id,
+			Name:            reqUser.User.Name,
+			Avatar:          reqUser.User.Avatar,
+			BackgroundImage: reqUser.User.BackgroundImage,
+			Signature:       reqUser.User.Signature,
+			FollowCount:     reqUser.User.FollowCount,
+			FollowerCount:   reqUser.User.FollowerCount,
 		}
 
 		cmt.User = &user
