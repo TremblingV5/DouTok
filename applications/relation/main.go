@@ -33,6 +33,9 @@ func Init() {
 
 func main() {
 	Init()
+	defer func() {
+		_ = service.SyncProducer.Close()
+	}()
 
 	// 启动 kafka 消费者协程，消费点赞消息
 	go service.ConsumeMsg()
