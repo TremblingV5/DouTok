@@ -1,6 +1,9 @@
 package service
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"strconv"
+)
 
 type VideoInHB struct {
 	Id         []byte `json:"id"`
@@ -17,11 +20,15 @@ func ToInt64(data []byte) int64 {
 }
 
 func (v *VideoInHB) GetId() int64 {
-	return ToInt64(v.Id)
+	id_string := string(v.Id)
+	i, _ := strconv.ParseInt(id_string, 10, 64)
+	return i
 }
 
 func (v *VideoInHB) GetAuthorId() int64 {
-	return ToInt64(v.AuthorId)
+	id_string := string(v.AuthorId)
+	i, _ := strconv.ParseInt(id_string, 10, 64)
+	return i
 }
 
 func (v *VideoInHB) GetVideoUrl() string {

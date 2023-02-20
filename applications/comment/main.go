@@ -20,6 +20,9 @@ func Init() {
 	service.Init()
 
 	rpc.InitPRCClient()
+
+	go service.UpdateComCountMap()
+	go service.UpdateComTotalCntMap()
 }
 
 func main() {

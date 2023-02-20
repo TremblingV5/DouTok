@@ -1,6 +1,9 @@
 package model
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"strconv"
+)
 
 type CommentInHB struct {
 	Id             []byte `json:"id"`
@@ -18,27 +21,39 @@ func ToInt64(data []byte) int64 {
 }
 
 func (c *CommentInHB) GetId() int64 {
-	return ToInt64(c.Id)
+	str := string(c.Id)
+	i, _ := strconv.ParseInt(str, 10, 64)
+	return i
 }
 
 func (c *CommentInHB) GetVideoId() int64 {
-	return ToInt64(c.VideoId)
+	str := string(c.VideoId)
+	i, _ := strconv.ParseInt(str, 10, 64)
+	return i
 }
 
 func (c *CommentInHB) GetUserId() int64 {
-	return ToInt64(c.UserId)
+	str := string(c.UserId)
+	i, _ := strconv.ParseInt(str, 10, 64)
+	return i
 }
 
 func (c *CommentInHB) GetConversationId() int64 {
-	return ToInt64(c.ConversationId)
+	str := string(c.ConversationId)
+	i, _ := strconv.ParseInt(str, 10, 64)
+	return i
 }
 
 func (c *CommentInHB) GetLastId() int64 {
-	return ToInt64(c.LastId)
+	str := string(c.LastId)
+	i, _ := strconv.ParseInt(str, 10, 64)
+	return i
 }
 
 func (c *CommentInHB) GetToUserId() int64 {
-	return ToInt64(c.ToUserId)
+	str := string(c.ToUserId)
+	i, _ := strconv.ParseInt(str, 10, 64)
+	return i
 }
 
 func (c *CommentInHB) GetContent() string {

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/publish/pack"
 
 	"github.com/TremblingV5/DouTok/applications/publish/service"
@@ -15,11 +16,11 @@ func (s *PublishServiceImpl) PublishAction(ctx context.Context, req *publish.Dou
 	}
 
 	if err := service.SavePublish(req.UserId, req.Title, req.Data); err != nil {
-		resp, _ := pack.PackPublishActionRes(1, err.Error())
+		resp, _ := pack.PackPublishActionRes(1, "System error")
 		return resp, err
 	}
 
-	resp, _ = pack.PackPublishActionRes(0, err.Error())
+	resp, _ = pack.PackPublishActionRes(0, "Success")
 	return resp, nil
 }
 

@@ -68,7 +68,7 @@ func GetFriendList(user_id int64) (error, []int64) {
 	followMap := make(map[int64]bool)
 	// 获取 follow
 	err, follow := ReadFollowListFromCache(fmt.Sprintf("%d", user_id))
-	if err != nil {
+	if err != nil || follow == nil {
 		klog.Errorf("read follow list from cache error, err = %s", err)
 		// 从 db 读
 		err, relationList := ReadFollowListFromDB(user_id)
@@ -95,7 +95,7 @@ func GetFriendList(user_id int64) (error, []int64) {
 	}
 	// 获取 follower
 	err, follower := ReadFollowerListFromCache(fmt.Sprintf("%d", user_id))
-	if err != nil {
+	if err != nil || follower == nil {
 		klog.Errorf("read follower list from cache error, err = %s", err)
 		// 从 db 读
 		err, relationList := ReadFollowerListFromDB(user_id)
