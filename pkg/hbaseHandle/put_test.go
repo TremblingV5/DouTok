@@ -20,9 +20,9 @@ func TestPut(t *testing.T) {
 	values := map[string]map[string][]byte{
 		"d": {
 			"title": []byte("test video"),
-			"time":  []byte("1997"),
+			"time":  []byte("1998"),
 		},
 	}
 
-	client.Put("test", "00030003", values)
+	client.Put("test", "00030005", values)
 }

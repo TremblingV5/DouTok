@@ -3,6 +3,8 @@ package pack
 import (
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/pkg/utils"
+	"github.com/cloudwego/kitex/pkg/klog"
+	"strconv"
 	"time"
 )
 
@@ -14,6 +16,14 @@ type Message struct {
 	CreateTime int64  `json:"create_time"`
 }
 
+type HBMessage struct {
+	Id         []byte `json:"id"`
+	FromUserId []byte `json:"from_user_id"`
+	ToUserId   []byte `json:"to_user_id"`
+	Content    []byte `json:"content"`
+	CreateTime []byte `json:"create_time"`
+}
+
 func NewMessage(req *message.DouyinMessageActionRequest) *Message {
 	message := Message{
 		Id:         int64(utils.GetSnowFlakeId()),
@@ -23,4 +33,30 @@ func NewMessage(req *message.DouyinMessageActionRequest) *Message {
 		CreateTime: time.Now().Unix(),
 	}
 	return &message
+}
+
+func HBMsg2Msg(msg *HBMessage) *Message {
+	id, err := strconv.ParseInt(string(msg.Id), 10, 64)
+	if err != nil {
+		klog.Errorf("hbmsg to msg error, err = %s", err)
+	}
+	fromUserId, err := strconv.ParseInt(string(msg.FromUserId), 10, 64)
+	if err != nil {
+		klog.Errorf("hbmsg to msg error, err = %s", err)
+	}
+	toUserId, err := strconv.ParseInt(string(msg.ToUserId), 10, 64)
+	if err != nil {
+		klog.Errorf("hbmsg to msg error, err = %s", err)
+	}
+	createTime, err := strconv.ParseInt(string(msg.CreateTime), 10, 64)
+	if err != nil {
+		klog.Errorf("hbmsg to msg error, err = %s", err)
+	}
+	return &Message{
+		Id:         id,
+		FromUserId: fromUserId,
+		ToUserId:   toUserId,
+		CreateTime: createTime,
+		Content:    string(msg.Content),
+	}
 }

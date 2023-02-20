@@ -34,7 +34,7 @@ func (s *MessageActionService) MessageAction(req *message.DouyinMessageActionReq
 	partition, offset, err := SyncProducer.SendMessage(msg)
 
 	if err == nil {
-		klog.Infof("produce success, partition:", partition, ",offset:", offset)
+		klog.Infof("produce success, partition: %d, offset: %d\n", partition, offset)
 	} else {
 		return err
 	}

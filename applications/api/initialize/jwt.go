@@ -66,7 +66,7 @@ func InitJwt() {
 			if len(loginVar.Username) == 0 || len(loginVar.Password) == 0 {
 				return "", jwt.ErrMissingLoginValues
 			}
-			return rpc.Login(context.Background(), &user.DouyinUserLoginRequest{Username: loginVar.Username, Password: loginVar.Password})
+			return rpc.Login(context.Background(), rpc.UserClient, &user.DouyinUserLoginRequest{Username: loginVar.Username, Password: loginVar.Password})
 		},
 		TokenLookup: "query: token",
 		TimeFunc:    time.Now,

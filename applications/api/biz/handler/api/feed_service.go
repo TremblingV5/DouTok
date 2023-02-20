@@ -24,7 +24,7 @@ func GetUserFeed(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.GetUserFeed(ctx, &feed.DouyinFeedRequest{
+	resp, err := rpc.GetUserFeed(ctx, rpc.FeedClient, &feed.DouyinFeedRequest{
 		LatestTime: req.LatestTime,
 	})
 	if err != nil {

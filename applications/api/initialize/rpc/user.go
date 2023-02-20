@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var userClient userservice.Client
+var UserClient userservice.Client
 
 // User RPC 客户端初始化
 func initUserRpc(Config *dtviper.Config) {
@@ -51,11 +51,11 @@ func initUserRpc(Config *dtviper.Config) {
 	if err != nil {
 		panic(err)
 	}
-	userClient = c
+	UserClient = c
 }
 
 // 传递 注册操作 的上下文, 并获取 RPC Server 端的响应.
-func Register(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *user.DouyinUserRegisterResponse, err error) {
+func Register(ctx context.Context, userClient userservice.Client, req *user.DouyinUserRegisterRequest) (resp *user.DouyinUserRegisterResponse, err error) {
 	resp, err = userClient.Register(ctx, req)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func Register(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *u
 }
 
 // 传递 登录操作 的上下文, 并获取 RPC Server 端的响应.
-func Login(ctx context.Context, req *user.DouyinUserLoginRequest) (int64, error) {
+func Login(ctx context.Context, userClient userservice.Client, req *user.DouyinUserLoginRequest) (int64, error) {
 	resp, err := userClient.Login(ctx, req)
 	if err != nil {
 		return 0, err
@@ -79,7 +79,7 @@ func Login(ctx context.Context, req *user.DouyinUserLoginRequest) (int64, error)
 }
 
 // 传递 获取用户信息操作 的上下文, 并获取 RPC Server 端的响应.
-func GetUserById(ctx context.Context, req *user.DouyinUserRequest) (resp *user.DouyinUserResponse, err error) {
+func GetUserById(ctx context.Context, userClient userservice.Client, req *user.DouyinUserRequest) (resp *user.DouyinUserResponse, err error) {
 	resp, err = userClient.GetUserById(ctx, req)
 	if err != nil {
 		return nil, err

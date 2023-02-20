@@ -28,7 +28,7 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		ToUserId:   req.ToUserId,
 		ActionType: req.ActionType,
 	}
-	resp, err := rpc.RelationAction(ctx, &rpcReq)
+	resp, err := rpc.RelationAction(ctx, rpc.RelationClient, &rpcReq)
 	if err != nil {
 		handler.SendResponse(c, handler.BuildRelationActionResp(errno.ConvertErr(err)))
 		return
@@ -48,7 +48,7 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.RelationFollowList(ctx, &relation.DouyinRelationFollowListRequest{
+	resp, err := rpc.RelationFollowList(ctx, rpc.RelationClient, &relation.DouyinRelationFollowListRequest{
 		UserId: req.UserId,
 	})
 	if err != nil {
@@ -70,7 +70,7 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.RelationFollowerList(ctx, &relation.DouyinRelationFollowerListRequest{
+	resp, err := rpc.RelationFollowerList(ctx, rpc.RelationClient, &relation.DouyinRelationFollowerListRequest{
 		UserId: req.UserId,
 	})
 	if err != nil {
@@ -93,7 +93,7 @@ func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.RelationFriendList(ctx, &relation.DouyinRelationFriendListRequest{
+	resp, err := rpc.RelationFriendList(ctx, rpc.RelationClient, &relation.DouyinRelationFriendListRequest{
 		UserId: req.UserId,
 	})
 	if err != nil {
