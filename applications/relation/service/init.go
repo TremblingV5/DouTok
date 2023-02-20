@@ -23,8 +23,12 @@ var (
 	mu            *sync.Mutex
 )
 
+func InitMutex() {
+	mu = &sync.Mutex{}
+}
+
 func InitViper() {
-	ViperConfig = dtviper.ConfigInit("DOUTOK_MESSAGE", "relation")
+	ViperConfig = dtviper.ConfigInit("DOUTOK_RELATION", "relation")
 }
 
 func InitSyncProducer() {
@@ -33,7 +37,7 @@ func InitSyncProducer() {
 }
 
 func InitConsumerGroup() {
-	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetStringSlice("Kafka.GroupId")[0])
+	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetStringSlice("Kafka.GroupIds")[0])
 	ConsumerGroup = cGroup
 }
 
