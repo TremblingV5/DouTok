@@ -4,11 +4,12 @@ package api
 
 import (
 	"context"
-
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/initialize"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed"
 	"github.com/TremblingV5/DouTok/pkg/errno"
+	"github.com/hertz-contrib/jwt"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -25,9 +26,14 @@ func GetUserFeed(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
+	userId := int64(0)
+	if req.Token != "" {
+		userId = int64(jwt.ExtractClaims(ctx, c)[initialize.AuthMiddleware.IdentityKey].(float64))
+	}
+
 	resp, err := rpc.GetUserFeed(ctx, rpc.FeedClient, &feed.DouyinFeedRequest{
 		LatestTime: req.LatestTime,
-		UserId:     int64(c.Keys["user_id"].(float64)),
+		UserId:     userId,
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildGetUserFeedResp(errno.ConvertErr(err)))

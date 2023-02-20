@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"sort"
 
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
@@ -45,5 +46,8 @@ func (s *MessageChatService) MessageChat(req *message.DouyinMessageChatRequest) 
 		}
 		messageList = append(messageList, &message)
 	}
+	sort.SliceStable(messageList, func(i, j int) bool {
+		return messageList[i].CreateTime < messageList[j].CreateTime
+	})
 	return nil, messageList
 }

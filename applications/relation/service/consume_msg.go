@@ -44,22 +44,6 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 			klog.Errorf("write follow to db error, err = %s", err)
 			return err
 		}
-		//op := int64(0)
-		//if relation.ActionType == 1 {
-		//	op = 1
-		//} else {
-		//	op = -1
-		//}
-		//// 更新关注数（db）
-		//err = UpdateFollowCountFromDB(relation.UserId, op)
-		//if err != nil {
-		//	return err
-		//}
-		//// 更新粉丝数（db）
-		//err = UpdateFollowerCountFromDB(relation.ToUserId, op)
-		//if err != nil {
-		//	return err
-		//}
 		// 标记，sarama会自动进行提交，默认间隔1秒
 		sess.MarkMessage(msg, "")
 	}
