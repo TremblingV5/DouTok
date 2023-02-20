@@ -25,11 +25,13 @@ func WriteNewUser(username string, password string) (int64, error, *errno.ErrNo)
 	encrypted := PasswordEncrypt(int64(user_id), password, salt)
 
 	if err := Do.Create(&model.User{
-		ID:       uint64(user_id),
-		UserName: username,
-		Password: encrypted,
-		Salt:     salt,
-		Avatar:   "",
+		ID:              uint64(user_id),
+		UserName:        username,
+		Password:        encrypted,
+		Salt:            salt,
+		Avatar:          misc.GetUserAvatar(),
+		BackgroundImage: misc.GetUserAvatar(),
+		Signature:       "这个人很低调",
 	}); err != nil {
 		return 0, err, &misc.SystemErr
 	}
