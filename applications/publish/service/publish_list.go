@@ -1,8 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"strconv"
 
+	tools "github.com/TremblingV5/DouTok/applications/publish/misc"
 	"github.com/TremblingV5/DouTok/applications/publish/typedef"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/misc"
@@ -10,12 +12,12 @@ import (
 
 func QueryPublishListInHBase(user_id int64) ([]typedef.VideoInHB, error) {
 	user_id_string := strconv.FormatInt(user_id, 10)
-	user_id_string = misc.LFill(user_id_string, 6)
+	user_id_string = tools.FillUserId(fmt.Sprint(user_id))
 
 	filters := hbaseHandle.GetFilterByRowKeyPrefix(user_id_string)
 
 	video_list, err := HBClient.Scan(
-		"list", filters...,
+		"publish", filters...,
 	)
 
 	list := []typedef.VideoInHB{}

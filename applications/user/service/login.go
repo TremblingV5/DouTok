@@ -18,5 +18,5 @@ func CheckPassword(username string, password string) (int64, error, *errno.ErrNo
 		return 0, nil, &misc.PasswordErr
 	}
 
-	return int64(user.ID), nil, &misc.NilErr
+	return int64(user.ID), nil, &misc.Success
 }

@@ -2,6 +2,7 @@ package misc
 
 var (
 	FavCountTopicName = "fav_count"
+	FavCountGroupName = "fav_count01"
 
 	ViperConfigEnvPrefix   = "DOUTOK_FAVORITE"
 	ViperConfigEnvFilename = "favorite"

@@ -1,18 +1,18 @@
 package service
 
 import (
-	"context"
 	"fmt"
 	"time"
 
 	"github.com/TremblingV5/DouTok/applications/comment/dal/model"
 	"github.com/TremblingV5/DouTok/applications/comment/misc"
-	"github.com/TremblingV5/DouTok/applications/feed/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment"
-	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 )
 
+/*
+	添加评论
+*/
 func AddComment(video_id int64, user_id int64, con_id int64, last_id int64, to_user_id int64, content string) (*comment.Comment, error) {
 	timestamp := fmt.Sprint(time.Now().Unix())
 
@@ -32,30 +32,31 @@ func AddComment(video_id int64, user_id int64, con_id int64, last_id int64, to_u
 		return nil, err
 	}
 
-	if err := AddCount(video_id); err != nil {
-		return nil, err
-	}
+	UpdateCacheComCount(video_id, true)
 
-	reqUser, err := rpc.GetUserById(context.Background(), &user.DouyinUserRequest{
-		UserId: user_id,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	user := user.User{
-		Id:            reqUser.User.Id,
-		Name:          reqUser.User.Name,
-		Avatar:        reqUser.User.Avatar,
-		FollowCount:   reqUser.User.FollowCount,
-		FollowerCount: reqUser.User.FollowerCount,
-	}
-
-	result.User = &user
+	//reqUser, err := rpc.GetUserById(context.Background(), &user.DouyinUserRequest{
+	//	UserId: user_id,
+	//})
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//user := user.User{
+	//	Id:            reqUser.User.Id,
+	//	Name:          reqUser.User.Name,
+	//	Avatar:        reqUser.User.Avatar,
+	//	FollowCount:   reqUser.User.FollowCount,
+	//	FollowerCount: reqUser.User.FollowerCount,
+	//}
+	//
+	//result.User = &user
 
 	return &result, nil
 }
 
+/*
+	在MySQL中存储评论信息
+*/
 func SaveComment2RDB(id int64, video_id int64, user_id int64, con_id int64, last_id int64, to_user_id int64, content string, timestamp string) error {
 	err := DoComment.Create(
 		&model.Comment{
@@ -78,6 +79,9 @@ func SaveComment2RDB(id int64, video_id int64, user_id int64, con_id int64, last
 	return nil
 }
 
+/*
+	在HBase中存储评论信息
+*/
 func SaveComment2HB(id int64, video_id int64, user_id int64, con_id int64, last_id int64, to_user_id int64, content string, timestamp string) error {
 	hbData := map[string]map[string][]byte{
 		"data": {

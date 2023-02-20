@@ -2,22 +2,13 @@ package service
 
 import (
 	"fmt"
-	"github.com/TremblingV5/DouTok/applications/favorite/misc"
 	"testing"
 )
 
 func TestQueryVideoCountFromRDB(t *testing.T) {
-	misc.InitViperConfig()
+	Init()
 
-	InitDb(
-		misc.GetConfig("MySQL.Username"),
-		misc.GetConfig("MySQL.Password"),
-		misc.GetConfig("MySQL.Host"),
-		misc.GetConfig("MySQL.Port"),
-		misc.GetConfig("MySQL.HBase"),
-	)
-
-	v, err := QueryVideoFromRBDById(1)
+	v, err := QueryVideoFromRBDById(1627179313688485888)
 
 	if err != nil {
 		fmt.Println(err)
@@ -28,17 +19,9 @@ func TestQueryVideoCountFromRDB(t *testing.T) {
 }
 
 func TestQueryAFewVideoCountFromRDB(t *testing.T) {
-	misc.InitViperConfig()
+	Init()
 
-	InitDb(
-		misc.GetConfig("MySQL.Username"),
-		misc.GetConfig("MySQL.Password"),
-		misc.GetConfig("MySQL.Host"),
-		misc.GetConfig("MySQL.Port"),
-		misc.GetConfig("MySQL.HBase"),
-	)
-
-	videos, err := QuerySomeVideoFromRDBByIds(1, 22)
+	videos, err := QuerySomeVideoFromRDBByIds(1627179313688485888, 1627180724060954624)
 
 	if err != nil {
 		fmt.Println(err)

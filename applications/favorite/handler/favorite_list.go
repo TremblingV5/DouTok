@@ -20,6 +20,12 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Do
 
 	// 3. 如果缓存没有则查库
 	res, err = service.QueryFavListInRDB(req.UserId)
+	// 4. 将从RDB查询到的数据读入缓存
+	for _, v := range res {
+		if err := service.WriteFavoriteInCache(req.UserId, v, true); err != nil {
+			continue
+		}
+	}
 
 	if err != nil {
 		pack.PackFavoriteListResp(int32(misc.SystemErr.ErrCode), misc.SystemErr.ErrMsg, nil)

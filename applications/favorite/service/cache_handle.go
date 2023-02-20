@@ -12,9 +12,9 @@ func UpdateCacheFavCount(video_id int64, op bool) error {
 
 	if ok {
 		if op {
-			FavCount.Set(fmt.Sprint(video_id), data.(int64)+1)
+			FavCount.Set(fmt.Sprint(video_id), data.(int)+1)
 		} else {
-			FavCount.Set(fmt.Sprint(video_id), data.(int64)-1)
+			FavCount.Set(fmt.Sprint(video_id), data.(int)-1)
 		}
 	} else {
 		if op {
