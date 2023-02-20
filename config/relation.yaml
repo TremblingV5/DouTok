@@ -36,8 +36,8 @@ Kafka:
     - "150.158.237.39:50004"
   Topics:
     - "relation_1"
-    - "relation_2"
-  GroupId:
+#    - "relation_2"
+  GroupIds:
     - "relation01"
     - "relation02"
     - "relation03"
