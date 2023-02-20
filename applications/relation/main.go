@@ -25,6 +25,7 @@ func Init() {
 	service.InitId()
 	service.InitDB()
 	service.InitSafeMap()
+	service.InitMutex()
 	go service.Flush()
 }
 

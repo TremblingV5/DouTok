@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation"
@@ -66,7 +67,7 @@ func (s *RelationFriendListService) RelationFriendList(req *relation.DouyinRelat
 func GetFriendList(user_id int64) (error, []int64) {
 	followMap := make(map[int64]bool)
 	// 获取 follow
-	err, follow := ReadFollowListFromCache(string(user_id))
+	err, follow := ReadFollowListFromCache(fmt.Sprintf("%d", user_id))
 	if err != nil {
 		klog.Errorf("read follow list from cache error, err = %s", err)
 		// 从 db 读
@@ -76,7 +77,7 @@ func GetFriendList(user_id int64) (error, []int64) {
 			return err, nil
 		} else {
 			// 添加 cache
-			err := WriteFollowListToCache(string(user_id), relationList)
+			err := WriteFollowListToCache(fmt.Sprintf("%d", user_id), relationList)
 			if err != nil {
 				klog.Errorf("update follow list to cache error, err = %s", err)
 			}
@@ -93,7 +94,7 @@ func GetFriendList(user_id int64) (error, []int64) {
 		followMap[v] = true
 	}
 	// 获取 follower
-	err, follower := ReadFollowerListFromCache(string(user_id))
+	err, follower := ReadFollowerListFromCache(fmt.Sprintf("%d", user_id))
 	if err != nil {
 		klog.Errorf("read follower list from cache error, err = %s", err)
 		// 从 db 读
@@ -103,7 +104,7 @@ func GetFriendList(user_id int64) (error, []int64) {
 			return err, nil
 		} else {
 			// 添加 cache
-			err := WriteFollowerListToCache(string(user_id), relationList)
+			err := WriteFollowerListToCache(fmt.Sprintf("%d", user_id), relationList)
 			if err != nil {
 				klog.Errorf("update follower list to cache error, err = %s", err)
 			}
