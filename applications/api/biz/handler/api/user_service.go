@@ -29,7 +29,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.Register(ctx, &user.DouyinUserRegisterRequest{
+	resp, err := rpc.Register(ctx, rpc.UserClient, &user.DouyinUserRegisterRequest{
 		Username: req.Username,
 		Password: req.Password,
 	})
@@ -69,7 +69,7 @@ func GetUserById(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.GetUserById(ctx, &user.DouyinUserRequest{
+	resp, err := rpc.GetUserById(ctx, rpc.UserClient, &user.DouyinUserRequest{
 		UserId: req.UserId,
 	})
 	if err != nil {

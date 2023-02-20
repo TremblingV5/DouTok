@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var messageClient messageservice.Client
+var MessageClient messageservice.Client
 
 // Comment RPC 客户端初始化
 func initMessageRpc(Config *dtviper.Config) {
@@ -51,11 +51,11 @@ func initMessageRpc(Config *dtviper.Config) {
 	if err != nil {
 		panic(err)
 	}
-	messageClient = c
+	MessageClient = c
 }
 
 // 传递 发布视频操作 的上下文, 并获取 RPC Server 端的响应.
-func MessageAction(ctx context.Context, req *message.DouyinMessageActionRequest) (resp *message.DouyinMessageActionResponse, err error) {
+func MessageAction(ctx context.Context, messageClient messageservice.Client, req *message.DouyinMessageActionRequest) (resp *message.DouyinMessageActionResponse, err error) {
 	resp, err = messageClient.MessageAction(ctx, req)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func MessageAction(ctx context.Context, req *message.DouyinMessageActionRequest)
 }
 
 // 传递 获取用户发布视频列表操作 的上下文, 并获取 RPC Server 端的响应.
-func MessageChat(ctx context.Context, req *message.DouyinMessageChatRequest) (resp *message.DouyinMessageChatResponse, err error) {
+func MessageChat(ctx context.Context, messageClient messageservice.Client, req *message.DouyinMessageChatRequest) (resp *message.DouyinMessageChatResponse, err error) {
 	resp, err = messageClient.MessageChat(ctx, req)
 	if err != nil {
 		return nil, err

@@ -2,11 +2,11 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"math"
 
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
-	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/misc"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 )
@@ -23,20 +23,19 @@ func (s *MessageChatService) MessageChat(req *message.DouyinMessageChatRequest) 
 	// 从 hbase 获取聊天记录
 	messageList := make([]*message.Message, 0)
 	sessionId := utils.GenerateSessionId(req.UserId, req.ToUserId)
-	start := sessionId + string(req.PreMsgTime)
-	end := sessionId + string(math.MaxInt)
-	num := ViperConfig.Viper.GetInt("Hbase.MessageNum")
-	res, err := HBClient.Scan(ViperConfig.Viper.GetString("Hbase.Table"),
-		hbaseHandle.GetFilterByRowKeyRange(num, start, end)...)
+	start := fmt.Sprintf("%s%d", sessionId, req.PreMsgTime)
+	end := fmt.Sprintf("%s%d", sessionId, math.MaxInt)
+	res, err := HBClient.ScanRange(ViperConfig.Viper.GetString("Hbase.Table"), start, end)
 	if err != nil {
 		return err, nil
 	}
 	for _, v := range res {
-		packMsg := pack.Message{}
-		err := misc.Map2Struct4HB(v, &packMsg)
+		hbMsg := pack.HBMessage{}
+		err := misc.Map2Struct4HB(v, &hbMsg)
 		if err != nil {
 			continue
 		}
+		packMsg := pack.HBMsg2Msg(&hbMsg)
 		message := message.Message{
 			Id:         packMsg.Id,
 			ToUserId:   packMsg.ToUserId,

@@ -31,6 +31,7 @@ func main() {
 
 	// 启动 kafka 消费者协程，消费 IM 消息
 	go service.ConsumeMsg()
+	//go service.TT()
 
 	var logger = dlog.InitLog(3)
 	defer logger.Sync()

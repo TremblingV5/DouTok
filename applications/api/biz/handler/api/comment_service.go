@@ -29,7 +29,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 		ActionType: req.ActionType,
 	}
 
-	resp, err := rpc.CommentAction(ctx, &rpcReq)
+	resp, err := rpc.CommentAction(ctx, rpc.CommentClient, &rpcReq)
 	if err != nil {
 		handler.SendResponse(c, handler.BuildCommendActionResp(errno.ConvertErr(err)))
 		return
@@ -49,7 +49,7 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := rpc.CommentList(ctx, &comment.DouyinCommentListRequest{
+	resp, err := rpc.CommentList(ctx, rpc.CommentClient, &comment.DouyinCommentListRequest{
 		VideoId: req.VideoId,
 	})
 	if err != nil {

@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var relationClient relationservice.Client
+var RelationClient relationservice.Client
 
 // Relation RPC 客户端初始化
 func initRelationRpc(Config *dtviper.Config) {
@@ -51,11 +51,11 @@ func initRelationRpc(Config *dtviper.Config) {
 	if err != nil {
 		panic(err)
 	}
-	relationClient = c
+	RelationClient = c
 }
 
 // 传递 关注操作 的上下文, 并获取 RPC Server 端的响应.
-func RelationAction(ctx context.Context, req *relation.DouyinRelationActionRequest) (resp *relation.DouyinRelationActionResponse, err error) {
+func RelationAction(ctx context.Context, relationClient relationservice.Client, req *relation.DouyinRelationActionRequest) (resp *relation.DouyinRelationActionResponse, err error) {
 	resp, err = relationClient.RelationAction(ctx, req)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func RelationAction(ctx context.Context, req *relation.DouyinRelationActionReque
 }
 
 // 传递 获取正在关注列表操作 的上下文, 并获取 RPC Server 端的响应.
-func RelationFollowList(ctx context.Context, req *relation.DouyinRelationFollowListRequest) (resp *relation.DouyinRelationFollowListResponse, err error) {
+func RelationFollowList(ctx context.Context, relationClient relationservice.Client, req *relation.DouyinRelationFollowListRequest) (resp *relation.DouyinRelationFollowListResponse, err error) {
 	resp, err = relationClient.RelationFollowList(ctx, req)
 	if err != nil {
 		return nil, err
@@ -79,7 +79,7 @@ func RelationFollowList(ctx context.Context, req *relation.DouyinRelationFollowL
 }
 
 // 传递 获取粉丝列表操作 的上下文, 并获取 RPC Server 端的响应.
-func RelationFollowerList(ctx context.Context, req *relation.DouyinRelationFollowerListRequest) (resp *relation.DouyinRelationFollowerListResponse, err error) {
+func RelationFollowerList(ctx context.Context, relationClient relationservice.Client, req *relation.DouyinRelationFollowerListRequest) (resp *relation.DouyinRelationFollowerListResponse, err error) {
 	resp, err = relationClient.RelationFollowerList(ctx, req)
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ func RelationFollowerList(ctx context.Context, req *relation.DouyinRelationFollo
 }
 
 // 传递 获取好友列表操作 的上下文, 并获取 RPC Server 端的响应.
-func RelationFriendList(ctx context.Context, req *relation.DouyinRelationFriendListRequest) (resp *relation.DouyinRelationFriendListResponse, err error) {
+func RelationFriendList(ctx context.Context, relationClient relationservice.Client, req *relation.DouyinRelationFriendListRequest) (resp *relation.DouyinRelationFriendListResponse, err error) {
 	resp, err = relationClient.RelationFriendList(ctx, req)
 	if err != nil {
 		return nil, err

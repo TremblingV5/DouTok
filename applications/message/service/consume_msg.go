@@ -1,6 +1,5 @@
 package service
 
-import "C"
 import (
 	"context"
 	"encoding/json"
@@ -26,6 +25,7 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 			return err
 		}
 		sessionId := utils.GenerateSessionId(message.FromUserId, message.ToUserId)
+
 		// 更新 redis 的最新消息
 		err = RedisClient.HSet(context.Background(), sessionId, mp).Err()
 		if err != nil {
@@ -33,7 +33,10 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 		}
 		// 将消息存入 hbase
 		// 生成 rowkey
-		rowKey := sessionId + string(message.CreateTime)
+		rowKey := fmt.Sprintf("%s%d", sessionId, message.CreateTime)
+
+		println("consume msg form kafka, generate rowKey = ", rowKey)
+
 		// 构造 hbase 一条数据
 		hbData := map[string]map[string][]byte{
 			"data": {
@@ -49,6 +52,7 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 		if err != nil {
 			return err
 		}
+
 		// TODO 1、解决消息重复消费 2、分布式事务一致性（redis 与 hbase 同时成功或失败、重试策略）
 
 		// 标记，sarama会自动进行提交，默认间隔1秒

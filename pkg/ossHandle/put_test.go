@@ -28,7 +28,7 @@ func TestPut(t *testing.T) {
 	}
 
 	if err := client.Put(
-		"video", "test.md", file,
+		"video", "integration.md", file,
 		// GetCallBackMap(config),
 	); err != nil {
 		fmt.Println(err)

@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/cloudwego/kitex/pkg/endpoint"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -11,12 +10,12 @@ import (
 var _ endpoint.Middleware = CommonMiddleware
 
 // 初始化 kitex 日志
-func init() {
-	var logger = dlog.InitLog(3)
-	defer logger.Sync()
-
-	klog.SetLogger(logger)
-}
+//func init() {
+//	var logger = dlog.InitLog(3)
+//	defer logger.Sync()
+//
+//	klog.SetLogger(logger)
+//}
 
 // CommonMiddleware common middleware print some rpc info、real request and real response
 func CommonMiddleware(next endpoint.Endpoint) endpoint.Endpoint {
