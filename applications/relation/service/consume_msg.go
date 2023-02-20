@@ -22,37 +22,44 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 
 		relation := pack.Relation{}
 		json.Unmarshal(msg.Value, &relation)
+		userId := fmt.Sprintf("%d", relation.UserId)
+		toUserId := fmt.Sprintf("%d", relation.ToUserId)
+		actionType := fmt.Sprintf("%d", relation.ActionType)
+
+		fmt.Printf("userId = %s, toUserId = %s, actionType = %s\n", userId, toUserId, actionType)
+
 		// 更新关注表 cache
-		err := WriteFollowToCache(string(relation.UserId), string(relation.ToUserId), string(relation.ActionType))
+		err := WriteFollowToCache(userId, toUserId, actionType)
 		if err != nil {
 			return err
 		}
 		// 更新粉丝表 cache
-		err = WriteFollowerToCache(string(relation.ToUserId), string(relation.UserId), string(relation.ActionType))
+		err = WriteFollowerToCache(toUserId, userId, actionType)
 		if err != nil {
 			return err
 		}
 		// 更新关注表 db
 		err = WriteFollowToDB(&relation)
 		if err != nil {
+			klog.Errorf("write follow to db error, err = %s", err)
 			return err
 		}
-		op := int64(0)
-		if relation.ActionType == 1 {
-			op = 1
-		} else {
-			op = -1
-		}
-		// 更新关注数（db）
-		err = UpdateFollowCountFromDB(relation.UserId, op)
-		if err != nil {
-			return err
-		}
-		// 更新粉丝数（db）
-		err = UpdateFollowerCountFromDB(relation.ToUserId, op)
-		if err != nil {
-			return err
-		}
+		//op := int64(0)
+		//if relation.ActionType == 1 {
+		//	op = 1
+		//} else {
+		//	op = -1
+		//}
+		//// 更新关注数（db）
+		//err = UpdateFollowCountFromDB(relation.UserId, op)
+		//if err != nil {
+		//	return err
+		//}
+		//// 更新粉丝数（db）
+		//err = UpdateFollowerCountFromDB(relation.ToUserId, op)
+		//if err != nil {
+		//	return err
+		//}
 		// 标记，sarama会自动进行提交，默认间隔1秒
 		sess.MarkMessage(msg, "")
 	}
@@ -80,7 +87,8 @@ func ConsumeMsg() {
 */
 func Flush() {
 	for {
-		time.Sleep(time.Second * 3)
+		time.Sleep(time.Second * 1)
+		klog.Infof("start iter\n")
 		ConcurrentMap.Iter(iter)
 		// 需要清空
 		ConcurrentMap.Clean()
@@ -88,23 +96,30 @@ func Flush() {
 }
 
 func iter(key string, v interface{}) {
+	if v == nil {
+		return
+	}
+	fmt.Printf("key = %s, v = %v\n", key, v)
 	value := v.(int64)
 	pair := strings.Split(key, "-")
-	user_id, err := strconv.ParseInt(pair[1], 10, 64)
+	userId, err := strconv.ParseInt(pair[1], 10, 64)
+	klog.Infof("userId = %d\n", userId)
 	if err != nil {
 		klog.Errorf("strconv.ParseInt error, err = %s", err)
 	}
 	if value != 0 {
 		if pair[0][6] == '_' {
+			klog.Infof("关注更新 %d\n", value)
 			// follow_
 			// 更新关注数 db
-			UpdateFollowCountFromDB(user_id, value)
+			UpdateFollowCountFromDB(userId, value)
 			// 删除关注数 cache
 			err = DeleteFollowCountCache(pair[1])
 		} else {
+			klog.Infof("粉丝更新 %d\n", value)
 			// follower_
 			// 更新粉丝数 db
-			UpdateFollowerCountFromDB(user_id, value)
+			UpdateFollowerCountFromDB(userId, value)
 			// 删除粉丝数 cache
 			err = DeleteFollowerCountCache(pair[1])
 		}

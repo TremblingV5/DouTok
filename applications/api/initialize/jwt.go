@@ -38,7 +38,7 @@ func InitJwt() {
 		},
 		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, token string, expire time.Time) {
 			claims := jwt.ExtractClaims(ctx, c)
-			userId := int64(claims[constants.IdentityKey].(float64))
+			userId := claims[constants.IdentityKey].(int64)
 			c.JSON(consts.StatusOK, map[string]interface{}{
 				"status_code": errno.SuccessCode,
 				"status_msg":  errno.Success,
@@ -49,7 +49,7 @@ func InitJwt() {
 		IdentityKey: constants.IdentityKey,
 		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {
 			claims := jwt.ExtractClaims(ctx, c)
-			return claims[constants.IdentityKey].(int64)
+			return claims[constants.IdentityKey].(float64)
 		},
 		Unauthorized: func(ctx context.Context, c *app.RequestContext, code int, message string) {
 			c.JSON(code, map[string]interface{}{
@@ -66,7 +66,13 @@ func InitJwt() {
 			if len(loginVar.Username) == 0 || len(loginVar.Password) == 0 {
 				return "", jwt.ErrMissingLoginValues
 			}
-			return rpc.Login(context.Background(), rpc.UserClient, &user.DouyinUserLoginRequest{Username: loginVar.Username, Password: loginVar.Password})
+			userId, err := rpc.Login(context.Background(), rpc.UserClient, &user.DouyinUserLoginRequest{Username: loginVar.Username, Password: loginVar.Password})
+			if err == nil && userId != 0 {
+				c.Set("JWT_PAYLOAD", jwt.MapClaims{
+					constants.IdentityKey: userId,
+				})
+			}
+			return userId, err
 		},
 		TokenLookup: "query: token",
 		TimeFunc:    time.Now,

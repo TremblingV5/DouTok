@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/TremblingV5/DouTok/applications/relation/dal/model"
 	"github.com/TremblingV5/DouTok/applications/relation/dal/query"
 	"github.com/TremblingV5/DouTok/applications/relation/rpc"
@@ -22,8 +23,8 @@ func NewRelationFollowerListService(ctx context.Context) *RelationFollowerListSe
 
 func (s *RelationFollowerListService) RelationFollowerList(req *relation.DouyinRelationFollowerListRequest) (error, []*user.User) {
 	// 从 cache 读
-	err, follower := ReadFollowerListFromCache(string(req.UserId))
-	if err != nil {
+	err, follower := ReadFollowerListFromCache(fmt.Sprintf("%d", req.UserId))
+	if err != nil || follower == nil {
 		klog.Errorf("read follower list from cache error, err = %s", err)
 		// 从 db 读
 		err, relationList := ReadFollowerListFromDB(req.UserId)
@@ -32,7 +33,7 @@ func (s *RelationFollowerListService) RelationFollowerList(req *relation.DouyinR
 			return err, nil
 		} else {
 			// 添加 cache
-			err := WriteFollowerListToCache(string(req.UserId), relationList)
+			err := WriteFollowerListToCache(fmt.Sprintf("%d", req.UserId), relationList)
 			if err != nil {
 				klog.Errorf("update follower list to cache error, err = %s", err)
 			}
@@ -84,8 +85,8 @@ func ReadFollowerListFromDB(user_id int64) (error, []*model.Relation) {
 func WriteFollowerListToCache(user_id string, relations []*model.Relation) error {
 	val := make([]string, len(relations)*2)
 	for _, v := range relations {
-		val = append(val, string(v.UserId))
-		val = append(val, string(v.Status))
+		val = append(val, fmt.Sprintf("%d", v.UserId))
+		val = append(val, fmt.Sprintf("%d", v.Status))
 	}
 
 	_, err := RedisClient.HSet(context.Background(), constants.FollowerListPrefix+user_id, val).Result()

@@ -6,6 +6,6 @@ func (m *SafeMap) Clean() {
 		keys = append(keys, key)
 	})
 	for _, key := range keys {
-		m.Set(key, 0)
+		m.Set(key, int64(0))
 	}
 }
