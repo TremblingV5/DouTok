@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var publishClient publishservice.Client
+var PublishClient publishservice.Client
 
 // Publish RPC 客户端初始化
 func initPublishRpc(Config *dtviper.Config) {
@@ -51,11 +51,11 @@ func initPublishRpc(Config *dtviper.Config) {
 	if err != nil {
 		panic(err)
 	}
-	publishClient = c
+	PublishClient = c
 }
 
 // 传递 发布视频操作 的上下文, 并获取 RPC Server 端的响应.
-func PublishAction(ctx context.Context, req *publish.DouyinPublishActionRequest) (resp *publish.DouyinPublishActionResponse, err error) {
+func PublishAction(ctx context.Context, publishClient publishservice.Client, req *publish.DouyinPublishActionRequest) (resp *publish.DouyinPublishActionResponse, err error) {
 	resp, err = publishClient.PublishAction(ctx, req)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func PublishAction(ctx context.Context, req *publish.DouyinPublishActionRequest)
 }
 
 // 传递 获取用户发布视频列表操作 的上下文, 并获取 RPC Server 端的响应.
-func PublishList(ctx context.Context, req *publish.DouyinPublishListRequest) (resp *publish.DouyinPublishListResponse, err error) {
+func PublishList(ctx context.Context, publishClient publishservice.Client, req *publish.DouyinPublishListRequest) (resp *publish.DouyinPublishListResponse, err error) {
 	resp, err = publishClient.PublishList(ctx, req)
 	if err != nil {
 		return nil, err

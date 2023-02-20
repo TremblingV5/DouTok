@@ -24,9 +24,8 @@ func InitViper() {
 }
 
 func InitHB() {
-	config := dtviper.ConfigInit("HBASE", "hbase")
 
-	client := hbaseHandle.InitHB(config.Viper.GetString("host"))
+	client := hbaseHandle.InitHB(ViperConfig.Viper.GetString("Hbase.Host"))
 
 	HBClient = &client
 }
@@ -37,7 +36,7 @@ func InitSyncProducer() {
 }
 
 func InitConsumerGroup() {
-	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetStringSlice("Kafka.GroupId")[0])
+	cGroup := kafka.InitConsumerGroup(ViperConfig.Viper.GetStringSlice("Kafka.Brokers"), ViperConfig.Viper.GetStringSlice("Kafka.GroupIds")[0])
 	ConsumerGroup = cGroup
 }
 

@@ -22,6 +22,7 @@ Snowflake:
   Node: 10
 
 Hbase:
+  Host: "139.9.80.79"
   Table: "message"
   MessageNum: 50
 
@@ -37,8 +38,8 @@ Kafka:
     - "150.158.237.39:50004"
   Topics:
     - "message_1"
-    - "message_2"
-  GroupId:
+#    - "message_2"
+  GroupIds:
     - "message01"
     - "message02"
     - "message03"

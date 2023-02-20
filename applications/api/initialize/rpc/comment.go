@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var commentClient commentservice.Client
+var CommentClient commentservice.Client
 
 // Comment RPC 客户端初始化
 func initCommentRpc(Config *dtviper.Config) {
@@ -51,11 +51,11 @@ func initCommentRpc(Config *dtviper.Config) {
 	if err != nil {
 		panic(err)
 	}
-	commentClient = c
+	CommentClient = c
 }
 
 // 传递 评论操作 的上下文, 并获取 RPC Server 端的响应.
-func CommentAction(ctx context.Context, req *comment.DouyinCommentActionRequest) (resp *comment.DouyinCommentActionResponse, err error) {
+func CommentAction(ctx context.Context, commentClient commentservice.Client, req *comment.DouyinCommentActionRequest) (resp *comment.DouyinCommentActionResponse, err error) {
 	resp, err = commentClient.CommentAction(ctx, req)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func CommentAction(ctx context.Context, req *comment.DouyinCommentActionRequest)
 }
 
 // 传递 获取评论列表操作 的上下文, 并获取 RPC Server 端的响应.
-func CommentList(ctx context.Context, req *comment.DouyinCommentListRequest) (resp *comment.DouyinCommentListResponse, err error) {
+func CommentList(ctx context.Context, commentClient commentservice.Client, req *comment.DouyinCommentListRequest) (resp *comment.DouyinCommentListResponse, err error) {
 	resp, err = commentClient.CommentList(ctx, req)
 	if err != nil {
 		return nil, err

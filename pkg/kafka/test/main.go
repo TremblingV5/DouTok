@@ -22,7 +22,7 @@ var (
 	userName      = flag.String("username", "ckafka-jamo8r7b#doutok", "The SASL username")
 	passwd        = flag.String("passwd", "doutokno1", "The SASL password")
 	algorithm     = flag.String("algorithm", "", "The SASL SCRAM SHA algorithm sha256 or sha512 as mechanism")
-	topic         = flag.String("topic", "test", "The Kafka topic to use")
+	topic         = flag.String("topic", "integration", "The Kafka topic to use")
 	certFile      = flag.String("certificate", "", "The optional certificate file for client authentication")
 	keyFile       = flag.String("key", "", "The optional key file for client authentication")
 	caFile        = flag.String("ca", "", "The optional certificate authority file for TLS client authentication")
