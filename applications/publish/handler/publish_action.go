@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/applications/publish/pack"
 
 	"github.com/TremblingV5/DouTok/applications/publish/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/publish"
@@ -9,16 +10,16 @@ import (
 
 func (s *PublishServiceImpl) PublishAction(ctx context.Context, req *publish.DouyinPublishActionRequest) (resp *publish.DouyinPublishActionResponse, err error) {
 	if ok, msg := check(req); ok {
-		resp, _ := service.PackPublishActionRes(1, msg)
+		resp, _ := pack.PackPublishActionRes(1, msg)
 		return resp, nil
 	}
 
 	if err := service.SavePublish(req.UserId, req.Title, req.Data); err != nil {
-		resp, _ := service.PackPublishActionRes(1, err.Error())
+		resp, _ := pack.PackPublishActionRes(1, err.Error())
 		return resp, err
 	}
 
-	resp, _ = service.PackPublishActionRes(0, err.Error())
+	resp, _ = pack.PackPublishActionRes(0, err.Error())
 	return resp, nil
 }
 

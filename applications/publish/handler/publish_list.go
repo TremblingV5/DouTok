@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/applications/publish/pack"
 
 	"github.com/TremblingV5/DouTok/applications/publish/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/publish"
@@ -16,7 +17,7 @@ func (s *PublishServiceImpl) PublishList(ctx context.Context, req *publish.Douyi
 		return nil, err
 	}
 
-	resp, err = service.PackPublishListRes(list, 0, "Success", req)
+	resp, err = pack.PackPublishListRes(list, 0, "Success", req)
 	if err != nil {
 		return resp, err
 	}

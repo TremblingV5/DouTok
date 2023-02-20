@@ -4,11 +4,10 @@ import (
 	"context"
 	"errors"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/initHelper"
 
 	"github.com/TremblingV5/DouTok/kitex_gen/comment"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment/commentservice"
-	"github.com/cloudwego/kitex/client"
-	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 var commentClient commentservice.Client
@@ -16,15 +15,9 @@ var commentClient commentservice.Client
 func InitCommentRpc() {
 	config := dtviper.ConfigInit("DOUTOK_COMMENT", "comment")
 
-	addr := config.Viper.GetString("Etcd.Address") + ":" + config.Viper.GetString("Etcd.Port")
-	registry, err := etcd.NewEtcdResolver([]string{addr})
-	if err != nil {
-		panic(err)
-	}
-
 	c, err := commentservice.NewClient(
-		"comment",
-		client.WithResolver(registry),
+		config.Viper.GetString("Server.Name"),
+		initHelper.InitRPCClientArgs(&config)...,
 	)
 
 	if err != nil {

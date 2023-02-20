@@ -2,26 +2,21 @@ package rpc
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/initHelper"
 
-	"github.com/TremblingV5/DouTok/applications/favorite/misc"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed/feedservice"
-	"github.com/cloudwego/kitex/client"
-	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 var feedClient feedservice.Client
 
 func InitRelationRpc() {
-	addr := misc.GetConfig("Etcd.Address") + ":" + misc.GetConfig("Etcd.Port")
-	registry, err := etcd.NewEtcdResolver([]string{addr})
-	if err != nil {
-		panic(err)
-	}
+	config := dtviper.ConfigInit("DOUTOK_FEED", "feed")
 
 	c, err := feedservice.NewClient(
-		"feed",
-		client.WithResolver(registry),
+		config.Viper.GetString("Server.Name"),
+		initHelper.InitRPCClientArgs(&config)...,
 	)
 
 	if err != nil {

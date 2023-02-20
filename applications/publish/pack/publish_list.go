@@ -1,23 +1,13 @@
-package service
+package pack
 
 import (
 	"context"
-
 	"github.com/TremblingV5/DouTok/applications/publish/rpc"
 	"github.com/TremblingV5/DouTok/applications/publish/typedef"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed"
 	"github.com/TremblingV5/DouTok/kitex_gen/publish"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 )
-
-func PackPublishActionRes(code int32, msg string) (*publish.DouyinPublishActionResponse, error) {
-	var resp publish.DouyinPublishActionResponse
-
-	resp.StatusCode = code
-	resp.StatusMsg = msg
-
-	return &resp, nil
-}
 
 func PackPublishListRes(list []typedef.VideoInHB, code int32, msg string, req *publish.DouyinPublishListRequest) (*publish.DouyinPublishListResponse, error) {
 	res := publish.DouyinPublishListResponse{

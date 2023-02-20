@@ -192,6 +192,7 @@ func ConfigInit(envPrefix string, cfgName string) Config {
 		viper.AddConfigPath("./config")
 		viper.AddConfigPath("../../config")
 		viper.AddConfigPath("../../../config")
+		viper.AddConfigPath("../../../../config")
 	}
 
 	if isRemoteConfig {
