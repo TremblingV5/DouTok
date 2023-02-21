@@ -39,3 +39,16 @@ func GetUserById(ctx context.Context, req *user.DouyinUserRequest) (resp *user.D
 
 	return resp, nil
 }
+
+func GetUserListByIds(ctx context.Context, req *user.DouyinUserListRequest) (resp *user.DouyinUserListResponse, err error) {
+	resp, err = userClient.GetUserListByIds(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode != 0 {
+		return nil, errors.New(resp.StatusMsg)
+	}
+
+	return resp, nil
+}

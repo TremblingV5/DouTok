@@ -57,6 +57,21 @@ func InitJwt() {
 				}
 				return false
 			}
+			//if strings.Contains(string(c.Request.Path()), "publish") {
+			//	tokenInForm := string(c.FormValue("token"))
+			//
+			//	if tokenInForm != "" {
+			//		jwt1.Parse(tokenInForm, func(token *jwt1.Token) (interface{}, error) {
+			//			if _, ok := token.Method.(*jwt1.SigningMethodRSA); !ok {
+			//				return nil, errors.New("unsupported signing method")
+			//			}
+			//			return
+			//		})
+			//		return true
+			//	}
+			//
+			//	return false
+			//}
 			return false
 		},
 		IdentityKey: constants.IdentityKey,
@@ -87,7 +102,7 @@ func InitJwt() {
 			}
 			return userId, err
 		},
-		TokenLookup: "query: token, form: token",
+		TokenLookup: "query: token, form: token, param: token",
 		TimeFunc:    time.Now,
 	})
 }

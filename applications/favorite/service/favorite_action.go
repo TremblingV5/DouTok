@@ -33,7 +33,7 @@ func ActionFavorite(user_id int64, video_id int64, op bool) (*errno.ErrNo, error
 	}
 
 	existed, err := RedisClients[misc.FavCache].HGet(context.Background(), fmt.Sprint(user_id), fmt.Sprint(video_id))
-	if err != nil {
+	if err != nil && err != redis.Nil {
 		return &misc.SystemErr, err
 	}
 

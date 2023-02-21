@@ -21,11 +21,35 @@ func PackFeedListResp(list []service.VideoInHB, code int32, msg string, user_id 
 	var video_list []*feed.Video
 
 	var video_id_list []int64
+	validateMap := make(map[int64]bool)
+	var userIdList []int64
+	validateUserIdMap := make(map[int64]bool)
 	for _, v := range list {
-		video_id_list = append(video_id_list, v.GetId())
+		videoId := v.GetId()
+		if _, ok := validateMap[videoId]; !ok {
+			video_id_list = append(video_id_list, v.GetId())
+			validateMap[videoId] = true
+		}
+		userId := v.GetAuthorId()
+		if _, ok := validateUserIdMap[userId]; !ok {
+			userIdList = append(userIdList, userId)
+			validateUserIdMap[userId] = true
+		}
 		if v.GetTimestamp() < next_time {
 			next_time = v.GetTimestamp()
 		}
+	}
+
+	userInfoResp, err := rpc.GetUserListByIds(context.Background(), &user.DouyinUserListRequest{
+		UserList: userIdList,
+	})
+	if err != nil {
+		return nil, nil
+	}
+	userInfo := userInfoResp.UserList
+	userMap := make(map[int64]*user.User)
+	for _, v := range userInfo {
+		userMap[v.Id] = v
 	}
 
 	isFavoriteResp, err := rpc.IsFavorite(context.Background(), &favorite.DouyinIsFavoriteRequest{
@@ -82,17 +106,7 @@ func PackFeedListResp(list []service.VideoInHB, code int32, msg string, user_id 
 			temp.IsFavorite = false
 		}
 
-		resp, err := rpc.GetUserById(
-			context.Background(), &user.DouyinUserRequest{
-				UserId: v.GetAuthorId(),
-			},
-		)
-
-		if err != nil {
-			continue
-		}
-
-		temp.Author = resp.User
+		temp.Author = userMap[v.GetAuthorId()]
 
 		video_list = append(video_list, &temp)
 
