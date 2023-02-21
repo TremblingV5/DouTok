@@ -33,12 +33,18 @@ func (s *RelationFriendListService) RelationFriendList(req *relation.DouyinRelat
 	}
 	// 去 message 服务查询对应好友列表的最新消息 返回一个 map
 	reqMsg := new(message.DouyinFriendListMessageRequest)
+	reqMsg.UserId = req.UserId
 	reqMsg.FriendIdList = friendList
 	respMsg, err := rpc.GetFriendList(context.Background(), reqMsg)
+
+	for k, v := range respMsg.Result {
+		klog.Infof("res key = %d, msg = %s\n", k, v.Content)
+	}
+
 	if err != nil {
 		return err, nil
 	}
-	fList := make([]*relation.FriendUser, len(reqUser.GetUserList()))
+	fList := make([]*relation.FriendUser, 0, len(reqUser.GetUserList()))
 	for _, v := range respUser.GetUserList() {
 		user := &user.User{
 			Id:            v.Id,
@@ -53,6 +59,9 @@ func (s *RelationFriendListService) RelationFriendList(req *relation.DouyinRelat
 		if respMsg.Result[v.Id].FromUserId == req.UserId {
 			msgType = 1
 		}
+
+		klog.Infof("user_id = %s, msgType = %d\n", respMsg.Result[v.Id].Content, int64(msgType))
+
 		friend := &relation.FriendUser{
 			User:    user,
 			Message: respMsg.Result[v.Id].Content,

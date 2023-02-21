@@ -3,11 +3,10 @@ package rpc
 import (
 	"context"
 	"errors"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
-	"github.com/TremblingV5/DouTok/pkg/initHelper"
-
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/kitex_gen/user/userservice"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/initHelper"
 )
 
 var userClient userservice.Client
