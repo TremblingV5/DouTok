@@ -1,11 +1,13 @@
 package initHelper
 
 import (
+	"context"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"net"
 )
@@ -25,6 +27,13 @@ func InitRPCServerArgs(config *dtviper.Config) []server.Option {
 	if err != nil {
 		panic(err)
 	}
+
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(config.Viper.GetString("Server.Name")),
+		provider.WithExportEndpoint("localhost:4317"),
+		provider.WithInsecure(),
+	)
+	defer p.Shutdown(context.Background())
 
 	return []server.Option{
 		server.WithServiceAddr(serverAddr),
