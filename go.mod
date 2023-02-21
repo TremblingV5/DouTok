@@ -3,6 +3,7 @@ module github.com/TremblingV5/DouTok
 go 1.18
 
 require (
+	bou.ke/monkey v1.0.2
 	github.com/Shopify/sarama v1.38.1
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible
 	github.com/bwmarrin/snowflake v0.3.0
@@ -40,7 +41,6 @@ require (
 )
 
 require (
-	bou.ke/monkey v1.0.2 // indirect
 	github.com/apache/thrift v0.13.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
@@ -155,3 +155,5 @@ require (
 	gorm.io/hints v1.1.0 // indirect
 	modernc.org/b/v2 v2.1.0 // indirect
 )
+
+replace github.com/hertz-contrib/jwt v1.0.2 => github.com/BaiZe1998/jwt v0.0.0-20230221090022-e4960a398936

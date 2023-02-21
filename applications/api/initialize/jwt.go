@@ -2,6 +2,8 @@ package initialize
 
 import (
 	"context"
+	"github.com/hertz-contrib/jwt"
+	"strings"
 	"time"
 
 	"github.com/TremblingV5/DouTok/applications/api/biz/model/api"
@@ -11,7 +13,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	"github.com/hertz-contrib/jwt"
 )
 
 var AuthMiddleware *jwt.HertzJWTMiddleware
@@ -47,6 +48,17 @@ func InitJwt() {
 				"token":       token,
 			})
 		},
+		WithNext: func(ctx context.Context, c *app.RequestContext) bool {
+			if strings.Contains(string(c.Request.Path()), "feed") {
+				var req api.DouyinFeedRequest
+				err := c.BindAndValidate(&req)
+				if err == nil && req.Token == "" {
+					return true
+				}
+				return false
+			}
+			return false
+		},
 		IdentityKey: constants.IdentityKey,
 		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {
 			claims := jwt.ExtractClaims(ctx, c)
@@ -75,7 +87,7 @@ func InitJwt() {
 			}
 			return userId, err
 		},
-		TokenLookup: "query: token",
+		TokenLookup: "query: token, form: token",
 		TimeFunc:    time.Now,
 	})
 }
