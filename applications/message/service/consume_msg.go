@@ -8,6 +8,7 @@ import (
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/pkg/misc"
 	"github.com/TremblingV5/DouTok/pkg/utils"
+	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 type msgConsumerGroup struct{}
@@ -24,13 +25,22 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 		if err != nil {
 			return err
 		}
+		// Struct2Map 有bug，会转float64
+		klog.Infof("messages to map, msg content = %s from %d to %d\n", mp["content"], int64(mp["from_user_id"].(float64)), int64(mp["to_user_id"].(float64)))
 		sessionId := utils.GenerateSessionId(message.FromUserId, message.ToUserId)
 
 		// 更新 redis 的最新消息
-		err = RedisClient.HSet(context.Background(), sessionId, mp).Err()
+		err = RedisClient.HMSet(context.Background(), sessionId, mp).Err()
 		if err != nil {
 			return err
 		}
+
+		content, err := RedisClient.HGet(context.Background(), sessionId, "content").Result()
+		if err != nil {
+			klog.Errorf("get friend list message error, err = %s", err)
+		}
+		klog.Infof("content = %s\n", content)
+
 		// 将消息存入 hbase
 		// 生成 rowkey
 		rowKey := fmt.Sprintf("%s%d", sessionId, message.CreateTime)
