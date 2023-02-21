@@ -23,32 +23,35 @@ func PackFeedListResp(list []service.VideoInHB, code int32, msg string, user_id 
 	var video_id_list []int64
 	for _, v := range list {
 		video_id_list = append(video_id_list, v.GetId())
+		if v.GetTimestamp() < next_time {
+			next_time = v.GetTimestamp()
+		}
 	}
 
-	is_favorite_resp, err := rpc.IsFavorite(context.Background(), &favorite.DouyinIsFavoriteRequest{
+	isFavoriteResp, err := rpc.IsFavorite(context.Background(), &favorite.DouyinIsFavoriteRequest{
 		UserId:      user_id,
 		VideoIdList: video_id_list,
 	})
 	if err != nil {
 		return nil, nil
 	}
-	is_favorite := is_favorite_resp.Result
+	isFavorite := isFavoriteResp.Result
 
-	favorite_count_resp, err := rpc.FavoriteCount(context.Background(), &favorite.DouyinFavoriteCountRequest{
+	favoriteCountResp, err := rpc.FavoriteCount(context.Background(), &favorite.DouyinFavoriteCountRequest{
+		VideoIdList: video_id_list,
+	})
+	if err != nil {
+		return nil, err
+	}
+	favoriteCount := favoriteCountResp.Result
+
+	commentCountResp, err := rpc.CommentCount(context.Background(), &comment.DouyinCommentCountRequest{
 		VideoIdList: video_id_list,
 	})
 	if err != nil {
 		return nil, nil
 	}
-	favorite_count := favorite_count_resp.Result
-
-	comment_count_resp, err := rpc.CommentCount(context.Background(), &comment.DouyinCommentCountRequest{
-		VideoIdList: video_id_list,
-	})
-	if err != nil {
-		return nil, nil
-	}
-	comment_count := comment_count_resp.Result
+	commentCount := commentCountResp.Result
 
 	for _, v := range list {
 		var temp feed.Video
@@ -58,9 +61,26 @@ func PackFeedListResp(list []service.VideoInHB, code int32, msg string, user_id 
 		temp.CoverUrl = v.GetCoverUrl()
 		temp.Title = v.GetTitle()
 
-		temp.FavoriteCount = favorite_count[v.GetId()]
-		temp.CommentCount = comment_count[v.GetId()]
-		temp.IsFavorite = is_favorite[v.GetId()]
+		value, ok := favoriteCount[v.GetId()]
+		if ok {
+			temp.FavoriteCount = value
+		} else {
+			temp.FavoriteCount = 0
+		}
+
+		commentCnt, ok := commentCount[v.GetId()]
+		if ok {
+			temp.CommentCount = commentCnt
+		} else {
+			temp.CommentCount = 0
+		}
+
+		isFav, ok := isFavorite[v.GetId()]
+		if ok {
+			temp.IsFavorite = isFav
+		} else {
+			temp.IsFavorite = false
+		}
 
 		resp, err := rpc.GetUserById(
 			context.Background(), &user.DouyinUserRequest{

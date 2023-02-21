@@ -2,6 +2,8 @@ package initialize
 
 import (
 	"context"
+	"time"
+
 	"github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
@@ -10,7 +12,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/jwt"
-	"time"
 )
 
 var AuthMiddleware *jwt.HertzJWTMiddleware

@@ -49,8 +49,9 @@ func SavePublish(user_id int64, title string, data []byte) error {
 }
 
 func SaveVideo2DB(user_id uint64, title string, play_url string, cover_url string) (uint64, error) {
+	newVideoId := utils.GetSnowFlakeId()
 	newVideo := model.Video{
-		ID:       uint64(utils.GetSnowFlakeId().Int64()),
+		ID:       uint64(newVideoId),
 		AuthorID: user_id,
 		Title:    title,
 		VideoUrl: play_url,
@@ -65,7 +66,7 @@ func SaveVideo2DB(user_id uint64, title string, play_url string, cover_url strin
 		return 0, err
 	}
 
-	return newVideo.ID, nil
+	return uint64(newVideoId), nil
 }
 
 func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cover_url string, timestamp string) error {

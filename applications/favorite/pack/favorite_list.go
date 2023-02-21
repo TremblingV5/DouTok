@@ -8,12 +8,7 @@ import (
 )
 
 func PackFavoriteListResp(code int32, msg string, list []int64) (resp *favorite.DouyinFavoriteListResponse, err error) {
-	resp = &favorite.DouyinFavoriteListResponse{
-		StatusCode: code,
-		StatusMsg:  msg,
-	}
-
-	resList := []*feed.Video{}
+	var resList []*feed.Video
 	for _, i := range list {
 		res, err := rpc.GetVideoById(context.Background(), &feed.VideoIdRequest{
 			VideoId:  i,
@@ -26,7 +21,9 @@ func PackFavoriteListResp(code int32, msg string, list []int64) (resp *favorite.
 		resList = append(resList, res)
 	}
 
-	resp.VideoList = resList
-
-	return resp, nil
+	return &favorite.DouyinFavoriteListResponse{
+		StatusCode: code,
+		StatusMsg:  msg,
+		VideoList:  resList,
+	}, nil
 }

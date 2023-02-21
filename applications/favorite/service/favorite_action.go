@@ -32,6 +32,11 @@ func ActionFavorite(user_id int64, video_id int64, op bool) (*errno.ErrNo, error
 		return &misc.SystemErr, err
 	}
 
+	existed, err := RedisClients[misc.FavCache].HGet(context.Background(), fmt.Sprint(user_id), fmt.Sprint(video_id))
+	if err != nil {
+		return &misc.SystemErr, err
+	}
+
 	// 2. 写缓存
 	err = WriteFavoriteInCache(user_id, video_id, op)
 	if err != nil {
@@ -39,9 +44,11 @@ func ActionFavorite(user_id int64, video_id int64, op bool) (*errno.ErrNo, error
 	}
 
 	// 3. 更新内存中的计数Map
-	err = UpdateCacheFavCount(video_id, op)
-	if err != nil {
-		return &misc.QueryCacheErr, err
+	if (existed == "1" && op == false) || (existed == "2" && op == true) {
+		err = UpdateCacheFavCount(video_id, op)
+		if err != nil {
+			return &misc.QueryCacheErr, err
+		}
 	}
 
 	// 4. 通过Kafka延迟落库

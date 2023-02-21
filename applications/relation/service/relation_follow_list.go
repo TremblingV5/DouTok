@@ -12,6 +12,7 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/go-redis/redis/v8"
 	"strconv"
 )
 
@@ -71,7 +72,11 @@ func ReadFollowListFromCache(user_id string) (error, []int64) {
 		}
 	}
 
-	return nil, ret
+	if len(ret) <= 0 {
+		return redis.Nil, ret
+	} else {
+		return nil, ret
+	}
 }
 
 // 查数据库

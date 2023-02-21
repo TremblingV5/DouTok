@@ -65,9 +65,10 @@ func (s *RelationActionService) RelationAction(req *relation.DouyinRelationActio
 	klog.Infof("%s follower = %d\n", followerKey, follower.(int64))
 	mu.Unlock()
 	// 使用同步producer，将消息存入 kafka
-	defer func() {
-		_ = SyncProducer.Close()
-	}()
+	// FIXME: 这里这个关闭SyncProducer是不是不应该出现？这里按理说每次调用接口都会执行
+	//defer func() {
+	//	_ = SyncProducer.Close()
+	//}()
 	// 构建消息
 	val, err := json.Marshal(pack.NewRelation(req))
 	if err != nil {

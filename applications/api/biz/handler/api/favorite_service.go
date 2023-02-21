@@ -25,6 +25,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp, err := rpc.FavoriteAction(ctx, rpc.FavoriteClient, &favorite.DouyinFavoriteActionRequest{
+		UserId:     int64(c.Keys["user_id"].(float64)),
 		VideoId:    req.VideoId,
 		ActionType: req.ActionType,
 	})

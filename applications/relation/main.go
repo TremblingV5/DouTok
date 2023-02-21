@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/applications/relation/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
@@ -26,6 +27,7 @@ func Init() {
 	service.InitDB()
 	service.InitSafeMap()
 	service.InitMutex()
+	rpc.InitRPC()
 	go service.Flush()
 }
 

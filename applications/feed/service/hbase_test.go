@@ -10,7 +10,7 @@ import (
 func TestFindFeedInHB(t *testing.T) {
 	Init()
 
-	res, err := FindFeedInHB("1000000000", fmt.Sprint(time.Now().Unix()))
+	res, err := FindFeedInHB("1627500000", fmt.Sprint(time.Now().Unix()))
 	if err != nil {
 		log.Panicln(err)
 	}
