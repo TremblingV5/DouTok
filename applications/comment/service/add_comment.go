@@ -21,7 +21,7 @@ func AddComment(video_id int64, user_id int64, con_id int64, last_id int64, to_u
 	result := comment.Comment{
 		Id:         int64(id),
 		Content:    content,
-		CreateDate: timestamp,
+		CreateDate: "刚刚",
 	}
 
 	if err := SaveComment2RDB(int64(id), video_id, user_id, con_id, last_id, to_user_id, content, timestamp); err != nil {

@@ -107,6 +107,8 @@ func InitHertz() *server.Hertz {
 
 	opts := []config.Option{server.WithHostPorts(ServiceAddr)}
 
+	opts = append(opts, server.WithMaxRequestBodySize(1024*1024*1024))
+
 	// 服务注册
 	if ViperConfig.Viper.GetBool("Etcd.Enable") {
 		r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
