@@ -20,7 +20,7 @@ func SavePublish(user_id int64, title string, data []byte) error {
 	// 1. 上传封面和视频到OSS
 	hasher := md5.New()
 	hasher.Write([]byte(fmt.Sprint(user_id) + title))
-	filename := hex.EncodeToString(hasher.Sum(nil))
+	filename := hex.EncodeToString(hasher.Sum(nil)) + ".mp4"
 
 	if err := OSSClient.Put(
 		"video", filename, bytes.NewReader(data),

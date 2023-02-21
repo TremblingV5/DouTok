@@ -11,7 +11,9 @@ func GetTimeRecall(timestamp string, current int64) string {
 
 	diff := current - timestampI64
 
-	if diff < 60*60 {
+	if diff < 60 {
+		return "刚刚"
+	} else if diff < 60*60 {
 		minutes := diff / 60
 		return fmt.Sprint(minutes) + "分钟前"
 	} else if diff < 60*60*24 {
