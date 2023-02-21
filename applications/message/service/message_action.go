@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"encoding/json"
-
 	"github.com/Shopify/sarama"
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
@@ -20,10 +19,6 @@ func NewMessageActionService(ctx context.Context) *MessageActionService {
 
 func (s *MessageActionService) MessageAction(req *message.DouyinMessageActionRequest) error {
 	// 使用同步producer，将消息存入 kafka
-	// FIXME: 这里这个关闭SyncProducer是不是不应该出现？这里按理说每次调用接口都会执行
-	// defer func() {
-	// 	_ = SyncProducer.Close()
-	// }()
 	// 构建消息
 	val, err := json.Marshal(pack.NewMessage(req))
 	if err != nil {

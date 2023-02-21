@@ -5,9 +5,11 @@ package api
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/initialize"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment"
 	"github.com/TremblingV5/DouTok/pkg/errno"
+	"github.com/hertz-contrib/jwt"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -24,12 +26,13 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
+	userId := int64(jwt.ExtractClaims(ctx, c)[initialize.AuthMiddleware.IdentityKey].(float64))
 	rpcReq := comment.DouyinCommentActionRequest{
 		VideoId:     req.VideoId,
-		CommentText: req.CommentText,
-		CommentId:   req.CommentId,
-		UserId:      int64(c.Keys["user_id"].(float64)),
 		ActionType:  req.ActionType,
+		UserId:      userId,
+		CommentId:   req.CommentId,
+		CommentText: req.CommentText,
 	}
 
 	resp, err := rpc.CommentAction(ctx, rpc.CommentClient, &rpcReq)
