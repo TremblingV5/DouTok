@@ -2,16 +2,16 @@ package rpc
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
-	"github.com/TremblingV5/DouTok/pkg/initHelper"
-
 	"github.com/TremblingV5/DouTok/kitex_gen/relation"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/initHelper"
 )
 
 var relationClient relationservice.Client
 
 func InitRelationRpc() {
+
 	config := dtviper.ConfigInit("DOUTOK_RELATION", "relation")
 
 	c, err := relationservice.NewClient(
