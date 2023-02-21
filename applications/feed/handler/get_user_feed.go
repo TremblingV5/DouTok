@@ -28,7 +28,7 @@ func (s *FeedServiceImpl) GetUserFeed(ctx context.Context, req *feed.DouyinFeedR
 
 	// 2. 【视频条数不足】从hbase中从latest_time开始，以24h的周期向前查询，直至条数满足或超过current_time - 14 * 24h
 	if !ok {
-		listFromHB, err := service.SearchFeedEarlierInHB(req.LatestTime, req.LatestTime-14*86400)
+		listFromHB, err := service.SearchFeedEarlierInHB(req.LatestTime, req.LatestTime-7*86400)
 		if err != nil {
 			return pack.PackFeedListResp([]service.VideoInHB{}, 1, "search hbase defeat", req.UserId)
 		}
