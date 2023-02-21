@@ -4,6 +4,7 @@ package api
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed"
@@ -26,6 +27,7 @@ func GetUserFeed(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := rpc.GetUserFeed(ctx, rpc.FeedClient, &feed.DouyinFeedRequest{
 		LatestTime: req.LatestTime,
+		UserId:     int64(c.Keys["user_id"].(float64)),
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildGetUserFeedResp(errno.ConvertErr(err)))

@@ -25,9 +25,9 @@ func QueryFavoriteCount(video_id []int64) (map[int64]int64, error) {
 
 		if !ok {
 			find_again = append(find_again, v)
+		} else {
+			resMap[v] = cnt
 		}
-
-		resMap[v] = cnt
 	}
 
 	find_again_again := []int64{}
@@ -41,10 +41,10 @@ func QueryFavoriteCount(video_id []int64) (map[int64]int64, error) {
 
 		if !ok {
 			find_again_again = append(find_again_again, v)
+		} else {
+			resMap[v] = cnt
+			FavTotalCount.Set(fmt.Sprint(v), cnt)
 		}
-
-		resMap[v] = cnt
-		FavTotalCount.Set(fmt.Sprint(v), cnt)
 	}
 
 	// 3. 从MySQL中查找喜欢数
@@ -59,6 +59,13 @@ func QueryFavoriteCount(video_id []int64) (map[int64]int64, error) {
 	for _, v := range res {
 		resMap[v.VideoId] = v.Number
 		WriteCount2Cache(v.VideoId, v.Number)
+	}
+
+	// 4. 如果仍然没有查找到该记录，则置0
+	for _, v := range video_id {
+		if _, ok := resMap[v]; !ok {
+			resMap[v] = 0
+		}
 	}
 
 	return resMap, nil

@@ -25,8 +25,11 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	}
 
 	rpcReq := comment.DouyinCommentActionRequest{
-		VideoId:    req.VideoId,
-		ActionType: req.ActionType,
+		VideoId:     req.VideoId,
+		CommentText: req.CommentText,
+		CommentId:   req.CommentId,
+		UserId:      int64(c.Keys["user_id"].(float64)),
+		ActionType:  req.ActionType,
 	}
 
 	resp, err := rpc.CommentAction(ctx, rpc.CommentClient, &rpcReq)

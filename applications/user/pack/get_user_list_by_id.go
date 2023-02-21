@@ -27,12 +27,14 @@ func PackUserListResp(code int32, msg string, list []*model.User) (resp *user.Do
 		}
 
 		temp := &user.User{
-			Id:            int64(v.ID),
-			Name:          v.UserName,
-			Avatar:        v.Avatar,
-			FollowCount:   req.FollowCount,
-			FollowerCount: req.FollowerCount,
-			IsFollow:      true,
+			Id:              int64(v.ID),
+			Name:            v.UserName,
+			Avatar:          v.Avatar,
+			BackgroundImage: v.BackgroundImage,
+			Signature:       v.Signature,
+			FollowCount:     req.FollowCount,
+			FollowerCount:   req.FollowerCount,
+			IsFollow:        true,
 		}
 
 		result = append(result, temp)

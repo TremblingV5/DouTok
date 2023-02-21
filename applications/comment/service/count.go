@@ -23,9 +23,10 @@ func CountComment(video_id ...int64) (map[int64]int64, *errno.ErrNo, error) {
 
 		if !ok {
 			findAgain = append(findAgain, v)
+		} else {
+			resMap[v] = cnt
 		}
 
-		resMap[v] = cnt
 	}
 
 	// 2. 从Redis中查找喜欢数
@@ -35,10 +36,10 @@ func CountComment(video_id ...int64) (map[int64]int64, *errno.ErrNo, error) {
 
 		if !ok {
 			findAgainAgain = append(findAgainAgain, v)
+		} else {
+			resMap[v] = cnt
+			ComTotalCount.Set(fmt.Sprint(v), cnt)
 		}
-
-		resMap[v] = cnt
-		ComTotalCount.Set(fmt.Sprint(v), cnt)
 	}
 
 	// 3. 从MySQL中查找喜欢数
@@ -52,6 +53,13 @@ func CountComment(video_id ...int64) (map[int64]int64, *errno.ErrNo, error) {
 
 	for _, v := range res {
 		resMap[v.Id] = v.Number
+	}
+
+	// 4. 如果仍然没有查找到该记录，则置0
+	for _, v := range video_id {
+		if _, ok := resMap[v]; !ok {
+			resMap[v] = 0
+		}
 	}
 
 	return resMap, &misc.Success, nil

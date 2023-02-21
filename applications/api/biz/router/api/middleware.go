@@ -22,7 +22,9 @@ func _douyinMw() []app.HandlerFunc {
 
 func _getuserfeedMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		initialize.AuthMiddleware.MiddlewareFunc(),
+	}
 }
 
 func _getuserbyidMw() []app.HandlerFunc {

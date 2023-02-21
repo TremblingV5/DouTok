@@ -3,17 +3,21 @@ package handler
 import (
 	"context"
 	"fmt"
-	"github.com/TremblingV5/DouTok/applications/feed/pack"
 	"time"
+
+	"github.com/TremblingV5/DouTok/applications/feed/pack"
 
 	"github.com/TremblingV5/DouTok/applications/feed/misc"
 	"github.com/TremblingV5/DouTok/applications/feed/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed"
-	"github.com/TremblingV5/DouTok/pkg/dlog"
 )
 
 func (s *FeedServiceImpl) GetUserFeed(ctx context.Context, req *feed.DouyinFeedRequest) (res *feed.DouyinFeedResponse, err error) {
 	log_list := []string{}
+
+	if req.LatestTime == 0 {
+		req.LatestTime = time.Now().Unix()
+	}
 
 	user_id_string := misc.FillUserId(fmt.Sprint(req.UserId))
 
@@ -84,12 +88,12 @@ func (s *FeedServiceImpl) GetUserFeed(ctx context.Context, req *feed.DouyinFeedR
 		}
 	}
 
-	log_string := ""
-	for _, v := range log_list {
-		log_string += v
-		log_string += ";"
-	}
-	dlog.Warn(log_string)
+	//log_string := ""
+	//for _, v := range log_list {
+	//	log_string += v
+	//	log_string += ";"
+	//}
+	//dlog.Warn(log_string)
 
 	return pack.PackFeedListResp(list, 0, "Success", req.UserId)
 }
