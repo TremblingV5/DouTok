@@ -4,12 +4,12 @@ package api
 
 import (
 	"context"
-	"errors"
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
 	"github.com/TremblingV5/DouTok/applications/api/initialize"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/pkg/errno"
+	"github.com/hertz-contrib/jwt"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -26,9 +26,12 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
+	userId := int64(jwt.ExtractClaims(ctx, c)[initialize.AuthMiddleware.IdentityKey].(float64))
+
 	resp, err := rpc.MessageChat(ctx, rpc.MessageClient, &message.DouyinMessageChatRequest{
-		UserId:   int64(c.Keys["user_id"].(float64)),
-		ToUserId: req.ToUserId,
+		UserId:     userId,
+		ToUserId:   req.ToUserId,
+		PreMsgTime: req.PreMsgTime,
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildMessageChatResp(errno.ConvertErr(err)))
@@ -49,12 +52,10 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	userId, e := c.Get(initialize.AuthMiddleware.IdentityKey)
-	if !e {
-		err = errors.New("identity not exist")
-	}
+	userId := int64(jwt.ExtractClaims(ctx, c)[initialize.AuthMiddleware.IdentityKey].(float64))
+
 	resp, err := rpc.MessageAction(ctx, rpc.MessageClient, &message.DouyinMessageActionRequest{
-		UserId:     int64(userId.(float64)),
+		UserId:     userId,
 		ToUserId:   req.ToUserId,
 		ActionType: req.ActionType,
 		Content:    req.Content,

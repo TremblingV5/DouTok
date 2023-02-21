@@ -12,6 +12,7 @@ func rootMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware.Recovery(),
+		middleware.CacheAPIRequest(),
 	}
 }
 
@@ -29,9 +30,7 @@ func _getuserfeedMw() []app.HandlerFunc {
 
 func _getuserbyidMw() []app.HandlerFunc {
 	// your code...
-	return []app.HandlerFunc{
-		initialize.AuthMiddleware.MiddlewareFunc(),
-	}
+	return nil
 }
 
 func _commentMw() []app.HandlerFunc {
@@ -69,10 +68,11 @@ func _favoritelistMw() []app.HandlerFunc {
 }
 
 func _messageMw() []app.HandlerFunc {
-	// your code...
+	//your code...
 	return []app.HandlerFunc{
 		initialize.AuthMiddleware.MiddlewareFunc(),
 	}
+	return nil
 }
 
 func _message_ctionMw() []app.HandlerFunc {

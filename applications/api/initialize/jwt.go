@@ -19,7 +19,7 @@ var AuthMiddleware *jwt.HertzJWTMiddleware
 func InitJwt() {
 	AuthMiddleware, _ = jwt.New(&jwt.HertzJWTMiddleware{
 		Key:        []byte(ViperConfig.Viper.GetString("JWT.signingKey")),
-		Timeout:    time.Hour,
+		Timeout:    12 * time.Hour,
 		MaxRefresh: time.Hour,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(int64); ok {
@@ -42,7 +42,7 @@ func InitJwt() {
 			userId := claims[constants.IdentityKey].(int64)
 			c.JSON(consts.StatusOK, map[string]interface{}{
 				"status_code": errno.SuccessCode,
-				"status_msg":  errno.Success,
+				"status_msg":  errno.Success.ErrMsg,
 				"user_id":     userId,
 				"token":       token,
 			})
