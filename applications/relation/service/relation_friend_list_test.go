@@ -1,14 +1,15 @@
 package service
 
 import (
-	"bou.ke/monkey"
 	"context"
+	"testing"
+
+	"bou.ke/monkey"
 	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/cloudwego/hertz/pkg/common/test/assert"
-	"testing"
 )
 
 func TestRelationFriendListService(t *testing.T) {
@@ -33,7 +34,7 @@ func TestRelationFriendListService(t *testing.T) {
 	err, ret := relService.RelationFriendList(req)
 	assert.Nil(t, err)
 	for _, friend := range ret {
-		println(friend.User.Id, friend.Message)
+		println(friend.Id, friend.Message)
 	}
 
 	relService = NewRelationFriendListService(context.Background())
@@ -56,6 +57,6 @@ func TestRelationFriendListService(t *testing.T) {
 	err, ret = relService.RelationFriendList(req)
 	assert.Nil(t, err)
 	for _, friend := range ret {
-		println(friend.User.Id, friend.Message)
+		println(friend.Id, friend.Message)
 	}
 }
