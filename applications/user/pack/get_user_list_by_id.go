@@ -34,7 +34,7 @@ func PackUserListResp(code int32, msg string, list []*model.User) (resp *user.Do
 			Signature:       v.Signature,
 			FollowCount:     req.FollowCount,
 			FollowerCount:   req.FollowerCount,
-			IsFollow:        true,
+			IsFollow:        false,
 		}
 
 		result = append(result, temp)
