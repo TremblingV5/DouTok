@@ -25,9 +25,12 @@ func Init() {
 func main() {
 	Init()
 
+	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	defer shutdown()
+
 	svr := feedservice.NewServer(
 		new(handler.FeedServiceImpl),
-		initHelper.InitRPCServerArgs(misc.Config)...,
+		options...,
 	)
 
 	if err := svr.Run(); err != nil {
