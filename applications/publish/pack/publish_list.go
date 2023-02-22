@@ -15,6 +15,15 @@ func PackPublishListRes(list []typedef.VideoInHB, code int32, msg string, req *p
 		StatusMsg:  msg,
 	}
 
+	newReq := user.DouyinUserRequest{
+		UserId: req.UserId,
+		// Token:  req.Token,
+	}
+
+	resp, _ := rpc.GetUserById(
+		context.Background(), &newReq,
+	)
+
 	var video_list []*feed.Video
 
 	for _, v := range list {
@@ -23,18 +32,6 @@ func PackPublishListRes(list []typedef.VideoInHB, code int32, msg string, req *p
 		temp.Title = v.GetTitle()
 		temp.PlayUrl = v.GetVideoUrl()
 		temp.CoverUrl = v.GetCoverUrl()
-
-		newReq := user.DouyinUserRequest{
-			UserId: req.UserId,
-			// Token:  req.Token,
-		}
-
-		resp, err := rpc.GetUserById(
-			context.Background(), &newReq,
-		)
-		if err != nil {
-			continue
-		}
 
 		temp.Author = resp.User
 		video_list = append(video_list, &temp)
