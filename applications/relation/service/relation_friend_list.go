@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+
 	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation"
@@ -46,14 +47,6 @@ func (s *RelationFriendListService) RelationFriendList(req *relation.DouyinRelat
 	}
 	fList := make([]*relation.FriendUser, 0, len(reqUser.GetUserList()))
 	for _, v := range respUser.GetUserList() {
-		user := &user.User{
-			Id:            v.Id,
-			Name:          v.Name,
-			FollowCount:   v.FollowCount,
-			FollowerCount: v.FollowerCount,
-			IsFollow:      v.IsFollow,
-			Avatar:        v.Avatar,
-		}
 		// 0为当前请求用户接受的消息，1为当前请求用户发送的消息
 		msgType := 0
 		if respMsg.Result[v.Id].FromUserId == req.UserId {
@@ -63,9 +56,14 @@ func (s *RelationFriendListService) RelationFriendList(req *relation.DouyinRelat
 		klog.Infof("user_id = %s, msgType = %d\n", respMsg.Result[v.Id].Content, int64(msgType))
 
 		friend := &relation.FriendUser{
-			User:    user,
-			Message: respMsg.Result[v.Id].Content,
-			MsgType: int64(msgType),
+			Id:            v.Id,
+			Name:          v.Name,
+			FollowCount:   v.FollowCount,
+			FollowerCount: v.FollowerCount,
+			IsFollow:      v.IsFollow,
+			Avatar:        v.Avatar,
+			Message:       respMsg.Result[v.Id].Content,
+			MsgType:       int64(msgType),
 		}
 		fList = append(fList, friend)
 	}
