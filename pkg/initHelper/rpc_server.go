@@ -15,7 +15,7 @@ import (
 /*
 	返回初始化RPC客户端所需要的一些配置，减少这部分代码的重复
 */
-func InitRPCServerArgs(config *dtviper.Config) []server.Option {
+func InitRPCServerArgs(config *dtviper.Config) ([]server.Option, func()) {
 	addr := config.Viper.GetString("Etcd.Address") + ":" + config.Viper.GetString("Etcd.Port")
 
 	registry, err := etcd.NewEtcdRegistry([]string{addr})
@@ -33,15 +33,16 @@ func InitRPCServerArgs(config *dtviper.Config) []server.Option {
 		provider.WithExportEndpoint("localhost:4317"),
 		provider.WithInsecure(),
 	)
-	defer p.Shutdown(context.Background())
 
 	return []server.Option{
-		server.WithServiceAddr(serverAddr),
-		server.WithMiddleware(middleware.CommonMiddleware),
-		server.WithMiddleware(middleware.ServerMiddleware),
-		server.WithRegistry(registry),
-		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
-		server.WithMuxTransport(),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.Viper.GetString("Server.Name")}),
-	}
+			server.WithServiceAddr(serverAddr),
+			server.WithMiddleware(middleware.CommonMiddleware),
+			server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithRegistry(registry),
+			server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
+			server.WithMuxTransport(),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.Viper.GetString("Server.Name")}),
+		}, func() {
+			p.Shutdown(context.Background())
+		}
 }

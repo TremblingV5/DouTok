@@ -28,9 +28,12 @@ func Init() {
 func main() {
 	Init()
 
+	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	defer shutdown()
+
 	svr := commentservice.NewServer(
 		new(handler.CommentServiceImpl),
-		initHelper.InitRPCServerArgs(misc.Config)...,
+		options...
 	)
 
 	if err := svr.Run(); err != nil {
