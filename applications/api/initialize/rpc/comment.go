@@ -11,7 +11,6 @@ import (
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"time"
@@ -28,12 +27,12 @@ func initCommentRpc(Config *dtviper.Config) {
 	}
 	ServiceName := Config.Viper.GetString("Server.Name")
 
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(ServiceName),
-		provider.WithExportEndpoint("localhost:4317"),
-		provider.WithInsecure(),
-	)
-	defer p.Shutdown(context.Background())
+	//p := provider.NewOpenTelemetryProvider(
+	//	provider.WithServiceName(ServiceName),
+	//	provider.WithExportEndpoint("localhost:4317"),
+	//	provider.WithInsecure(),
+	//)
+	//defer p.Shutdown(context.Background())
 
 	c, err := commentservice.NewClient(
 		ServiceName,

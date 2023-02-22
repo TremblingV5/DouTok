@@ -6,6 +6,7 @@ import (
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"time"
 )
@@ -21,6 +22,7 @@ func InitRPCClientArgs(config *dtviper.Config) []client.Option {
 	}
 
 	return []client.Option{
+		client.WithSuite(tracing.NewClientSuite()),
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithMuxConnection(1),                         // mux
