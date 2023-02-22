@@ -23,9 +23,12 @@ func Init() {
 func main() {
 	Init()
 
+	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	defer shutdown()
+
 	svr := userservice.NewServer(
 		new(handler.UserServiceImpl),
-		initHelper.InitRPCServerArgs(misc.Config)...,
+		options...,
 	)
 
 	if err := svr.Run(); err != nil {
