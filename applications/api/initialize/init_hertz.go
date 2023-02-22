@@ -17,9 +17,9 @@ import (
 	"github.com/hertz-contrib/gzip"
 	h2config "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
+	"github.com/hertz-contrib/obs-opentelemetry/provider"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
 	"github.com/hertz-contrib/registry/etcd"
-	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"time"
 )
 
