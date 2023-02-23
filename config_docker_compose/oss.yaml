@@ -1,0 +1,5 @@
+endpoint: "oss-cn-shanghai.aliyuncs.com"
+key: "LTAI5tE4KuLv9mURV2C73Umi"
+secret: "6GTV8iO6UDTjXitmnXgRrZvW6wHqXw"
+bucket: "doutok-video"
+callback: "http://q2cq39.natappfree.cc/callback/handle"
