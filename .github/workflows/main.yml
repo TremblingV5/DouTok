@@ -25,35 +25,35 @@ jobs:
           
           docker login --username=${{ secrets.ALIYUN_KEY_ID }} --password=${{ secrets.ALIYUN_KEY_SECRET }} registry.cn-shanghai.aliyuncs.com
           
-          docker build . -t api --build-arg target=api
+          docker build -t api . --build-arg target=api
           
           docker push ${{ env.REGISTRY }}/doutok/api:latest
           
-          docker build . -t comment --build-arg target=comment
+          docker build -t comment . --build-arg target=comment
           
           docker push ${{ env.REGISTRY }}/doutok/comment:latest
           
-          docker build . -t favorite --build-arg target=favorite
+          docker build -t favorite . --build-arg target=favorite
           
           docker push ${{ env.REGISTRY }}/doutok/favorite:latest
           
-          docker build . -t feed --build-arg target=feed
+          docker build -t feed . --build-arg target=feed
           
           docker push ${{ env.REGISTRY }}/doutok/feed:latest
           
-          docker build . -t message --build-arg target=message
+          docker build -t message . --build-arg target=message
           
           docker push ${{ env.REGISTRY }}/doutok/message:latest
           
-          docker build . -t publsih --build-arg target=publsih
+          docker build -t publsih . --build-arg target=publsih
           
           docker push ${{ env.REGISTRY }}/doutok/publsih:latest
           
-          docker build . -t relation --build-arg target=relation
+          docker build -t relation . --build-arg target=relation
           
           docker push ${{ env.REGISTRY }}/doutok/api:latest
           
-          docker build . -t user --build-arg target=user
+          docker build -t user . --build-arg target=user
           
           docker push ${{ env.REGISTRY }}/doutok/user:latest
         
