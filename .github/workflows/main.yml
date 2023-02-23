@@ -22,7 +22,7 @@ jobs:
       - name: Build docker image
         run:
           docker version
-          docker login --username=${{ secrets.ALIYUN_KEY_ID }} --pasword=${{ secrets.ALIYUN_KEY_SECRET }} registry.cn-shanghai.aliyuncs.com
+          docker login --username=${{ secrets.ALIYUN_KEY_ID }} --password=${{ secrets.ALIYUN_KEY_SECRET }} registry.cn-shanghai.aliyuncs.com
           docker build ./ -t api --build-arg target=api
           docker push ${{ env.REGISTRY }}/doutok/api:latest
           docker build ./ -t comment --build-arg target=comment
