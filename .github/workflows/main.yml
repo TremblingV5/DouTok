@@ -1,7 +1,7 @@
 name: build latest
 
 on:
-  pull_request:
+  push:
     branches: ["main"]
 
 env:
