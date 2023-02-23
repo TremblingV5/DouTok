@@ -23,6 +23,8 @@ jobs:
         run:
           docker version
           
+          ls
+          
           docker login --username=${{ secrets.ALIYUN_KEY_ID }} --password=${{ secrets.ALIYUN_KEY_SECRET }} registry.cn-shanghai.aliyuncs.com
           
           docker build -t api . --tag ${{ env.REGISTRY }}/doutok/api:latest --build-arg target=api
