@@ -1,0 +1,47 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v1"
+
+Etcd:
+  Address: "47.115.230.248"
+  Port: 2379
+
+Server:
+  Name: "DoutokMessageServer"
+  Address: "message"
+  Port: 8082
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "127.0.0.1"
+    - "192.168.1.1"
+
+Snowflake:
+  Node: 10
+
+Hbase:
+  Host: "139.9.80.79"
+  Table: "message"
+  MessageNum: 50
+
+Redis:
+  Host: "47.115.230.248"
+  Port: 6379
+  Password: "root"
+  DataBases:
+    Default: 5
+
+Kafka:
+  Brokers:
+    - "150.158.237.39:50004"
+  Topics:
+    - "message_1"
+#    - "message_2"
+  GroupIds:
+    - "message01"
+    - "message02"
+    - "message03"
+    - "message04"
+    - "message05"

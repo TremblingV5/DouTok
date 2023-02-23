@@ -1,0 +1,42 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v1"
+
+JWT:
+  signingKey: "signingKey"
+
+Etcd:
+  Enable: true
+  Address: "47.115.230.248"
+  Port: 2379
+
+Server:
+  Name: "DoutokAPIServer"
+  Address: "0.0.0.0"
+  Port: 8088
+
+Hertz:
+  UseNetpoll: true
+  Http2:
+    Enable: false
+    DisableKeepalive: false
+    ReadTimeout: "1m0s"
+  Tls:
+    Enable: false
+    CertFile: ""
+    KeyFile: ""
+    ALPN: true
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "127.0.0.1"
+    - "192.168.1.1"
+
+Redis:
+  Host: "47.115.230.248"
+  Port: 6379
+  Password: "root"
+  DataBases:
+    Default: 0
