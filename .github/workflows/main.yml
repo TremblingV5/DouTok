@@ -56,4 +56,4 @@ jobs:
           docker build -t user . --tag ${{ env.REGISTRY }}/doutok/user:latest --build-arg target=user
           
           docker push ${{ env.REGISTRY }}/doutok/user:latest
-        
+      
