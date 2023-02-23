@@ -1,4 +1,4 @@
-![image-20230223111012814](https://baize-blog-images.oss-cn-shanghai.aliyuncs.com/img/image-20230223111012814.png)
+![image-20230223111012814](./documents/imgs/banner.jpeg)
 
 DouTok is a backend for TikTok client based on Kitex and Hertz.
 
