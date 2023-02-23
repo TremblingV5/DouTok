@@ -47,7 +47,7 @@ jobs:
           
           docker push ${{ env.REGISTRY }}/doutok/message:${{github.ref}}
           
-          docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publish:${{github.ref}} --build-arg publish=publish
+          docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publish:${{github.ref}} --build-arg target=publish
           
           docker push ${{ env.REGISTRY }}/doutok/publish:${{github.ref}}
           
