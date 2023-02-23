@@ -1,0 +1,32 @@
+name: build latest
+
+on:
+  pull_request:
+    branches: ["main"]
+
+env:
+  REGISTRY: registry.cn-shanghai.aliyuncs.com
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Login to ${{ env.REGISTRY }}
+        uses: aliyun/acr-login@v1
+        with:
+          access-key-id: ${{ secrets.ALIYUN_KEY_ID }}
+          access-key-secret: ${{ secrets.ALIYUN_KEY_SECRET }}
+      
+#       - name: Build docker image
+#         run:
+#           docker version
+#           docker login --username
+        
