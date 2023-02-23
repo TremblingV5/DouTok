@@ -1,0 +1,47 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v1"
+
+JWT:
+  signingKey: "signingKey"
+
+Etcd:
+  Address: "47.115.230.248"
+  Port: 2379
+
+Server:
+  Name: "DoutokCommentServer"
+  Address: "comment"
+  Port: 8086
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "127.0.0.1"
+    - "192.168.1.1"
+
+MySQL:
+  Host: "47.115.230.248"
+  Port: 3307
+  Username: "admin"
+  Password: "root"
+  Database: "DouTok"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
+
+Snowflake:
+  Node: 70
+
+HBase:
+  Host: "139.9.80.79"
+
+Redis:
+  Dest: "47.115.230.248:6379"
+  Password: "root"
+  ComCntCache:
+    Num: 8
+  ComTotalCntCache:
+    Num: 9
+    
