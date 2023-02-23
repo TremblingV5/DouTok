@@ -18,7 +18,8 @@ func main() {
 
 	initialize.Init()
 
-	h := initialize.InitHertz()
+	h, shutdown := initialize.InitHertz()
+	defer shutdown()
 
 	pprof.Register(h)
 
