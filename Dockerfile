@@ -3,9 +3,13 @@ FROM golang:1.18-alpine3.16 AS builder
 ARG target
 ENV target=${target}
 
+ARG proxy=https://proxy.golang.org
+ENV proxy=${proxy}
+RUN echo ${proxy}
+
 WORKDIR /build
 
-ENV GOPROXY https://goproxy.cn
+ENV GOPROXY ${proxy}
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
