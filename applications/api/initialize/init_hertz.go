@@ -102,7 +102,7 @@ func InitHertzCfg() {
 }
 
 // 初始化 Hertz
-func InitHertz() *server.Hertz {
+func InitHertz() (*server.Hertz, func()) {
 	InitHertzCfg()
 
 	opts := []config.Option{server.WithHostPorts(ServiceAddr)}
@@ -129,7 +129,7 @@ func InitHertz() *server.Hertz {
 		provider.WithExportEndpoint("localhost:4317"),
 		provider.WithInsecure(),
 	)
-	defer p.Shutdown(context.Background())
+
 	tracer, tracerCfg := hertztracing.NewServerTracer()
 	opts = append(opts, tracer)
 
@@ -182,5 +182,7 @@ func InitHertz() *server.Hertz {
 		}
 	}
 
-	return h
+	return h, func() {
+		p.Shutdown(context.Background())
+	}
 }
