@@ -7,8 +7,8 @@ WORKDIR /build
 
 ENV GOPROXY https://goproxy.cn
 COPY go.mod .
+COPY go.sum .
 RUN go mod download
-RUN go mod tidy
 
 COPY . .
 RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o serve ./applications/${target}/
