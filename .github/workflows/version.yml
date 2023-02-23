@@ -1,0 +1,60 @@
+name: build version
+
+on:
+  push:
+    tags: [ 'v*.*.*' ]
+
+env:
+  REGISTRY: registry.cn-shanghai.aliyuncs.com
+
+jobs:
+  build:
+    runs-on: ubuntu-${{github.ref}}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Build docker image
+        run:
+          docker version
+          
+          ls
+          
+          docker login --username=${{ secrets.ALIYUN_KEY_ID }} --password=${{ secrets.ALIYUN_KEY_SECRET }} registry.cn-shanghai.aliyuncs.com
+          
+          docker build -t api . --tag ${{ env.REGISTRY }}/doutok/api:${{github.ref}} --build-arg target=api
+          
+          docker push ${{ env.REGISTRY }}/doutok/api:${{github.ref}}
+          
+          docker build -t comment . --tag ${{ env.REGISTRY }}/doutok/comment:${{github.ref}} --build-arg target=comment
+          
+          docker push ${{ env.REGISTRY }}/doutok/comment:${{github.ref}}
+          
+          docker build -t favorite . --tag ${{ env.REGISTRY }}/doutok/favorite:${{github.ref}} --build-arg target=favorite
+          
+          docker push ${{ env.REGISTRY }}/doutok/favorite:${{github.ref}}
+          
+          docker build -t feed . --tag ${{ env.REGISTRY }}/doutok/feed:${{github.ref}} --build-arg target=feed
+          
+          docker push ${{ env.REGISTRY }}/doutok/feed:${{github.ref}}
+          
+          docker build -t message . --tag ${{ env.REGISTRY }}/doutok/message:${{github.ref}} --build-arg target=message
+          
+          docker push ${{ env.REGISTRY }}/doutok/message:${{github.ref}}
+          
+          docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publish:${{github.ref}} --build-arg publish=publish
+          
+          docker push ${{ env.REGISTRY }}/doutok/publish:${{github.ref}}
+          
+          docker build -t relation . --tag ${{ env.REGISTRY }}/doutok/relation:${{github.ref}} --build-arg target=relation
+          
+          docker push ${{ env.REGISTRY }}/doutok/relation:${{github.ref}}
+          
+          docker build -t user . --tag ${{ env.REGISTRY }}/doutok/user:${{github.ref}} --build-arg target=user
+          
+          docker push ${{ env.REGISTRY }}/doutok/user:${{github.ref}}
