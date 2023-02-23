@@ -8,9 +8,9 @@ WORKDIR /build
 ENV GOPROXY https://goproxy.cn
 COPY go.mod .
 COPY go.sum .
+COPY . .
 RUN go mod download
 
-COPY . .
 RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o serve ./applications/${target}/
 
 FROM alpine:3.16 AS doutok-serve
