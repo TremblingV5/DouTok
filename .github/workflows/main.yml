@@ -47,9 +47,9 @@ jobs:
           
           docker push ${{ env.REGISTRY }}/doutok/message:latest
           
-          docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publsih:latest --build-arg target=publsih
+          docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publish:latest --build-arg target=publish
           
-          docker push ${{ env.REGISTRY }}/doutok/publsih:latest
+          docker push ${{ env.REGISTRY }}/doutok/publish:latest
           
           docker build -t relation . --tag ${{ env.REGISTRY }}/doutok/relation:latest --build-arg target=relation
           
