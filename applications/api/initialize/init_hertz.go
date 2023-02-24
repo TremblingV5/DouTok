@@ -126,7 +126,7 @@ func InitHertz() (*server.Hertz, func()) {
 	// 链路追踪
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(ServiceName),
-		provider.WithExportEndpoint("localhost:4317"),
+		provider.WithExportEndpoint(fmt.Sprintf("%s:%s", ViperConfig.Viper.GetString("Otel.Host"), ViperConfig.Viper.GetString("Otel.Port"))),
 		provider.WithInsecure(),
 	)
 

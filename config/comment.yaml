@@ -44,4 +44,7 @@ Redis:
     Num: 8
   ComTotalCntCache:
     Num: 9
-    
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317

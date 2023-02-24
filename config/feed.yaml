@@ -51,3 +51,7 @@ Redis:
     Num: 1
   MarkdedTime:
     Num: 2
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317

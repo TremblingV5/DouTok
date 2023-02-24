@@ -2,6 +2,7 @@ package initHelper
 
 import (
 	"context"
+	"fmt"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -31,7 +32,7 @@ func InitRPCServerArgs(config *dtviper.Config) ([]server.Option, func()) {
 
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.Viper.GetString("Server.Name")),
-		provider.WithExportEndpoint("localhost:4317"),
+		provider.WithExportEndpoint(fmt.Sprintf("%s:%s", config.Viper.GetString("Otel.Host"), config.Viper.GetString("Otel.Port"))),
 		provider.WithInsecure(),
 	)
 

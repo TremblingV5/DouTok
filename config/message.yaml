@@ -45,3 +45,7 @@ Kafka:
     - "message03"
     - "message04"
     - "message05"
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317
