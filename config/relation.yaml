@@ -50,3 +50,7 @@ MySQL:
   Database: "DouTok"
   Username: "root"
   Password: "root"
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317

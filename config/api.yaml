@@ -40,3 +40,7 @@ Redis:
   Password: "root"
   DataBases:
     Default: 0
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317
