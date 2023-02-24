@@ -60,7 +60,7 @@ func main() {
 
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(ServiceName),
-		provider.WithExportEndpoint("localhost:4317"),
+		provider.WithExportEndpoint(fmt.Sprintf("%s:%s", service.ViperConfig.Viper.GetString("Otel.Host"), service.ViperConfig.Viper.GetString("Otel.Port"))),
 		provider.WithInsecure(),
 	)
 	defer p.Shutdown(context.Background())

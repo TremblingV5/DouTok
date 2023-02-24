@@ -46,3 +46,7 @@ Redis:
 
 Kafka:
   Broker: "150.158.237.39:50004"
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317
