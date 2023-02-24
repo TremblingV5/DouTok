@@ -43,3 +43,7 @@ MySQL:
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317
