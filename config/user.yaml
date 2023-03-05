@@ -6,7 +6,7 @@ JWT:
   signingKey: "signingKey"
 
 Etcd:
-  Address: "47.115.230.248"
+  Address: "127.0.0.1"
   Port: 2379
 
 Server:
@@ -31,7 +31,7 @@ Snowflake:
   Node: 40
 
 MySQL:
-  Host: "47.115.230.248"
+  Host: "127.0.0.1"
   Port: 3307
   Username: "admin"
   Password: "root"
@@ -43,3 +43,6 @@ MySQL:
 Otel:
   Host: "82.156.171.8"
   Port: 4317
+
+PreventCaller:
+  - "DoutokAPIServer"

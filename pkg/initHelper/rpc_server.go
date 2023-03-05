@@ -36,10 +36,13 @@ func InitRPCServerArgs(config *dtviper.Config) ([]server.Option, func()) {
 		provider.WithInsecure(),
 	)
 
+	preventedCaller := config.Viper.GetStringSlice("PreventCaller")
+
 	return []server.Option{
 			server.WithServiceAddr(serverAddr),
 			server.WithMiddleware(middleware.CommonMiddleware),
 			server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithMiddleware(middleware.GetKitexStreamingCallPreventMiddleware(preventedCaller)),
 			server.WithRegistry(registry),
 			server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
 			server.WithMuxTransport(),

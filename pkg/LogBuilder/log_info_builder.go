@@ -11,9 +11,11 @@ type LogInfoBuilder struct {
 	Items   map[string]string
 }
 
-func InitLogBuilder() *LogInfoBuilder {
+func InitLogBuilder(logType string, message string) *LogInfoBuilder {
 	return &LogInfoBuilder{
-		Items: make(map[string]string),
+		logType: logType,
+		message: message,
+		Items:   make(map[string]string),
 	}
 }
 

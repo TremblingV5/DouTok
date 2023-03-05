@@ -83,6 +83,7 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 func Init() {
 	InitViper()
 	rpc.InitRPC()
+	rpc.InitLogHandle()
 	InitJwt()
 	InitRedisClient()
 }
