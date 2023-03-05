@@ -6,7 +6,7 @@ JWT:
   signingKey: "signingKey"
 
 Etcd:
-  Address: "47.115.230.248"
+  Address: "127.0.0.1"
   Port: 2379
 
 Server:
@@ -35,7 +35,7 @@ OSS:
   Callback: ""
 
 MySQL:
-  Host: "47.115.230.248"
+  Host: "127.0.0.1"
   Port: 3307
   Username: "admin"
   Password: "root"
