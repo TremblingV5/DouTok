@@ -3,6 +3,8 @@ package initHelper
 import (
 	"context"
 	"fmt"
+	"net"
+
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -11,7 +13,6 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"net"
 )
 
 /*
@@ -35,6 +36,8 @@ func InitRPCServerArgs(config *dtviper.Config) ([]server.Option, func()) {
 		provider.WithExportEndpoint(fmt.Sprintf("%s:%s", config.Viper.GetString("Otel.Host"), config.Viper.GetString("Otel.Port"))),
 		provider.WithInsecure(),
 	)
+
+	preventedCaller := config.Viper.GetStringSlice("PreventCaller")
 
 	return []server.Option{
 			server.WithServiceAddr(serverAddr),

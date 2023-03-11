@@ -23,7 +23,11 @@ Log:
     callerEncoder: "full" # full, short
     nameEncoder: "full" # full
     consoleSeparator: " "
-
+  path: "./tmp/DouTok.log"
+  maxSize: 102400
+  maxBackups: 3
+  maxAge: 10
+  skip: 2
   outputPaths:
     - "stdout"
     - "./tmp/DouTok.log"

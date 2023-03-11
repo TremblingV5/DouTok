@@ -9,7 +9,7 @@ services:
         image: registry.cn-shanghai.aliyuncs.com/doutok/api:latest
         container_name: api
         volumes:
-            -   ./config_docker_compose:/app/config
+            - ./config_docker_compose:/app/config
         networks:
             - total
         ports:
@@ -20,7 +20,7 @@ services:
         image: registry.cn-shanghai.aliyuncs.com/doutok/comment:latest
         container_name: comment
         volumes:
-            -   ./config_docker_compose:/app/config
+            - ./config_docker_compose:/app/config
         networks:
             - total
         ports:
@@ -31,7 +31,7 @@ services:
         image: registry.cn-shanghai.aliyuncs.com/doutok/favorite:latest
         container_name: favorite
         volumes:
-            -   ./config_docker_compose:/app/config
+            - ./config_docker_compose:/app/config
         networks:
             - total
         ports:
@@ -42,7 +42,7 @@ services:
         image: registry.cn-shanghai.aliyuncs.com/doutok/feed:latest
         container_name: feed
         volumes:
-            -   ./config_docker_compose:/app/config
+            - ./config_docker_compose:/app/config
         networks:
             - total
         ports:
@@ -53,7 +53,7 @@ services:
         image: registry.cn-shanghai.aliyuncs.com/doutok/message:latest
         container_name: message
         volumes:
-            -   ./config_docker_compose:/app/config
+            - ./config_docker_compose:/app/config
         networks:
             - total
         ports:
@@ -64,7 +64,7 @@ services:
         image: registry.cn-shanghai.aliyuncs.com/doutok/publish:latest
         container_name: publish
         volumes:
-            -   ./config_docker_compose:/app/config
+            - ./config_docker_compose:/app/config
         networks:
             - total
         ports:
@@ -75,7 +75,7 @@ services:
         image: registry.cn-shanghai.aliyuncs.com/doutok/relation:latest
         container_name: relation
         volumes:
-            -   ./config_docker_compose:/app/config
+            - ./config_docker_compose:/app/config
         networks:
             - total
         ports:
@@ -86,7 +86,7 @@ services:
         image: registry.cn-shanghai.aliyuncs.com/doutok/user:latest
         container_name: user
         volumes:
-            -   ./config_docker_compose:/app/config
+            - ./config_docker_compose:/app/config
         networks:
             - total
         ports:

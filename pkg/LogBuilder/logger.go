@@ -1,6 +1,7 @@
 package LogBuilder
 
 import (
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -14,7 +15,17 @@ type logInfo struct {
 	value string
 }
 
-func New(filename string, maxSize int, maxBackups int, maxAge int) *Logger {
+func NewByViper(config *dtviper.Config) *Logger {
+	filename := config.Viper.GetString("Log.path")
+	maxSize := config.Viper.GetInt("Log.maxSize")
+	maxBackups := config.Viper.GetInt("Log.maxBackups")
+	maxAge := config.Viper.GetInt("Log.maxAge")
+	skip := config.Viper.GetInt("Log.skip")
+
+	return New(filename, maxSize, maxBackups, maxAge, skip)
+}
+
+func New(filename string, maxSize int, maxBackups int, maxAge int, skip int) *Logger {
 	writeSyncer := getLogWriter(
 		filename, maxSize, maxBackups, maxAge,
 	)
@@ -27,7 +38,7 @@ func New(filename string, maxSize int, maxBackups int, maxAge int) *Logger {
 	}
 	core := zapcore.NewCore(encoder, writeSyncer, l)
 
-	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
+	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(skip))
 	return &Logger{
 		Handle: logger,
 	}

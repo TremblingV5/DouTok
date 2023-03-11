@@ -1,8 +1,11 @@
 package rpc
 
 import (
+	"github.com/TremblingV5/DouTok/pkg/LogBuilder"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 )
+
+var logHandle *LogBuilder.Logger
 
 // InitRPC init rpc client
 func InitRPC() {
@@ -26,4 +29,10 @@ func InitRPC() {
 
 	MessageConfig := dtviper.ConfigInit("DOUTOK_MESSAGE", "message")
 	initMessageRpc(&MessageConfig)
+}
+
+func InitLogHandle() {
+	config := dtviper.ConfigInit("DOUTOK_LOG", "log")
+	l := LogBuilder.NewByViper(&config)
+	logHandle = l
 }
