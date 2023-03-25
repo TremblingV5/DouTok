@@ -4,7 +4,6 @@ import (
 	"github.com/TremblingV5/DouTok/applications/publish/handler"
 	"github.com/TremblingV5/DouTok/applications/publish/misc"
 	"github.com/TremblingV5/DouTok/applications/publish/rpc"
-	"github.com/TremblingV5/DouTok/applications/publish/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/publish/publishservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/initHelper"
@@ -16,8 +15,7 @@ var (
 
 func Init() {
 	misc.InitViperConfig()
-	service.Init()
-	rpc.InitPRCClient()
+	rpc.Init()
 }
 
 func main() {

@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
+	"time"
+
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
@@ -12,8 +15,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/websocket"
 	"github.com/jellydator/ttlcache/v2"
-	"log"
-	"time"
 )
 
 const (
@@ -95,7 +96,7 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 				}
 			}
 			// 向 message 模块发送消息
-			resp, err := rpc.MessageAction(ctx, &message.DouyinMessageActionRequest{
+			resp, err := rpc.MessageAction(ctx, rpc.MessageClient, &message.DouyinMessageActionRequest{
 				ToUserId:   clientMsg.ToUserId,
 				ActionType: 1,
 				Content:    clientMsg.MsgContent,

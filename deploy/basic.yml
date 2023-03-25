@@ -31,7 +31,7 @@ services:
             - mysql_vol:/var/lib/mysql:rw
             - ./my.cnf:/etc/mysql/my.cnf
         ports:
-            - "3307:3307"
+            - "3306:3306"
         restart: always
 
     etcd:

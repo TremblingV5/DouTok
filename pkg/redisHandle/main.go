@@ -29,7 +29,7 @@ func InitRedis(dsn string, pwd string, dbs map[string]int) (map[string]*RedisCli
 
 		_, err := redisCaches[k].Client.Ping(ctx).Result()
 		if err != nil {
-			return redisCaches, err
+			return nil, err
 		}
 	}
 

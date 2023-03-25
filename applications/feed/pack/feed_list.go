@@ -3,121 +3,103 @@ package pack
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/feed/rpc"
-	"github.com/TremblingV5/DouTok/applications/feed/service"
-	"github.com/TremblingV5/DouTok/kitex_gen/comment"
-	"github.com/TremblingV5/DouTok/kitex_gen/favorite"
+	"github.com/TremblingV5/DouTok/kitex_gen/commentDomain"
+	"github.com/TremblingV5/DouTok/kitex_gen/entity"
+	"github.com/TremblingV5/DouTok/kitex_gen/favoriteDomain"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed"
-	"github.com/TremblingV5/DouTok/kitex_gen/user"
-	"strconv"
+	"github.com/TremblingV5/DouTok/kitex_gen/userDomain"
+	"github.com/TremblingV5/DouTok/kitex_gen/videoDomain"
 )
 
-func PackFeedListResp(list []service.VideoInHB, code int32, msg string, user_id int64) (*feed.DouyinFeedResponse, error) {
-	res := feed.DouyinFeedResponse{
-		StatusCode: code,
-		StatusMsg:  msg,
+func PackageFeedListResp(ctx context.Context, result *videoDomain.DoutokGetFeedResponse, userId int64, err error) (*feed.DouyinFeedResponse, error) {
+	if err != nil {
+		return nil, err
 	}
 
-	next_time := "9999999999"
-	var video_list []*feed.Video
-
-	var video_id_list []int64
-	validateMap := make(map[int64]bool)
+	var videoIdList []int64
 	var userIdList []int64
-	validateUserIdMap := make(map[int64]bool)
-	for _, v := range list {
-		videoId := v.GetId()
-		if _, ok := validateMap[videoId]; !ok {
-			video_id_list = append(video_id_list, v.GetId())
-			validateMap[videoId] = true
-		}
-		userId := v.GetAuthorId()
-		if _, ok := validateUserIdMap[userId]; !ok {
-			userIdList = append(userIdList, userId)
-			validateUserIdMap[userId] = true
-		}
-		if v.GetTimestamp() < next_time {
-			next_time = v.GetTimestamp()
-		}
+	for _, v := range result.VideoList {
+		videoIdList = append(videoIdList, v.Id)
+		userIdList = append(userIdList, v.Author.Id)
 	}
 
-	userInfoResp, err := rpc.GetUserListByIds(context.Background(), &user.DouyinUserListRequest{
-		UserList: userIdList,
-	})
-	if err != nil {
-		return nil, nil
-	}
-	userInfo := userInfoResp.UserList
-	userMap := make(map[int64]*user.User)
-	for _, v := range userInfo {
-		userMap[v.Id] = v
-	}
-
-	isFavoriteResp, err := rpc.IsFavorite(context.Background(), &favorite.DouyinIsFavoriteRequest{
-		UserId:      user_id,
-		VideoIdList: video_id_list,
-	})
-	if err != nil {
-		return nil, nil
-	}
-	isFavorite := isFavoriteResp.Result
-
-	favoriteCountResp, err := rpc.FavoriteCount(context.Background(), &favorite.DouyinFavoriteCountRequest{
-		VideoIdList: video_id_list,
+	userInfo, err := rpc.UserDomainClient.GetUserInfo(ctx, &userDomain.DoutokGetUserInfoRequest{
+		UserId: userIdList,
 	})
 	if err != nil {
 		return nil, err
 	}
-	favoriteCount := favoriteCountResp.Result
 
-	commentCountResp, err := rpc.CommentCount(context.Background(), &comment.DouyinCommentCountRequest{
-		VideoIdList: video_id_list,
+	isFavInfo, err := rpc.FavoriteDomainClient.IsFavorite(ctx, &favoriteDomain.DoutokIsFavRequest{
+		UserId:  userId,
+		VideoId: videoIdList,
 	})
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
-	commentCount := commentCountResp.Result
 
-	for _, v := range list {
-		var temp feed.Video
+	favCount, err := rpc.FavoriteDomainClient.CountFavorite(ctx, &favoriteDomain.DoutokCountFavRequest{
+		UserIdList: videoIdList,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-		temp.Id = v.GetId()
-		temp.PlayUrl = v.GetVideoUrl()
-		temp.CoverUrl = v.GetCoverUrl()
-		temp.Title = v.GetTitle()
+	commentCount, err := rpc.CommentDomainClient.CountComment(ctx, &commentDomain.DoutokCountCommentReq{
+		VideoIdList: videoIdList,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-		value, ok := favoriteCount[v.GetId()]
-		if ok {
-			temp.FavoriteCount = value
-		} else {
-			temp.FavoriteCount = 0
+	var videoList []*entity.Video
+	for _, v := range result.VideoList {
+		temp := &entity.Video{
+			Id:       v.GetId(),
+			PlayUrl:  v.GetPlayUrl(),
+			CoverUrl: v.GetCoverUrl(),
+			Title:    v.GetTitle(),
 		}
 
-		commentCnt, ok := commentCount[v.GetId()]
-		if ok {
-			temp.CommentCount = commentCnt
+		if u, ok := userInfo.UserList[v.GetId()]; ok {
+			temp.Author = &entity.User{
+				Id:              u.Id,
+				Name:            u.Name,
+				Avatar:          u.Avatar,
+				BackgroundImage: u.BackgroundImage,
+				Signature:       u.Signature,
+			}
 		} else {
-			temp.CommentCount = 0
+			temp.Author = &entity.User{
+				Id: v.Author.Id,
+			}
 		}
 
-		isFav, ok := isFavorite[v.GetId()]
-		if ok {
+		if isFav, ok := isFavInfo.IsFav[v.GetId()]; ok {
 			temp.IsFavorite = isFav
 		} else {
 			temp.IsFavorite = false
 		}
 
-		temp.Author = userMap[v.GetAuthorId()]
-
-		video_list = append(video_list, &temp)
-
-		if v.GetTimestamp() < next_time {
-			next_time = v.GetTimestamp()
+		if favCnt, ok := favCount.CountFav[v.GetId()]; ok {
+			temp.FavoriteCount = favCnt
+		} else {
+			temp.FavoriteCount = 0
 		}
+
+		if commentCnt, ok := commentCount.CommentCount[v.GetId()]; ok {
+			temp.CommentCount = commentCnt
+		} else {
+			temp.CommentCount = 0
+		}
+
+		videoList = append(videoList, temp)
 	}
 
-	res.VideoList = video_list
-	next_time_int64, _ := strconv.Atoi(next_time)
-	res.NextTime = int64(next_time_int64)
-
-	return &res, nil
+	return &feed.DouyinFeedResponse{
+		StatusCode: 0,
+		StatusMsg:  "Success",
+		VideoList:  videoList,
+		NextTime:   result.NextTime,
+	}, nil
 }

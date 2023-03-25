@@ -3,6 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/TremblingV5/DouTok/applications/message/rpc"
+	"net"
+
+	"github.com/TremblingV5/DouTok/applications/message/handler"
 	"github.com/TremblingV5/DouTok/applications/message/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/message/messageservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
@@ -14,7 +18,6 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"net"
 )
 
 func Init() {
@@ -24,6 +27,7 @@ func Init() {
 	service.InitSyncProducer()
 	service.InitConsumerGroup()
 	service.InitId()
+	rpc.Init()
 }
 
 func main() {
@@ -62,7 +66,7 @@ func main() {
 	defer p.Shutdown(context.Background())
 
 	svr := messageservice.NewServer(
-		new(MessageServiceImpl),
+		new(handler.MessageServiceImpl),
 		server.WithServiceAddr(addr),                                       // address
 		server.WithMiddleware(middleware.CommonMiddleware),                 // middleware
 		server.WithMiddleware(middleware.ServerMiddleware),                 // middleware

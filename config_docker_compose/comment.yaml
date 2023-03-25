@@ -6,7 +6,7 @@ JWT:
   signingKey: "signingKey"
 
 Etcd:
-  Address: "47.115.230.248"
+  Address: "localhost"
   Port: 2379
 
 Server:
@@ -22,11 +22,11 @@ Client:
     - "192.168.1.1"
 
 MySQL:
-  Host: "47.115.230.248"
-  Port: 3307
-  Username: "admin"
-  Password: "root"
-  Database: "DouTok"
+  Host: "localhost"
+  Port: 3306
+  Username: "USER"
+  Password: "PWD"
+  Database: "DBName"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
@@ -35,11 +35,11 @@ Snowflake:
   Node: 70
 
 HBase:
-  Host: "139.9.80.79"
+  Host: "localhost"
 
 Redis:
-  Dest: "47.115.230.248:6379"
-  Password: "root"
+  Dest: "localhost:6379"
+  Password: "PWD"
   ComCntCache:
     Num: 8
   ComTotalCntCache:

@@ -38,10 +38,18 @@ jobs:
           docker build -t comment . --tag ${{ env.REGISTRY }}/doutok/comment:${{steps.get_version.outputs.VERSION}} --build-arg target=comment
           
           docker push ${{ env.REGISTRY }}/doutok/comment:${{steps.get_version.outputs.VERSION}}
+
+          docker build -t commentDomain . --tag ${{ env.REGISTRY }}/doutok/commentDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=commentDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/commentDomain:${{steps.get_version.outputs.VERSION}}
           
           docker build -t favorite . --tag ${{ env.REGISTRY }}/doutok/favorite:${{steps.get_version.outputs.VERSION}} --build-arg target=favorite
           
           docker push ${{ env.REGISTRY }}/doutok/favorite:${{steps.get_version.outputs.VERSION}}
+
+          docker build -t favoriteDomain . --tag ${{ env.REGISTRY }}/doutok/favoriteDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=favoriteDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/favoriteDomain:${{steps.get_version.outputs.VERSION}}
           
           docker build -t feed . --tag ${{ env.REGISTRY }}/doutok/feed:${{steps.get_version.outputs.VERSION}} --build-arg target=feed
           
@@ -50,6 +58,10 @@ jobs:
           docker build -t message . --tag ${{ env.REGISTRY }}/doutok/message:${{steps.get_version.outputs.VERSION}} --build-arg target=message
           
           docker push ${{ env.REGISTRY }}/doutok/message:${{steps.get_version.outputs.VERSION}}
+
+          docker build -t messageDomain . --tag ${{ env.REGISTRY }}/doutok/messageDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=messageDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/messageDomain:${{steps.get_version.outputs.VERSION}}
           
           docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publish:${{steps.get_version.outputs.VERSION}} --build-arg target=publish
           
@@ -58,7 +70,19 @@ jobs:
           docker build -t relation . --tag ${{ env.REGISTRY }}/doutok/relation:${{steps.get_version.outputs.VERSION}} --build-arg target=relation
           
           docker push ${{ env.REGISTRY }}/doutok/relation:${{steps.get_version.outputs.VERSION}}
+
+          docker build -t relationDomain . --tag ${{ env.REGISTRY }}/doutok/relationDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=relationDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/relationDomain:${{steps.get_version.outputs.VERSION}}
           
           docker build -t user . --tag ${{ env.REGISTRY }}/doutok/user:${{steps.get_version.outputs.VERSION}} --build-arg target=user
           
           docker push ${{ env.REGISTRY }}/doutok/user:${{steps.get_version.outputs.VERSION}}
+
+          docker build -t userDomain . --tag ${{ env.REGISTRY }}/doutok/userDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=userDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/userDomain:${{steps.get_version.outputs.VERSION}}
+
+          docker build -t videoDomain . --tag ${{ env.REGISTRY }}/doutok/videoDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=videoDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/videoDomain:${{steps.get_version.outputs.VERSION}}
