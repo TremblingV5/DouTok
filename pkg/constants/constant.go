@@ -7,8 +7,8 @@ const (
 		如下是数据库名的定义
 	*/
 	DbDefault   = "default"
-	FeedSendBox = "feedlist"
-	TimeCache   = "feedmarkedtime"
+	FeedSendBox = "SendBox"
+	TimeCache   = "MarkedTime"
 
 	AddrPrefix = "user_addr"
 

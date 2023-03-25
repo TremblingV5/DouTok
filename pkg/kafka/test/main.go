@@ -5,12 +5,13 @@ import (
 	"crypto/x509"
 	"flag"
 	"fmt"
-	"github.com/Shopify/sarama"
 	"log"
 	"os"
 	"os/signal"
 	"strings"
 	"time"
+
+	"github.com/Shopify/sarama"
 )
 
 func init() {
@@ -85,12 +86,12 @@ func main() {
 	conf.Producer.Return.Successes = true
 	conf.Metadata.Full = true
 	conf.Version = sarama.V0_10_0_0
-	conf.ClientID = "sasl_scram_client"
+	// conf.ClientID = "sasl_scram_client"
 	conf.Metadata.Full = true
-	conf.Net.SASL.Enable = true
-	conf.Net.SASL.User = *userName
-	conf.Net.SASL.Password = *passwd
-	conf.Net.SASL.Handshake = true
+	// conf.Net.SASL.Enable = true
+	// conf.Net.SASL.User = *userName
+	// conf.Net.SASL.Password = *passwd
+	// conf.Net.SASL.Handshake = true
 	// if *algorithm == "sha512" {
 	// 	conf.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient { return &XDGSCRAMClient{HashGeneratorFcn: SHA512} }
 	// 	conf.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512

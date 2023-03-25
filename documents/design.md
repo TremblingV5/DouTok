@@ -113,3 +113,24 @@ hbase：
 mysql：
 
 用户信息表（不包括点赞数、关注数等）、用户count表（点赞数、粉丝数等）
+
+## 各个模块传输到Log模块的日志结构
+
+以json格式通过Kafka传输到Log模块
+
+```json
+{
+    "app": "{模块名}",
+    "address": "{提供日志的服务所在地址及端口}",
+    "type": "{日志类型}",
+    "process_id": 1,
+    "thread_id": 2,
+    "go_id": 3,
+    "request_id": 4
+}
+```
+
+上述日志类型包括：
+
+- log：只用于记录的日志
+- kafka-topic-partition-field1,field2,field3：除用于记录外，将此条日志再次通过kafka进行传输，topic、partition分别是使用的kafka信息，field1、2、3为要传输的字段名

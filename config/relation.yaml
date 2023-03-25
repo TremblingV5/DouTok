@@ -3,13 +3,13 @@ Global:
   ChangeMe: "v1"
 
 Etcd:
-  Address: "47.115.230.248"
+  Address: "localhost"
   Port: 2379
 
 Server:
   Name: "DoutokRelationServer"
   Address: "127.0.0.1"
-  Port: 8097
+  Port: 8078
 
 Client:
   Echo: true
@@ -25,15 +25,15 @@ Hbase:
   Table: "message"
 
 Redis:
-  Host: "47.115.230.248"
+  Host: "localhost"
   Port: 6379
-  Password: "root"
+  Password: "PWD"
   DataBases:
     Default: 6
 
 Kafka:
   Brokers:
-    - "150.158.237.39:50004"
+    - "192.168.2.120:9092"
   Topics:
     - "relation_1"
 #    - "relation_2"
@@ -45,11 +45,11 @@ Kafka:
     - "relation05"
 
 MySQL:
-  Host: "47.115.230.248"
-  Port: "3307"
-  Database: "DouTok"
+  Host: "localhost"
+  Port: "3306"
+  Database: "DBName"
   Username: "root"
-  Password: "root"
+  Password: "PWD"
 
 Otel:
   Host: "82.156.171.8"

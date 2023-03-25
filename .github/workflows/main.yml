@@ -34,10 +34,18 @@ jobs:
           docker build -t comment . --tag ${{ env.REGISTRY }}/doutok/comment:latest --build-arg target=comment
           
           docker push ${{ env.REGISTRY }}/doutok/comment:latest
+
+          docker build -t commentDomain . --tag ${{ env.REGISTRY }}/doutok/commentDomain:latest --build-arg target=commentDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/commentDomain:latest
           
           docker build -t favorite . --tag ${{ env.REGISTRY }}/doutok/favorite:latest --build-arg target=favorite
           
           docker push ${{ env.REGISTRY }}/doutok/favorite:latest
+
+          docker build -t favoriteDomain . --tag ${{ env.REGISTRY }}/doutok/favoriteDomain:latest --build-arg target=favoriteDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/favoriteDomain:latest
           
           docker build -t feed . --tag ${{ env.REGISTRY }}/doutok/feed:latest --build-arg target=feed
           
@@ -46,6 +54,10 @@ jobs:
           docker build -t message . --tag ${{ env.REGISTRY }}/doutok/message:latest --build-arg target=message
           
           docker push ${{ env.REGISTRY }}/doutok/message:latest
+
+          docker build -t messageDomain . --tag ${{ env.REGISTRY }}/doutok/messageDomain:latest --build-arg target=messageDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/messageDomain:latest
           
           docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publish:latest --build-arg target=publish
           
@@ -54,8 +66,20 @@ jobs:
           docker build -t relation . --tag ${{ env.REGISTRY }}/doutok/relation:latest --build-arg target=relation
           
           docker push ${{ env.REGISTRY }}/doutok/relation:latest
+
+          docker build -t relationDomain . --tag ${{ env.REGISTRY }}/doutok/relationDomain:latest --build-arg target=relationDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/relationDomain:latest
           
           docker build -t user . --tag ${{ env.REGISTRY }}/doutok/user:latest --build-arg target=user
           
           docker push ${{ env.REGISTRY }}/doutok/user:latest
+
+          docker build -t userDomain . --tag ${{ env.REGISTRY }}/doutok/userDomain:latest --build-arg target=userDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/userDomain:latest
+
+          docker build -t videoDomain . --tag ${{ env.REGISTRY }}/doutok/videoDomain:latest --build-arg target=videoDomain
+          
+          docker push ${{ env.REGISTRY }}/doutok/videoDomain:latest
       

@@ -1,0 +1,52 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v1"
+
+JWT:
+  signingKey: "signingKey"
+
+Etcd:
+  Address: "localhost"
+  Port: 2379
+
+Server:
+  Name: "DoutokFavoriteDomainServer"
+  Address: "127.0.0.1"
+  Port: 8084
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "127.0.0.1"
+    - "192.168.1"
+
+Snowflake:
+  Node: 602
+
+MySQL:
+  Host: "localhost"
+  Port: 3306
+  Username: "USER"
+  Password: "PWD"
+  Database: "DBName"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
+
+Redis:
+  Dest: "localhost:6379"
+  Password: "PWD"
+  FavCache:
+    Num: 3
+  FavCntCache:
+    Num: 4
+  FavTotalCountCache:
+    Num: 8
+
+Kafka:
+  Broker: "192.168.2.120:9092"
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317

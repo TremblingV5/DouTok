@@ -7,23 +7,23 @@ import (
 // InitRPC init rpc client
 func InitRPC() {
 	UserConfig := dtviper.ConfigInit("DOUTOK_USER", "user")
-	initUserRpc(&UserConfig)
+	initUserRpc(UserConfig)
 
 	FeedConfig := dtviper.ConfigInit("DOUTOK_FEED", "feed")
-	initFeedRpc(&FeedConfig)
+	initFeedRpc(FeedConfig)
 
 	PublishConfig := dtviper.ConfigInit("DOUTOK_PUBLISH", "publish")
-	initPublishRpc(&PublishConfig)
+	initPublishRpc(PublishConfig)
 
 	FavoriteConfig := dtviper.ConfigInit("DOUTOK_FAVORITE", "favorite")
-	initFavoriteRpc(&FavoriteConfig)
+	initFavoriteRpc(FavoriteConfig)
 
 	CommentConfig := dtviper.ConfigInit("DOUTOK_COMMENT", "comment")
-	initCommentRpc(&CommentConfig)
+	initCommentRpc(CommentConfig)
 
 	RelationConfig := dtviper.ConfigInit("DOUTOK_RELATION", "relation")
-	initRelationRpc(&RelationConfig)
+	initRelationRpc(RelationConfig)
 
 	MessageConfig := dtviper.ConfigInit("DOUTOK_MESSAGE", "message")
-	initMessageRpc(&MessageConfig)
+	initMessageRpc(MessageConfig)
 }
