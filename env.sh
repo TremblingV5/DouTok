@@ -1,0 +1,1 @@
+./start.sh etcd mysql redis minio zookeeper hbase kafka

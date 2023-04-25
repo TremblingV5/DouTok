@@ -3,7 +3,7 @@ package initialize
 import "github.com/TremblingV5/DouTok/pkg/dtviper"
 
 var (
-	ViperConfig dtviper.Config
+	ViperConfig *dtviper.Config
 )
 
 func InitViper() {

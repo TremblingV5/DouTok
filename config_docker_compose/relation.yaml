@@ -3,7 +3,7 @@ Global:
   ChangeMe: "v1"
 
 Etcd:
-  Address: "47.115.230.248"
+  Address: "localhost"
   Port: 2379
 
 Server:
@@ -25,9 +25,9 @@ Hbase:
   Table: "message"
 
 Redis:
-  Host: "47.115.230.248"
+  Host: "localhost"
   Port: 6379
-  Password: "root"
+  Password: "PWD"
   DataBases:
     Default: 6
 
@@ -45,8 +45,8 @@ Kafka:
     - "relation05"
 
 MySQL:
-  Host: "47.115.230.248"
-  Port: "3307"
-  Database: "DouTok"
+  Host: "localhost"
+  Port: "3306"
+  Database: "DBName"
   Username: "root"
-  Password: "root"
+  Password: "PWD"

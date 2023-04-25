@@ -2,28 +2,32 @@ package pack
 
 import (
 	"github.com/TremblingV5/DouTok/applications/favorite/rpc"
+	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/TremblingV5/DouTok/kitex_gen/favorite"
-	"github.com/TremblingV5/DouTok/kitex_gen/feed"
+	"github.com/TremblingV5/DouTok/kitex_gen/favoriteDomain"
+	"github.com/TremblingV5/DouTok/kitex_gen/videoDomain"
 	"golang.org/x/net/context"
 )
 
-func PackFavoriteListResp(code int32, msg string, list []int64) (resp *favorite.DouyinFavoriteListResponse, err error) {
-	var resList []*feed.Video
-	for _, i := range list {
-		res, err := rpc.GetVideoById(context.Background(), &feed.VideoIdRequest{
-			VideoId:  i,
-			SearchId: 0,
+func PackageFavoriteListResponse(ctx context.Context, result *favoriteDomain.DoutokListFavResponse, e error) (resp *favorite.DouyinFavoriteListResponse, err error) {
+	if e != nil {
+		return nil, e
+	}
+
+	var videoIdList []*entity.Video
+	for _, v := range result.VideoList {
+		videoInfo, e := rpc.VideoDomainClient.GetVideoInfo(ctx, &videoDomain.DoutokGetVideoInfoRequest{
+			VideoId: v.Id,
 		})
-		if err != nil {
+		if e != nil {
 			continue
 		}
-
-		resList = append(resList, res)
+		videoIdList = append(videoIdList, videoInfo)
 	}
 
 	return &favorite.DouyinFavoriteListResponse{
-		StatusCode: code,
-		StatusMsg:  msg,
-		VideoList:  resList,
+		StatusCode: result.StatusCode,
+		StatusMsg:  result.StatusMsg,
+		VideoList:  videoIdList,
 	}, nil
 }

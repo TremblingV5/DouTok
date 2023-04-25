@@ -1,12 +1,17 @@
 package pack
 
-import "github.com/TremblingV5/DouTok/kitex_gen/publish"
+import (
+	"github.com/TremblingV5/DouTok/kitex_gen/publish"
+	"github.com/TremblingV5/DouTok/kitex_gen/videoDomain"
+)
 
-func PackPublishActionRes(code int32, msg string) (*publish.DouyinPublishActionResponse, error) {
-	var resp publish.DouyinPublishActionResponse
+func PackagePublishActionResponse(result *videoDomain.DoutokAddPublishResponse, err error) (*publish.DouyinPublishActionResponse, error) {
+	if err != nil {
+		return nil, err
+	}
 
-	resp.StatusCode = code
-	resp.StatusMsg = msg
-
-	return &resp, nil
+	return &publish.DouyinPublishActionResponse{
+		StatusCode: result.StatusCode,
+		StatusMsg:  result.StatusMsg,
+	}, err
 }

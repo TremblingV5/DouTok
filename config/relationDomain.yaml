@@ -1,0 +1,56 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v1"
+
+Etcd:
+  Address: "localhost"
+  Port: 2379
+
+Server:
+  Name: "DoutokRelationDomainServer"
+  Address: "127.0.0.1"
+  Port: 8077
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "127.0.0.1"
+    - "192.168.1.1"
+
+Snowflake:
+  Node: 30
+
+Hbase:
+  Table: "message"
+
+Redis:
+  Host: "localhost"
+  Port: 6379
+  Password: "PWD"
+  DataBases:
+    Default: 6
+
+Kafka:
+  Brokers:
+    - "150.158.237.39:50004"
+  Topics:
+    - "relation_1"
+#    - "relation_2"
+  GroupIds:
+    - "relation01"
+    - "relation02"
+    - "relation03"
+    - "relation04"
+    - "relation05"
+
+MySQL:
+  Host: "localhost"
+  Port: "3306"
+  Database: "DBName"
+  Username: "root"
+  Password: "PWD"
+
+Otel:
+  Host: "82.156.171.8"
+  Port: 4317

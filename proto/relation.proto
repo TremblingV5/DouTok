@@ -2,7 +2,7 @@ syntax = "proto3";
 package relation;
 option go_package = "relation";
 
-import "user.proto";
+import "entity.proto";
 
 message douyin_relation_action_request {
     int64 user_id = 1; // 用户id
@@ -11,8 +11,8 @@ message douyin_relation_action_request {
 }
 
 message douyin_relation_action_response {
-    int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    string status_msg = 2; // 返回状态描述
+    int32 status_code = 1;
+    string status_msg = 2;
 }
 
 message douyin_relation_follow_list_request {
@@ -20,9 +20,9 @@ message douyin_relation_follow_list_request {
 }
 
 message douyin_relation_follow_list_response {
-    int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    string status_msg = 2; // 返回状态描述
-    repeated user.User user_list = 3; // 用户信息列表
+    int32 status_code = 1;
+    string status_msg = 2;
+    repeated entity.User user_list = 3; // 用户信息列表
 }
 
 message douyin_relation_follower_list_request {
@@ -30,9 +30,9 @@ message douyin_relation_follower_list_request {
 }
 
 message douyin_relation_follower_list_response {
-    int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    string status_msg = 2; // 返回状态描述
-    repeated user.User user_list = 3; // 用户列表
+    int32 status_code = 1;
+    string status_msg = 2;
+    repeated entity.User user_list = 3; // 用户列表
 }
 
 message douyin_relation_friend_list_request {
@@ -40,25 +40,9 @@ message douyin_relation_friend_list_request {
 }
 
 message douyin_relation_friend_list_response {
-    int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    string status_msg = 2; // 返回状态描述
-    repeated FriendUser user_list = 3; // 用户列表
-}
-
-message FriendUser {
-    int64 id = 1; // 用户id
-    string name = 2; // 用户名称
-    int64 follow_count = 3; // 关注总数
-    int64 follower_count = 4; // 粉丝总数
-    bool is_follow = 5; // true-已关注，false-未关注
-    string avatar = 6; // 用户头像Url
-    string background_image = 7; // 用户个人页顶部大图
-    string signature = 8; // 个人简介
-    int64 total_favorited = 9; // 获赞数量
-    int64 work_count = 10; // 作品数量
-    int64 favorite_count = 11; // 点赞数量
-    string message = 12; // 和该好友的最新聊天消息
-    int64 msgType = 13; // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息（用于聊天框显示一条信息）
+    int32 status_code = 1;
+    string status_msg = 2;
+    repeated entity.FriendUser user_list = 3; // 用户列表
 }
 
 message douyin_relation_count_request {
@@ -77,5 +61,5 @@ service RelationService{
     rpc RelationFollowList(douyin_relation_follow_list_request) returns (douyin_relation_follow_list_response); //获取已关注用户的列表
     rpc RelationFollowerList(douyin_relation_follower_list_request) returns (douyin_relation_follower_list_response); //获取粉丝用户列表
     rpc RelationFriendList(douyin_relation_friend_list_request) returns (douyin_relation_friend_list_response); //获取粉丝用户列表
-    rpc GetFollowCount(douyin_relation_count_request) returns (douyin_relation_count_response); // 查询一个user的关注数和粉丝数
+    // rpc GetFollowCount(douyin_relation_count_request) returns (douyin_relation_count_response); // 查询一个user的关注数和粉丝数
 }

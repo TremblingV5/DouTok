@@ -6,13 +6,13 @@ JWT:
   signingKey: "signingKey"
 
 Etcd:
-  Address: "47.115.230.248"
+  Address: "localhost"
   Port: 2379
 
 Server:
   Name: "DoutokPublishServer"
   Address: "127.0.0.1"
-  Port: 8084
+  Port: 8079
 
 Client:
   Echo: true
@@ -22,7 +22,7 @@ Client:
     - "192.168.1.1"
 
 HBase:
-  Host: "139.9.80.79"
+  Host: "localhost"
 
 Snowflake:
   Node: 66
@@ -35,11 +35,11 @@ OSS:
   Callback: ""
 
 MySQL:
-  Host: "47.115.230.248"
-  Port: 3307
-  Username: "admin"
-  Password: "root"
-  Database: "DouTok"
+  Host: "localhost"
+  Port: 3306
+  Username: "USER"
+  Password: "PWD"
+  Database: "DBName"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
