@@ -33,3 +33,13 @@ func InitRPCClientArgs(config *dtviper.Config) []client.Option {
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.Viper.GetString("Server.Name")}),
 	}
 }
+
+func InitRPCClient[T any](f func(string, ...client.Option) (T, error), cfg *dtviper.Config) *T {
+	c, err := f(cfg.Viper.GetString("Server.Name"), InitRPCClientArgs(cfg)...)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return &c
+}

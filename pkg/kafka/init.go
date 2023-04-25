@@ -3,16 +3,17 @@ package kafka
 import (
 	"flag"
 	"fmt"
-	"github.com/Shopify/sarama"
 	"log"
 	"os"
 	"time"
+
+	"github.com/Shopify/sarama"
 )
 
 var (
 	//brokers       = flag.String("brokers", "150.158.237.39:50004", "The Kafka brokers to connect to, as a comma separated list")
-	userName      = flag.String("username", "ckafka-jamo8r7b#doutok", "The SASL username")
-	passwd        = flag.String("passwd", "doutokno1", "The SASL password")
+	userName      = flag.String("username", "admin", "The SASL username")
+	passwd        = flag.String("passwd", "root", "The SASL password")
 	algorithm     = flag.String("algorithm", "", "The SASL SCRAM SHA algorithm sha256 or sha512 as mechanism")
 	topic         = flag.String("topic", "test", "The Kafka topic to use")
 	certFile      = flag.String("certificate", "", "The optional certificate file for client authentication")
@@ -53,12 +54,12 @@ func InitSynProducer(brokers []string) sarama.SyncProducer {
 	conf.Producer.Return.Successes = true
 	conf.Metadata.Full = true
 	conf.Version = sarama.V0_10_2_0
-	conf.ClientID = "sasl_scram_client"
+	// conf.ClientID = "sasl_scram_client"
 	conf.Metadata.Full = true
-	conf.Net.SASL.Enable = true
-	conf.Net.SASL.User = *userName
-	conf.Net.SASL.Password = *passwd
-	conf.Net.SASL.Handshake = true
+	// conf.Net.SASL.Enable = true
+	// conf.Net.SASL.User = *userName
+	// conf.Net.SASL.Password = *passwd
+	// conf.Net.SASL.Handshake = true
 
 	// 使用同步producer，异步模式下有更高的性能，但是处理更复杂，这里建议先从简单的入手
 	producer, err := sarama.NewSyncProducer(brokers, conf)
@@ -77,12 +78,12 @@ func InitConsumerGroup(brokers []string, groupId string) sarama.ConsumerGroup {
 	conf.Producer.Return.Successes = true
 	conf.Metadata.Full = true
 	conf.Version = sarama.V0_10_2_0
-	conf.ClientID = "sasl_scram_client"
+	// conf.ClientID = "sasl_scram_client"
 	conf.Metadata.Full = true
-	conf.Net.SASL.Enable = true
-	conf.Net.SASL.User = *userName
-	conf.Net.SASL.Password = *passwd
-	conf.Net.SASL.Handshake = true
+	// conf.Net.SASL.Enable = true
+	// conf.Net.SASL.User = *userName
+	// conf.Net.SASL.Password = *passwd
+	// conf.Net.SASL.Handshake = true
 
 	cGroup, err := sarama.NewConsumerGroup(brokers, groupId, conf)
 	if err != nil {

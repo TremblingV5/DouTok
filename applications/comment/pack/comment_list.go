@@ -2,54 +2,54 @@ package pack
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/applications/comment/service"
-	"time"
-
-	"github.com/TremblingV5/DouTok/applications/comment/dal/model"
 	"github.com/TremblingV5/DouTok/applications/comment/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment"
-	"github.com/TremblingV5/DouTok/kitex_gen/user"
+	"github.com/TremblingV5/DouTok/kitex_gen/commentDomain"
+	"github.com/TremblingV5/DouTok/kitex_gen/entity"
+	"github.com/TremblingV5/DouTok/kitex_gen/userDomain"
 )
 
-func PackCommentListResp(code int32, msg string, comments []*model.CommentInHB) (resp *comment.DouyinCommentListResponse, err error) {
-	resp = &comment.DouyinCommentListResponse{
-		StatusCode: code,
-		StatusMsg:  msg,
+func PackageCommentListRepsonse(ctx context.Context, result *commentDomain.DoutokListCommentResp, e error) (resp *comment.DouyinCommentListResponse, err error) {
+	if e != nil {
+		return nil, e
 	}
 
-	comment_list := []*comment.Comment{}
+	var userIdList []int64
+	for _, v := range result.CommentList {
+		userIdList = append(userIdList, v.User.GetId())
+	}
 
-	currentTime := time.Now().Unix()
+	userInfo, err := rpc.UserDomainRPCClient.GetUserInfo(ctx, &userDomain.DoutokGetUserInfoRequest{
+		UserId: userIdList,
+	})
 
-	for _, v := range comments {
-		temp := comment.Comment{
+	var commentList []*entity.Comment
+	for _, v := range result.CommentList {
+		temp := &entity.Comment{
 			Id:         v.GetId(),
 			Content:    v.GetContent(),
-			CreateDate: service.GetTimeRecall(v.GetTimestamp(), currentTime),
+			CreateDate: v.GetCreateDate(),
 		}
 
-		reqUser, err := rpc.GetUserById(context.Background(), &user.DouyinUserRequest{
-			UserId: v.GetUserId(),
-		})
-		if err != nil {
-			continue
+		if v, ok := userInfo.UserList[v.User.GetId()]; ok {
+			temp.User = &entity.User{
+				Id:              v.GetId(),
+				Name:            v.GetName(),
+				Avatar:          v.GetAvatar(),
+				BackgroundImage: v.GetBackgroundImage(),
+				Signature:       v.GetSignature(),
+			}
+		} else {
+			temp.User = &entity.User{
+				Id: v.GetId(),
+			}
 		}
-
-		tempUser := user.User{
-			Id:              reqUser.User.Id,
-			Name:            reqUser.User.Name,
-			FollowCount:     reqUser.User.FollowCount,
-			FollowerCount:   reqUser.User.FollowerCount,
-			Avatar:          reqUser.User.Avatar,
-			BackgroundImage: reqUser.User.BackgroundImage,
-			Signature:       reqUser.User.Signature,
-		}
-
-		temp.User = &tempUser
-		comment_list = append(comment_list, &temp)
+		commentList = append(commentList, temp)
 	}
 
-	resp.CommentList = comment_list
-
-	return resp, nil
+	return &comment.DouyinCommentListResponse{
+		StatusCode:  result.StatusCode,
+		StatusMsg:   result.StatusMsg,
+		CommentList: commentList,
+	}, e
 }

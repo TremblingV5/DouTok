@@ -3,7 +3,7 @@ Global:
   ChangeMe: "v1"
 
 Etcd:
-  Address: "47.115.230.248"
+  Address: "localhost"
   Port: 2379
 
 Server:
@@ -22,14 +22,14 @@ Snowflake:
   Node: 10
 
 Hbase:
-  Host: "139.9.80.79"
+  Host: "localhost"
   Table: "message"
   MessageNum: 50
 
 Redis:
-  Host: "47.115.230.248"
+  Host: "localhost"
   Port: 6379
-  Password: "root"
+  Password: "PWD"
   DataBases:
     Default: 5
 

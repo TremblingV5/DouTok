@@ -1,0 +1,53 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v1"
+
+JWT:
+  signingKey: "signingKey"
+
+Etcd:
+  Address: "localhost"
+  Port: 2379
+
+Server:
+  Name: "DoutokVideoDomainServer"
+  Address: "videoDomain"
+  Port: 8083
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "127.0.0.1"
+    - "192.168.1.1"
+
+MySQL:
+  Host: "localhost"
+  Port: 3306
+  Username: "USER"
+  Password: "PWD"
+  Database: "DBName"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
+
+HBase:
+  Host: "localhost"
+
+Snowflake:
+  Node: 501
+
+OSS:
+  Endpoint: "oss-cn-shanghai.aliyuncs.com"
+  Key: "LTAI5tE4KuLv9mURV2C73Umi"
+  Secret: ""
+  Bucket: "doutok-video"
+  Callback: ""
+
+Redis:
+  Dest: "localhost:6379"
+  Password: "PWD"
+  SendBox:
+    Num: 1
+  MarkdedTime:
+    Num: 2

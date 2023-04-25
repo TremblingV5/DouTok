@@ -2,7 +2,7 @@ syntax = "proto3";
 package comment;
 option go_package = "comment";
 
-import "user.proto";
+import "entity.proto";
 
 message douyin_comment_action_request {
     int64 user_id = 1; // 用户id
@@ -13,9 +13,9 @@ message douyin_comment_action_request {
 }
 
 message douyin_comment_action_response {
-    int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    string status_msg = 2; // 返回状态描述
-    Comment comment = 3; // 评论成功返回评论内容，不需要重新拉取整个列表
+    int32 status_code = 1;
+    string status_msg = 2;
+    entity.Comment comment = 3; // 评论成功返回评论内容，不需要重新拉取整个列表
 }
 
 message douyin_comment_list_request {
@@ -23,18 +23,9 @@ message douyin_comment_list_request {
 }
 
 message douyin_comment_list_response {
-    int32 status_code = 1; // 状态码，0-成功，其他值-失败
-    string status_msg = 2; // 返回状态描述
-    repeated Comment comment_list = 3; // 评论列表
-}
-
-message Comment {
-    int64 id = 1; // 视频评论id
-    user.User user =2; // 评论用户信息
-    string content = 3; // 评论内容
-    string create_date = 4; // 评论发布日期，格式 mm-dd
-    int64 like_count = 5; // 该评论的点赞数
-    int64 tease_count = 6; // 该评论diss数量
+    int32 status_code = 1;
+    string status_msg = 2;
+    repeated entity.Comment comment_list = 3; // 评论列表
 }
 
 message douyin_comment_count_request {
@@ -50,5 +41,5 @@ message douyin_comment_count_response {
 service CommentService{
     rpc CommentAction(douyin_comment_action_request) returns (douyin_comment_action_response); //评论操作
     rpc CommentList(douyin_comment_list_request) returns (douyin_comment_list_response); //返回评论列表
-    rpc CommentCount(douyin_comment_count_request) returns (douyin_comment_count_response); // 返回一个视频列表中各自的评论数量
+    // rpc CommentCount(douyin_comment_count_request) returns (douyin_comment_count_response); // 返回一个视频列表中各自的评论数量
 }

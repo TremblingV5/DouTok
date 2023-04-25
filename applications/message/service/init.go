@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+
 	"github.com/Shopify/sarama"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
@@ -15,7 +16,7 @@ var (
 	HBClient      *hbaseHandle.HBaseClient
 	RedisClient   *redis.Client
 	SyncProducer  sarama.SyncProducer
-	ViperConfig   dtviper.Config
+	ViperConfig   *dtviper.Config
 	ConsumerGroup sarama.ConsumerGroup
 )
 

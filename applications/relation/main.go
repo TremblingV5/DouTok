@@ -3,8 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"net"
+
+	"github.com/TremblingV5/DouTok/applications/relation/handler"
 	"github.com/TremblingV5/DouTok/applications/relation/rpc"
-	"github.com/TremblingV5/DouTok/applications/relation/service"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
@@ -15,7 +18,6 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"net"
 )
 
 func Init() {
@@ -27,8 +29,8 @@ func Init() {
 	service.InitDB()
 	service.InitSafeMap()
 	service.InitMutex()
-	rpc.InitRPC()
-	go service.Flush()
+	rpc.Init()
+	//go service.Flush()
 }
 
 func main() {
@@ -66,7 +68,7 @@ func main() {
 	defer p.Shutdown(context.Background())
 
 	svr := relationservice.NewServer(
-		new(RelationServiceImpl),
+		new(handler.RelationServiceImpl),
 		server.WithServiceAddr(addr),                                       // address
 		server.WithMiddleware(middleware.CommonMiddleware),                 // middleware
 		server.WithMiddleware(middleware.ServerMiddleware),                 // middleware

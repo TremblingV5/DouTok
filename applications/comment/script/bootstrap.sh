@@ -19,3 +19,4 @@ if [ ! -d "$KITEX_LOG_DIR/rpc" ]; then
 fi
 
 exec "$CURDIR/bin/comment"
+

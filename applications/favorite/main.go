@@ -4,7 +4,6 @@ import (
 	"github.com/TremblingV5/DouTok/applications/favorite/handler"
 	"github.com/TremblingV5/DouTok/applications/favorite/misc"
 	"github.com/TremblingV5/DouTok/applications/favorite/rpc"
-	"github.com/TremblingV5/DouTok/applications/favorite/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/favorite/favoriteservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/initHelper"
@@ -16,14 +15,11 @@ var (
 
 func Init() {
 	misc.InitViperConfig()
+	rpc.Init()
 
-	service.Init()
-
-	rpc.InitPRCClient()
-
-	go service.UpdateFavMap()
-	go service.UpdateFavCntMap()
-	go service.Consumer4UpdateCount()
+	//go service.UpdateFavMap()
+	//go service.UpdateFavCntMap()
+	//go service.Consumer4UpdateCount()
 }
 
 func main() {
