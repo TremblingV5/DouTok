@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-var success = errno.NewErrNo(0, "Success")
-var usernameErr = errno.NewErrNo(1, "usernameErr")
-var passwordErr = errno.NewErrNo(2, "passwordErr")
+var success = errno.New(0, "Success")
+var usernameErr = errno.New(1, "usernameErr")
+var passwordErr = errno.New(2, "passwordErr")
 
 func TestValidate(t *testing.T) {
 	username := "xinzf"

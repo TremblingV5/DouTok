@@ -60,7 +60,7 @@ func FavoriteAction(ctx context.Context, favoriteClient favoriteservice.Client, 
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
@@ -72,7 +72,7 @@ func FavoriteList(ctx context.Context, favoriteClient favoriteservice.Client, re
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }

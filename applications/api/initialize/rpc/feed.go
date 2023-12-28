@@ -60,7 +60,7 @@ func GetUserFeed(ctx context.Context, feedClient feedservice.Client, req *feed.D
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
