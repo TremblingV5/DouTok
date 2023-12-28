@@ -2,21 +2,30 @@ package handler
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/misc"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/pack"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/commentDomain"
 )
 
-func (s *CommentDomainServiceImpl) CountComment(ctx context.Context, req *commentDomain.DoutokCountCommentReq) (resp *commentDomain.DoutokCountCommentResp, err error) {
+func (s *CommentDomainHandler) CountComment(ctx context.Context, req *commentDomain.DoutokCountCommentReq) (resp *commentDomain.DoutokCountCommentResp, err error) {
 	if len(req.VideoIdList) <= 0 {
-		return pack.PackageCountCommentResp(&misc.SystemErr, nil)
+		return &commentDomain.DoutokCountCommentResp{
+			StatusCode:   1,
+			StatusMsg:    ParametersError.Error(),
+			CommentCount: nil,
+		}, ParametersError
 	}
 
-	res, errNo, err := service.NewCountCommentService(ctx).CountComment(req.VideoIdList...)
+	result, err := s.service.CountComments(ctx, req.VideoIdList...)
 	if err != nil {
-		return pack.PackageCountCommentResp(errNo, nil)
+		return &commentDomain.DoutokCountCommentResp{
+			StatusCode:   1,
+			StatusMsg:    err.Error(),
+			CommentCount: nil,
+		}, err
 	}
 
-	return pack.PackageCountCommentResp(&misc.Success, res)
+	return &commentDomain.DoutokCountCommentResp{
+		StatusCode:   0,
+		StatusMsg:    Success,
+		CommentCount: result,
+	}, nil
 }

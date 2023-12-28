@@ -60,7 +60,7 @@ func CommentAction(ctx context.Context, commentClient commentservice.Client, req
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
@@ -72,7 +72,7 @@ func CommentList(ctx context.Context, commentClient commentservice.Client, req *
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }

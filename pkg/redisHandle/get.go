@@ -9,6 +9,10 @@ func (c *RedisClient) Get(ctx context.Context, key string) (string, error) {
 	return c.Client.Get(ctx, key).Result()
 }
 
+func (c *RedisClient) GetI64(ctx context.Context, key string) (int64, error) {
+	return c.Client.Get(ctx, key).Int64()
+}
+
 func (c *RedisClient) GetObj(ctx context.Context, key string, out any) error {
 	result, err := c.Get(ctx, key)
 	if err != nil {
