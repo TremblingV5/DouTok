@@ -10,8 +10,8 @@ var (
 )
 
 var (
-	NilErr    = errno.NewErrNo(NilErrCode, "Don't care")
-	Success   = errno.NewErrNo(SuccessCode, "Success")
-	EmptyErr  = errno.NewErrNo(EmptyErrCode, "size of title or data is zero")
-	SystemErr = errno.NewErrNo(SystemErrCode, "System error")
+	NilErr    = errno.New(NilErrCode, "Don't care")
+	Success   = errno.New(SuccessCode, "Success")
+	EmptyErr  = errno.New(EmptyErrCode, "size of title or data is zero")
+	SystemErr = errno.New(SystemErrCode, "System error")
 )

@@ -14,6 +14,51 @@ import (
 	"net"
 )
 
+type etcdConfig interface {
+	GetAddr() string
+}
+
+type baseConfig interface {
+	GetAddr() string
+	GetName() string
+}
+
+type otelConfig interface {
+	GetAddr() string
+}
+
+func InitRPCServerArgsV2(base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
+	etcdAddr := etcdCfg.GetAddr()
+	registry, err := etcd.NewEtcdRegistry([]string{etcdAddr})
+	if err != nil {
+		panic(err)
+	}
+
+	serverAddr, err := net.ResolveTCPAddr("tcp", base.GetAddr())
+	if err != nil {
+		panic(err)
+	}
+
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(base.GetName()),
+		provider.WithExportEndpoint(otelCfg.GetAddr()),
+		provider.WithInsecure(),
+	)
+
+	return []server.Option{
+			server.WithServiceAddr(serverAddr),
+			server.WithMiddleware(middleware.CommonMiddleware),
+			server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithRegistry(registry),
+			server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}),
+			server.WithMuxTransport(),
+			server.WithSuite(tracing.NewServerSuite()),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: base.GetName()}),
+		}, func() {
+			p.Shutdown(context.Background())
+		}
+}
+
 /*
 	返回初始化RPC客户端所需要的一些配置，减少这部分代码的重复
 */

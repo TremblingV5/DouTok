@@ -60,7 +60,7 @@ func Register(ctx context.Context, userClient userservice.Client, req *user.Douy
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
@@ -72,7 +72,7 @@ func Login(ctx context.Context, userClient userservice.Client, req *user.DouyinU
 		return 0, err
 	}
 	if resp.StatusCode != 0 {
-		return 0, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+		return 0, errno.New(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp.UserId, nil
 }
@@ -84,7 +84,7 @@ func GetUserById(ctx context.Context, userClient userservice.Client, req *user.D
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
