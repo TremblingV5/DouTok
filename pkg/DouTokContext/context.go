@@ -7,6 +7,7 @@ import (
 
 const (
 	RequestIDNoSet = "request id not set"
+	UserIDNoSet    = -1
 )
 
 /*
@@ -15,6 +16,8 @@ and `GetRequestID` to implement it.
 */
 
 type RequestID struct{}
+type UserID struct{}
+type VideoID struct{}
 
 func New() context.Context {
 	ctx := context.Background()
@@ -31,4 +34,16 @@ func GetRequestID(ctx context.Context) string {
 		return RequestIDNoSet
 	}
 	return requestId.(string)
+}
+
+func WithUserID(ctx context.Context, userId int64) context.Context {
+	return context.WithValue(ctx, UserID{}, userId)
+}
+
+func GetUserID(ctx context.Context) int64 {
+	userId := ctx.Value(UserID{})
+	if userId == nil {
+		return UserIDNoSet
+	}
+	return userId.(int64)
 }
