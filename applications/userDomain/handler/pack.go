@@ -1,13 +1,20 @@
-package pack
+package handler
 
 import (
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/model"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/TremblingV5/DouTok/kitex_gen/userDomain"
-	"github.com/TremblingV5/DouTok/pkg/errno"
 )
 
-func PackageGetUserInfoResp(errNo *errno.ErrNo, userList []*model.User) (resp *userDomain.DoutokGetUserInfoResponse, err error) {
+func packCheckUserResp(code int32, message string, user_id int64) (resp *userDomain.DoutokCheckUserResponse, err error) {
+	return &userDomain.DoutokCheckUserResponse{
+		StatusCode: code,
+		StatusMsg:  message,
+		UserId:     user_id,
+	}, nil
+}
+
+func packGetUserInfoResp(code int32, message string, userList []*model.User) (resp *userDomain.DoutokGetUserInfoResponse, err error) {
 	userListRes := make(map[int64]*entity.User)
 
 	for _, v := range userList {
@@ -21,8 +28,8 @@ func PackageGetUserInfoResp(errNo *errno.ErrNo, userList []*model.User) (resp *u
 	}
 
 	return &userDomain.DoutokGetUserInfoResponse{
-		StatusCode: int32(errNo.ErrCode),
-		StatusMsg:  errNo.ErrMsg,
+		StatusCode: code,
+		StatusMsg:  message,
 		UserList:   userListRes,
 	}, nil
 }
