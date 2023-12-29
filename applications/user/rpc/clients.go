@@ -1,15 +1,20 @@
 package rpc
 
-import "github.com/TremblingV5/DouTok/pkg/initHelper"
+import (
+	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain/relationdomainservice"
+	"github.com/TremblingV5/DouTok/kitex_gen/userDomain/userdomainservice"
+	"github.com/TremblingV5/DouTok/pkg/services"
+	"github.com/cloudwego/kitex/client"
+)
 
 type Clients struct {
-	User     *initHelper.UserDomainClient
-	Relation *initHelper.RelationDomainClient
+	User     *services.Service[userdomainservice.Client]
+	Relation *services.Service[relationdomainservice.Client]
 }
 
-func New() *Clients {
+func New(serverName string, options []client.Option) *Clients {
 	return &Clients{
-		User:     initHelper.InitUserDomainRPCClient(),
-		Relation: initHelper.InitRelationDomainRPCClient(),
+		User:     services.New[userdomainservice.Client](serverName, userdomainservice.NewClient, options),
+		Relation: services.New[relationdomainservice.Client](serverName, relationdomainservice.NewClient, options),
 	}
 }

@@ -6,7 +6,6 @@ import (
 	"net"
 
 	"github.com/TremblingV5/DouTok/applications/relation/handler"
-	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/applications/relationDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
@@ -29,8 +28,6 @@ func Init() {
 	service.InitDB()
 	service.InitSafeMap()
 	service.InitMutex()
-	rpc.Init()
-	//go service.Flush()
 }
 
 func main() {
@@ -68,7 +65,7 @@ func main() {
 	defer p.Shutdown(context.Background())
 
 	svr := relationservice.NewServer(
-		new(handler.RelationServiceImpl),
+		new(handler.Handler),
 		server.WithServiceAddr(addr),                                       // address
 		server.WithMiddleware(middleware.CommonMiddleware),                 // middleware
 		server.WithMiddleware(middleware.ServerMiddleware),                 // middleware
