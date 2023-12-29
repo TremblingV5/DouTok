@@ -12,20 +12,7 @@ import (
 	"net"
 )
 
-type etcdConfig interface {
-	GetAddr() string
-}
-
-type baseConfig interface {
-	GetAddr() string
-	GetName() string
-}
-
-type otelConfig interface {
-	GetAddr() string
-}
-
-func InitRPCServerArgsV2(base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
+func InitRPCServerArgs(base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
 	etcdAddr := etcdCfg.GetAddr()
 	registry, err := etcd.NewEtcdRegistry([]string{etcdAddr})
 	if err != nil {
