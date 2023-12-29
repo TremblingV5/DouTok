@@ -1,4 +1,4 @@
-package service
+package encrypt
 
 import (
 	"crypto/md5"
@@ -8,27 +8,21 @@ import (
 	"time"
 )
 
-func PasswordEncrypt(user_id int64, src string, salt string) string {
-	opNum := GetOpNum(user_id)
+func Encrypt(userId int64, src string, salt string) string {
+	opNum := getOpNum(userId)
 
 	for i := 0; i < int(opNum); i++ {
-		src = GetMd5(src + salt)
+		src = getMd5(src + salt)
 	}
 
 	return src
 }
 
-/*
-	生成salt
-*/
 func GenSalt() string {
-	return GenRandString(32)
+	return getRandomString(32)
 }
 
-/*
-	获取一个user id所对应的操作数
-*/
-func GetOpNum(id int64) int64 {
+func getOpNum(id int64) int64 {
 	str := fmt.Sprint(id)
 
 	l := 0
@@ -69,18 +63,12 @@ func GetOpNum(id int64) int64 {
 	return int64(res_int)
 }
 
-/*
-	进行md5加密
-*/
-func GetMd5(str string) string {
+func getMd5(str string) string {
 	code := md5.Sum([]byte(str))
 	return fmt.Sprintf("%x", code)
 }
 
-/*
-	根据给定长度生成一个随机字符串
-*/
-func GenRandString(l int) string {
+func getRandomString(l int) string {
 	list := []byte("0123456789abcdefghigklmnopqrstuvwxyz")
 
 	result := []byte{}
