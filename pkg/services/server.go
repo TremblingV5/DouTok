@@ -12,7 +12,7 @@ import (
 	"net"
 )
 
-func InitRPCServerArgs(base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
+func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
 	etcdAddr := etcdCfg.GetAddr()
 	registry, err := etcd.NewEtcdRegistry([]string{etcdAddr})
 	if err != nil {
@@ -25,7 +25,7 @@ func InitRPCServerArgs(base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) 
 	}
 
 	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(base.GetName()),
+		provider.WithServiceName(serviceName),
 		provider.WithExportEndpoint(otelCfg.GetAddr()),
 		provider.WithInsecure(),
 	)
@@ -38,7 +38,7 @@ func InitRPCServerArgs(base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) 
 			server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}),
 			server.WithMuxTransport(),
 			server.WithSuite(tracing.NewServerSuite()),
-			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: base.GetName()}),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
 		}, func() {
 			p.Shutdown(context.Background())
 		}

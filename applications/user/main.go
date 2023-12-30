@@ -8,6 +8,7 @@ import (
 	"github.com/TremblingV5/DouTok/kitex_gen/user/userservice"
 	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
+	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/services"
 	"go.uber.org/zap"
 )
@@ -42,9 +43,9 @@ func init() {
 }
 
 func main() {
-	clients := rpc.New(config.Base.GetName(), services.InitRPCClientArgs(config.Base, config.Etcd))
+	clients := rpc.New(services.InitRPCClientArgs(constants.USER_SERVER_NAME, config.Etcd))
 
-	options, shutdown := services.InitRPCServerArgs(config.Base, config.Etcd, config.Otel)
+	options, shutdown := services.InitRPCServerArgs(constants.USER_SERVER_NAME, config.Base, config.Etcd, config.Otel)
 	defer shutdown()
 
 	svr := userservice.NewServer(handler.New(clients), options...)
