@@ -3,8 +3,10 @@ package service
 import (
 	"context"
 	"fmt"
+)
 
-	"github.com/TremblingV5/DouTok/applications/favorite/misc"
+const (
+	favCache = "favcache"
 )
 
 /*
@@ -17,7 +19,7 @@ func WriteFavoriteInCache(user_id int64, video_id int64, is_fav bool) error {
 	} else {
 		op = "2"
 	}
-	return RedisClients[misc.FavCache].HSet(
+	return RedisClients[favCache].HSet(
 		context.Background(), fmt.Sprint(user_id), fmt.Sprint(video_id), op,
 	)
 }
