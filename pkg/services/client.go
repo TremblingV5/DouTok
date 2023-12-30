@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func InitRPCClientArgs(base baseConfig, etcdCfg etcdConfig) []client.Option {
+func InitRPCClientArgs(serviceName string, etcdCfg etcdConfig) []client.Option {
 	registry, err := etcd.NewEtcdResolver([]string{etcdCfg.GetAddr()})
 	if err != nil {
 		panic(err)
@@ -25,6 +25,6 @@ func InitRPCClientArgs(base baseConfig, etcdCfg etcdConfig) []client.Option {
 		client.WithConnectTimeout(30000 * time.Millisecond), // conn timeout
 		client.WithFailureRetry(retry.NewFailurePolicy()),   // retry
 		client.WithResolver(registry),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: base.GetName()}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
 	}
 }
