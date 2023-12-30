@@ -1,39 +1,53 @@
 package main
 
 import (
+	"context"
 	"github.com/TremblingV5/DouTok/applications/favorite/handler"
-	"github.com/TremblingV5/DouTok/applications/favorite/misc"
 	"github.com/TremblingV5/DouTok/applications/favorite/rpc"
+	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/kitex_gen/favorite/favoriteservice"
-	"github.com/TremblingV5/DouTok/pkg/dlog"
-	"github.com/TremblingV5/DouTok/pkg/initHelper"
+	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
+	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
+	"github.com/TremblingV5/DouTok/pkg/constants"
+	"github.com/TremblingV5/DouTok/pkg/services"
+	"go.uber.org/zap"
 )
+
+type Config struct {
+	Base   configStruct.Base   `envPrefix:"DOUTOK_FAVORITE_"`
+	Etcd   configStruct.Etcd   `envPrefix:"DOUTOK_FAVORITE_"`
+	Jwt    configStruct.Jwt    `envPrefix:"DOUTOK_FAVORITE_"`
+	Otel   configStruct.Otel   `envPrefix:"DOUTOK_FAVORITE_"`
+	Logger configStruct.Logger `envPrefix:"DOUTOK_FAVORITE_"`
+}
 
 var (
-	Logger = dlog.InitLog(3)
+	logger *zap.Logger
+	config = &Config{}
 )
 
-func Init() {
-	misc.InitViperConfig()
-	rpc.Init()
-
-	//go service.UpdateFavMap()
-	//go service.UpdateFavCntMap()
-	//go service.Consumer4UpdateCount()
+func init() {
+	ctx := context.Background()
+	cfg, err := configStruct.Load[*Config](ctx, &Config{})
+	config = cfg
+	logger = DouTokLogger.InitLogger(config.Logger)
+	DouTokContext.DefaultLogger = logger
+	ctx = DouTokContext.AddLoggerToContext(ctx, logger)
+	if err != nil {
+		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
+	}
 }
 
 func main() {
-	Init()
-
-	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	options, shutdown := services.InitRPCServerArgs(constants.FAVORITE_SERVER_NAME, config.Base, config.Etcd, config.Otel)
 	defer shutdown()
 
 	svr := favoriteservice.NewServer(
-		new(handler.FavoriteServiceImpl),
+		handler.New(rpc.New(services.InitRPCClientArgs(constants.FAVORITE_SERVER_NAME, config.Etcd))),
 		options...,
 	)
 
 	if err := svr.Run(); err != nil {
-		Logger.Fatal(err)
+		logger.Fatal("run server err", zap.Error(err))
 	}
 }
