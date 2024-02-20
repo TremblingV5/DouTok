@@ -14,14 +14,14 @@ type Handler struct {
 	clients *rpc.Clients
 }
 
-func New() *Handler {
+func New(rpcClient *rpc.Clients) *Handler {
 	return &Handler{
-		clients: rpc.New(),
+		clients: rpcClient,
 	}
 }
 
 func (s *Handler) Login(ctx context.Context, req *user.DouyinUserLoginRequest) (resp *user.DouyinUserLoginResponse, err error) {
-	result, err := s.clients.User.CheckUser(ctx, &userDomain.DoutokCheckUserRequest{
+	result, err := s.clients.User.Client.CheckUser(ctx, &userDomain.DoutokCheckUserRequest{
 		Username: req.Username,
 		Password: req.Password,
 	})
@@ -38,7 +38,7 @@ func (s *Handler) Login(ctx context.Context, req *user.DouyinUserLoginRequest) (
 }
 
 func (s *Handler) Register(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *user.DouyinUserRegisterResponse, err error) {
-	result, err := s.clients.User.AddUser(ctx, &userDomain.DoutokAddUserRequest{
+	result, err := s.clients.User.Client.AddUser(ctx, &userDomain.DoutokAddUserRequest{
 		Username: req.Username,
 		Password: req.Password,
 	})
@@ -55,7 +55,7 @@ func (s *Handler) Register(ctx context.Context, req *user.DouyinUserRegisterRequ
 }
 
 func (s *Handler) GetUserById(ctx context.Context, req *user.DouyinUserRequest) (resp *user.DouyinUserResponse, err error) {
-	userInfo, err := s.clients.User.GetUserInfo(ctx, &userDomain.DoutokGetUserInfoRequest{UserId: []int64{req.UserId}})
+	userInfo, err := s.clients.User.Client.GetUserInfo(ctx, &userDomain.DoutokGetUserInfoRequest{UserId: []int64{req.UserId}})
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func (s *Handler) GetUserById(ctx context.Context, req *user.DouyinUserRequest) 
 	resp.User = userInfo.UserList[req.UserId]
 
 	// hydrate follow count
-	followCount, err := s.clients.Relation.CountRelation(ctx, &relationDomain.DoutokCountRelationRequest{
+	followCount, err := s.clients.Relation.Client.CountRelation(ctx, &relationDomain.DoutokCountRelationRequest{
 		UserId:     []int64{req.UserId},
 		ActionType: int64(0),
 	})
@@ -85,7 +85,7 @@ func (s *Handler) GetUserById(ctx context.Context, req *user.DouyinUserRequest) 
 	resp.User.FollowCount = followCount.Result[req.UserId]
 
 	// hydrate follower count
-	followerCount, err := s.clients.Relation.CountRelation(ctx, &relationDomain.DoutokCountRelationRequest{
+	followerCount, err := s.clients.Relation.Client.CountRelation(ctx, &relationDomain.DoutokCountRelationRequest{
 		UserId:     []int64{req.UserId},
 		ActionType: int64(1),
 	})
