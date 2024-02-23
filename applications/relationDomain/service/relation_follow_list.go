@@ -7,9 +7,9 @@ import (
 
 	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain"
 
-	"github.com/TremblingV5/DouTok/applications/relation/pack"
 	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/model"
 	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/query"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/pack"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/utils"

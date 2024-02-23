@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/Shopify/sarama"
-	"github.com/TremblingV5/DouTok/applications/relation/pack"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/pack"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 
@@ -66,7 +66,8 @@ func ConsumeMsg() {
 	_ = ConsumerGroup.Close()
 }
 
-/**
+/*
+*
 1. 从 SafeMap 中获取关注数和粉丝数，累加入 MySQL
 2. 删除 Redis 中对应的缓存 follow/follower 数量
 */
