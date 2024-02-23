@@ -7,7 +7,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "DoutokMessageServer"
+  Name: "DouTokMessageServer"
   Address: "message"
   Port: 8082
 
@@ -29,7 +29,7 @@ Hbase:
 Redis:
   Host: "localhost"
   Port: 6379
-  Password: "PWD"
+  Password: "root"
   DataBases:
     Default: 5
 

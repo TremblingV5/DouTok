@@ -7,3 +7,5 @@ hbase-zoo-data/
 tmp
 log
 zip
+
+__debug*

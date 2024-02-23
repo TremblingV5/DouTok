@@ -10,7 +10,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "DoutokUserServer"
+  Name: "DouTokUserServer"
   Address: "user"
   Port: 8081
   Argon2ID:
@@ -33,9 +33,9 @@ Snowflake:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "USER"
-  Password: "PWD"
-  Database: "DBName"
+  Username: "admin"
+  Password: "root"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"

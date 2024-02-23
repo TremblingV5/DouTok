@@ -48,7 +48,7 @@ func (s *SavePublishService) SavePublish(user_id int64, title string, data []byt
 		return err
 	}
 
-	play_url := "https://" + OssCfg.BucketName + "." + OssCfg.Endpoint + "/video/" + filename
+	play_url := "http://" + OssCfg.Endpoint + "/doutok/video/" + filename
 	cover_url := play_url + "?x-oss-process=video/snapshot,t_30000,f_jpg,w_0,h_0,m_fast,ar_auto"
 
 	// 2. 写入数据到MySQl

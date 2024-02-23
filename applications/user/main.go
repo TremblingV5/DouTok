@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+
+	"go.uber.org/zap"
+
 	"github.com/TremblingV5/DouTok/applications/user/handler"
 	"github.com/TremblingV5/DouTok/applications/user/rpc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
@@ -10,7 +13,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/services"
-	"go.uber.org/zap"
 )
 
 type Config struct {
