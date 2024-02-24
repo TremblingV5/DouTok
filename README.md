@@ -24,6 +24,10 @@ DouTok is a backend for TikTok client based on Kitex and Hertz.
    docker-compose up -d
    ```
 
+### Download Client
+
+We can download `.apk` file form `./ui` of this repo. Now the client is only support Android. After downloading and installing of this app. We can open it firstly. Then we can click `我` on the right bottom to enter configure page. After opening `高级配置`, we can input base url of the backend. An example is `http://localhost:8080/`.
+
 ## Architecture
 
 ### Technology Architecture
