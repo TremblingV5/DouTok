@@ -11,7 +11,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "DoutokAPIServer"
+  Name: "DouTokAPIServer"
   Address: "0.0.0.0"
   Port: 8088
 
@@ -37,6 +37,6 @@ Client:
 Redis:
   Host: "localhost"
   Port: 6379
-  Password: "PWD"
+  Password: "root"
   DataBases:
     Default: 0

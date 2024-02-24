@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/user/errs"
 	"github.com/TremblingV5/DouTok/applications/user/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain"

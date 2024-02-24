@@ -11,7 +11,7 @@
             "mode": "auto",
             "program": "./applications/comment/",
             "env": {
-                "DOUTOK_COMMENT_SERVER_NAME": "DouTokComment",
+                "DOUTOK_COMMENT_SERVER_NAME": "DouTokCommentServer",
                 "DOUTOK_COMMENT_SERVER_PORT": "8081",
                 "DOUTOK_COMMENT_ETCD_ADDRESS": "localhost",
                 "DOUTOK_COMMENT_ETCD_PORT": "2379",
@@ -24,10 +24,55 @@
             "mode": "auto",
             "program": "./applications/favorite/",
             "env": {
-                "DOUTOK_FAVORITE_SERVER_NAME": "DouTokFavorite",
+                "DOUTOK_FAVORITE_SERVER_NAME": "DouTokFavoriteServer",
                 "DOUTOK_FAVORITE_SERVER_PORT": "8082",
                 "DOUTOK_FAVORITE_ETCD_ADDRESS": "localhost",
                 "DOUTOK_FAVORITE_ETCD_PORT": "2379",
+            }
+        },
+        {
+            "name": "Run DouTok Comment Domain",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "./applications/commentDomain/cmd/server/",
+            "env": {
+                "DOUTOK_COMMENT_DOMAIN_SERVER_NAME": "DouTokCommentDomainServer",
+                "DOUTOK_COMMENT_DOMAIN_SERVER_PORT": "8083",
+                "DOUTOK_COMMENT_DOMAIN_ETCD_ADDRESS": "localhost",
+                "DOUTOK_COMMENT_DOMAIN_ETCD_PORT": "2379",
+                "DOUTOK_COMMENT_DOMAIN_MYSQL_USERNAME": "admin",
+                "DOUTOK_COMMENT_DOMAIN_MYSQL_PASSWORD": "root",
+                "DOUTOK_COMMENT_DOMAIN_MYSQL_DATABASE": "DouTok",
+            }
+        },
+        {
+            "name": "Run DouTok User",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "./applications/user/",
+            "env": {
+                "DOUTOK_USER_SERVER_NAME": "DouTokUserServer",
+                "DOUTOK_USER_SERVER_PORT": "8084",
+                "DOUTOK_USER_ETCD_ADDRESS": "localhost",
+                "DOUTOK_USER_ETCD_PORT": "2379",
+            }
+        },
+        {
+            "name": "Run DouTok User Domain",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "./applications/userDomain/",
+            "env": {
+                "DOUTOK_USER_DOMAIN_SERVER_NAME": "DouTokUserDomainServer",
+                "DOUTOK_USER_DOMAIN_SERVER_PORT": "8085",
+                "DOUTOK_USER_DOMAIN_ETCD_ADDRESS": "localhost",
+                "DOUTOK_USER_DOMAIN_ETCD_PORT": "2379",
+                "DOUTOK_USER_DOMAIN_MYSQL_USERNAME": "admin",
+                "DOUTOK_USER_DOMAIN_MYSQL_PASSWORD": "root",
+                "DOUTOK_USER_DOMAIN_MYSQL_DATABASE": "DouTok",
             }
         }
     ]
