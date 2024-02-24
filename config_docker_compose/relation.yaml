@@ -7,7 +7,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "DoutokRelationServer"
+  Name: "DouTokRelationServer"
   Address: "relation"
   Port: 8097
 
@@ -27,7 +27,7 @@ Hbase:
 Redis:
   Host: "localhost"
   Port: 6379
-  Password: "PWD"
+  Password: "root"
   DataBases:
     Default: 6
 
@@ -47,6 +47,6 @@ Kafka:
 MySQL:
   Host: "localhost"
   Port: "3306"
-  Database: "DBName"
-  Username: "root"
-  Password: "PWD"
+  Database: "DouTok"
+  Username: "admin"
+  Password: "root"
