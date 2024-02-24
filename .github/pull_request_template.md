@@ -1,0 +1,25 @@
+## Link to an issue
+
+<!-- Please add an issue link if this PR is related with one. -->
+
+## What
+
+<!-- Please describe what this PR does in simple words. -->
+
+## How
+
+<!-- Please describe how you have implemented the changes. -->
+
+## Screenshots
+
+<!-- Please add screenshots if we need. -->
+
+## How to test
+
+<!-- Please describe how to test the changes you have made. -->
+
+## Checklist
+
+- [ ] Link to an issue if it really related.
+- [ ] At least describe what this PR does.
+- [ ] Unit tests. At least do not reduce the single test coverage.
