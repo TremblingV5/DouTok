@@ -1,0 +1,4 @@
+mysql_data/
+kafka_data/
+redis_data/
+zk_data/
