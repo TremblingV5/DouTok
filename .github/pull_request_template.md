@@ -23,3 +23,4 @@
 - [ ] Link to an issue if it really related.
 - [ ] At least describe what this PR does.
 - [ ] Unit tests. At least do not reduce the single test coverage.
+- [ ] Checked and updated `guidelines.md` which used to describe how to build, deploy and use DouTok.
