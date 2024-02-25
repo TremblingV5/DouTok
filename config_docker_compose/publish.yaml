@@ -10,7 +10,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "DoutokPublishServer"
+  Name: "DouTokPublishServer"
   Address: "publish"
   Port: 8084
 
@@ -31,15 +31,15 @@ OSS:
   Endpoint: "oss-cn-shanghai.aliyuncs.com"
   Key: "LTAI5tE4KuLv9mURV2C73Umi"
   Secret: "6GTV8iO6UDTjXitmnXgRrZvW6wHqXw"
-  Bucket: "doutok-video"
+  Bucket: "DouTok-video"
   Callback: ""
 
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "USER"
-  Password: "PWD"
-  Database: "DBName"
+  Username: "admin"
+  Password: "root"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"

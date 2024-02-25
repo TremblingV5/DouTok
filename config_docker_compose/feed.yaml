@@ -10,7 +10,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "DoutokFeedServer"
+  Name: "DouTokFeedServer"
   Address: "feed"
   Port: 8083
 
@@ -24,9 +24,9 @@ Client:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "USER"
-  Password: "PWD"
-  Database: "DBName"
+  Username: "admin"
+  Password: "root"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
@@ -41,12 +41,12 @@ OSS:
   Endpoint: "oss-cn-shanghai.aliyuncs.com"
   Key: "LTAI5tE4KuLv9mURV2C73Umi"
   Secret: ""
-  Bucket: "doutok-video"
+  Bucket: "DouTok-video"
   Callback: ""
 
 Redis:
   Dest: "localhost:6379"
-  Password: "PWD"
+  Password: "root"
   SendBox:
     Num: 1
   MarkdedTime:

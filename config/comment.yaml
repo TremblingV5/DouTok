@@ -10,7 +10,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "DoutokCommentServer"
+  Name: "DouTokCommentServer"
   Address: "127.0.0.1"
   Port: 8087
 
@@ -24,9 +24,9 @@ Client:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "USER"
-  Password: "PWD"
-  Database: "DBName"
+  Username: "admin"
+  Password: "root"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
@@ -39,7 +39,7 @@ HBase:
 
 Redis:
   Dest: "localhost:6379"
-  Password: "PWD"
+  Password: "root"
   ComCntCache:
     Num: 8
   ComTotalCntCache:

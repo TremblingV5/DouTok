@@ -2,6 +2,10 @@ package main
 
 import (
 	"context"
+	"strconv"
+
+	"go.uber.org/zap"
+
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/query"
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/repository/user"
 	"github.com/TremblingV5/DouTok/applications/userDomain/errs"
@@ -12,26 +16,22 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	"github.com/TremblingV5/DouTok/pkg/services"
-	"go.uber.org/zap"
-	"strconv"
 )
 
 type Config struct {
-	Base      configStruct.Base      `envPrefix:"DOUTOK_COMMENT_DOMAIN_"`
-	Etcd      configStruct.Etcd      `envPrefix:"DOUTOK_COMMENT_DOMAIN_"`
-	Jwt       configStruct.Jwt       `envPrefix:"DOUTOK_COMMENT_DOMAIN_"`
-	MySQL     configStruct.MySQL     `envPrefix:"DOUTOK_COMMENT_DOMAIN_"`
-	Snowflake configStruct.Snowflake `envPrefix:"DOUTOK_COMMENT_DOMAIN_"`
-	Otel      configStruct.Otel      `envPrefix:"DOUTOK_COMMENT_DOMAIN_"`
-	Logger    configStruct.Logger    `envPrefix:"DOUTOK_COMMENT_DOMAIN_"`
+	Base      configStruct.Base      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Etcd      configStruct.Etcd      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Jwt       configStruct.Jwt       `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	MySQL     configStruct.MySQL     `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Snowflake configStruct.Snowflake `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Otel      configStruct.Otel      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Logger    configStruct.Logger    `envPrefix:"DOUTOK_USER_DOMAIN_"`
 }
 
 var (
 	logger *zap.Logger
-	Logger = dlog.InitLog(3)
 	config = &Config{}
 )
 
@@ -76,6 +76,6 @@ func main() {
 	)
 
 	if err := svr.Run(); err != nil {
-		Logger.Fatal(err)
+		logger.Fatal("failed to run server", zap.Any("error", err))
 	}
 }
