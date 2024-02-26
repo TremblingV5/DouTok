@@ -151,8 +151,6 @@ func main() {
 		}
 
 		log.Printf("Consumed: %d\n", consumed)
-		fmt.Println("Consumed: %d\n", consumed)
-
 	} else {
 		syncProducer, err := sarama.NewSyncProducer(splitBrokers, conf)
 		if err != nil {
