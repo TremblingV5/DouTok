@@ -33,7 +33,7 @@ Redis:
 
 Kafka:
   Brokers:
-    - "192.168.2.120:9092"
+    - "YOUR_OWN_IP:9092"
   Topics:
     - "relation_1"
 #    - "relation_2"
