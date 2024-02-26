@@ -72,8 +72,6 @@ services:
         - ./hbase-data:/hbase-data
         - ./hbase-zoo-data:/zookeeper-data
     environment:
-        - ZK_Server=zookeeper
-        - ZK_Port=2181
         - HBASE_CONF_hbase_cluster_distributed=false
     restart: always
 
@@ -91,7 +89,7 @@ services:
     environment:
         - KAFKA_BROKER_ID=0
         - KAFKA_LISTENERS=PLAINTEXT://kafka:9092
-        - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.2.120:9092
+        - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://YOUR_OWN_IP:9092
         - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
         - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
         - KAFKA_HEAP_OPTS=-Xmx512M -Xms16M

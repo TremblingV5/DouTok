@@ -45,7 +45,7 @@ Redis:
     Num: 8
 
 Kafka:
-  Broker: "192.168.2.120:9092"
+  Broker: "YOUR_OWN_IP:9092"
 
 Otel:
   Host: "82.156.171.8"

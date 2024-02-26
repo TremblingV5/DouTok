@@ -1,21 +1,24 @@
-package hbaseHandle
+package main
 
 import (
-	"testing"
+	"log"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
-	"github.com/sirupsen/logrus"
+	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 )
 
-func TestPut(t *testing.T) {
+func main() {
 	logrus.SetLevel(logrus.DebugLevel)
+
 	var config configStruct.HBaseConfig
 	configurator.InitConfig(
 		&config, "hbase.yaml",
 	)
 
-	client := InitHB(config.Host)
+	client := hbaseHandle.InitHB(config.Host)
 
 	values := map[string]map[string][]byte{
 		"d": {
@@ -24,5 +27,6 @@ func TestPut(t *testing.T) {
 		},
 	}
 
-	client.Put("test", "00030005", values)
+	err := client.Put("test", "00030005", values)
+	log.Println(err)
 }
