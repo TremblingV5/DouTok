@@ -9,8 +9,9 @@ import (
 	"time"
 
 	"github.com/Shopify/sarama"
-	"github.com/TremblingV5/DouTok/applications/relation/pack"
 	"github.com/cloudwego/kitex/pkg/klog"
+
+	"github.com/TremblingV5/DouTok/applications/relationDomain/pack"
 )
 
 type msgConsumerGroup struct{}
