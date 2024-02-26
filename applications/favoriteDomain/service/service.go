@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/cache/favorite_count_cache"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/repository/favorite"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/repository/favorite_count"
@@ -30,19 +31,19 @@ func New() *Service {
 }
 
 func (s *Service) CreateFavorite(ctx context.Context, userId, videoId int64) error {
-
+	return nil
 }
 
 func (s *Service) RemoveFavorite(ctx context.Context, userId, videoId int64) error {
-
+	return nil
 }
 
 func (s *Service) CountFavorite(ctx context.Context, videoId []int64) (map[int64]int64, error) {
-
+	return nil, nil
 }
 
 func (s *Service) ListFavorite(ctx context.Context, userId int64) ([]int64, error) {
-
+	return nil, nil
 }
 
 func (s *Service) IsFavorite(ctx context.Context, userId, videoId int64) (bool, error) {
