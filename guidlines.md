@@ -39,10 +39,14 @@ Run `docker-compose -f ./env/dependencies.yml up -d` to deploy all dependencies.
 
 For `User`, `UserDomain`, `Comment`, `CommentDomain`, `Favorite`:
 
+If you are using vscode:
 1. Copy `./config/vscode_launch.jsonc` to `./vscode`
 2. Use vscode to run these modules.
 
-For others:
+If you are using Goland:
+1. run the shell named `run.sh` in each module.
+
+For others services:
 
 Run each modules by using `go run ./applications/xxx/`
 
