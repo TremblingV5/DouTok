@@ -48,7 +48,7 @@ Minio:
   Endpoint: "localhost:9000"
   Key: "root"
   Secret: "rootroot"
-  Bucket: "DouTok"
+  Bucket: "doutok"
   Callback: ""
 
 Redis:
