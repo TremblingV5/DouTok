@@ -3,7 +3,7 @@ version: '3'
 networks:
   total:
     driver: bridge
-  
+
 services:
   redis:
     image: redis:latest
@@ -101,4 +101,20 @@ services:
         - total
     ports:
         - 8889:8889
+    restart: always
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server --console-address ':9001' /data
+    ports:
+        - "9000:9000"
+        - "9001:9001"
+    environment:
+        MINIO_ACCESS_KEY: root
+        MINIO_SECRET_KEY: rootroot
+    volumes:
+      - ./minio_data:/data
+      - ./config/minio:/root/.minio
+    privileged: true
     restart: always
