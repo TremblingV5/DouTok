@@ -33,7 +33,7 @@ Something more, modification of `hosts` file is needed. This will help `HBase` r
 
 ### Fire
 
-Run `docker-compose -f ./deploy/env.yml` to deploy all dependencies.
+Run `docker-compose -f ./env/dependencies.yml` to deploy all dependencies.
 
 ## How to build backend
 
