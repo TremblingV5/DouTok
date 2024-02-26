@@ -4,17 +4,19 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"time"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/hertz-contrib/websocket"
+	"github.com/jellydator/ttlcache/v2"
 
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/pkg/errno"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"github.com/hertz-contrib/websocket"
-	"github.com/jellydator/ttlcache/v2"
 )
 
 const (
@@ -82,10 +84,10 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 			// TODO 这里消息编解码可能有问题，需要考虑到客户端的处理方式
 			clientMsg := ClientMsg{}
 			json.Unmarshal(msg, &clientMsg)
-			clientFrom, err := hub.clients.Get(string(clientMsg.UserId))
+			clientFrom, err := hub.clients.Get(fmt.Sprint(clientMsg.UserId))
 			if errors.Is(err, ttlcache.ErrNotFound) {
 				// 注册 client
-				client := &Client{conn: conn, userId: string(clientMsg.UserId)}
+				client := &Client{conn: conn, userId: fmt.Sprint(clientMsg.UserId)}
 				hub.register <- client
 			} else {
 				if err != nil {
@@ -106,7 +108,7 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 				return
 			}
 			// 获取 B 用户的连接并发送消息
-			clientTo, err := hub.clients.Get(string(clientMsg.ToUserId))
+			clientTo, err := hub.clients.Get(fmt.Sprint(clientMsg.ToUserId))
 			if errors.Is(err, ttlcache.ErrNotFound) {
 				// B 不在线
 				handler.SendResponse(c, handler.BuildMessageActionResp(errno.Success))

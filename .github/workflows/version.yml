@@ -1,88 +1,88 @@
-name: build version
+# name: build version
 
-on:
-  push:
-    tags: [ 'v*.*.*' ]
+# on:
+#   push:
+#     tags: [ 'v*.*.*' ]
 
-env:
-  REGISTRY: registry.cn-shanghai.aliyuncs.com
+# env:
+#   REGISTRY: registry.cn-shanghai.aliyuncs.com
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+#       packages: write
+#       id-token: write
       
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
       
-      - name: Set version info
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+#       - name: Set version info
+#         id: get_version
+#         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
-      - name: Build docker image
-        run:
-          docker version
+#       - name: Build docker image
+#         run:
+#           docker version
           
-          ls
+#           ls
           
-          docker login --username=${{ secrets.ALIYUN_KEY_ID }} --password=${{ secrets.ALIYUN_KEY_SECRET }} registry.cn-shanghai.aliyuncs.com
+#           docker login --username=${{ secrets.ALIYUN_KEY_ID }} --password=${{ secrets.ALIYUN_KEY_SECRET }} registry.cn-shanghai.aliyuncs.com
           
-          docker build -t api . --tag ${{ env.REGISTRY }}/doutok/api:${{steps.get_version.outputs.VERSION}} --build-arg target=api
+#           docker build -t api . --tag ${{ env.REGISTRY }}/doutok/api:${{steps.get_version.outputs.VERSION}} --build-arg target=api
           
-          docker push ${{ env.REGISTRY }}/doutok/api:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/api:${{steps.get_version.outputs.VERSION}}
           
-          docker build -t comment . --tag ${{ env.REGISTRY }}/doutok/comment:${{steps.get_version.outputs.VERSION}} --build-arg target=comment
+#           docker build -t comment . --tag ${{ env.REGISTRY }}/doutok/comment:${{steps.get_version.outputs.VERSION}} --build-arg target=comment
           
-          docker push ${{ env.REGISTRY }}/doutok/comment:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/comment:${{steps.get_version.outputs.VERSION}}
 
-          docker build -t commentDomain . --tag ${{ env.REGISTRY }}/doutok/commentDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=commentDomain
+#           docker build -t commentDomain . --tag ${{ env.REGISTRY }}/doutok/commentDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=commentDomain
           
-          docker push ${{ env.REGISTRY }}/doutok/commentDomain:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/commentDomain:${{steps.get_version.outputs.VERSION}}
           
-          docker build -t favorite . --tag ${{ env.REGISTRY }}/doutok/favorite:${{steps.get_version.outputs.VERSION}} --build-arg target=favorite
+#           docker build -t favorite . --tag ${{ env.REGISTRY }}/doutok/favorite:${{steps.get_version.outputs.VERSION}} --build-arg target=favorite
           
-          docker push ${{ env.REGISTRY }}/doutok/favorite:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/favorite:${{steps.get_version.outputs.VERSION}}
 
-          docker build -t favoriteDomain . --tag ${{ env.REGISTRY }}/doutok/favoriteDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=favoriteDomain
+#           docker build -t favoriteDomain . --tag ${{ env.REGISTRY }}/doutok/favoriteDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=favoriteDomain
           
-          docker push ${{ env.REGISTRY }}/doutok/favoriteDomain:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/favoriteDomain:${{steps.get_version.outputs.VERSION}}
           
-          docker build -t feed . --tag ${{ env.REGISTRY }}/doutok/feed:${{steps.get_version.outputs.VERSION}} --build-arg target=feed
+#           docker build -t feed . --tag ${{ env.REGISTRY }}/doutok/feed:${{steps.get_version.outputs.VERSION}} --build-arg target=feed
           
-          docker push ${{ env.REGISTRY }}/doutok/feed:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/feed:${{steps.get_version.outputs.VERSION}}
           
-          docker build -t message . --tag ${{ env.REGISTRY }}/doutok/message:${{steps.get_version.outputs.VERSION}} --build-arg target=message
+#           docker build -t message . --tag ${{ env.REGISTRY }}/doutok/message:${{steps.get_version.outputs.VERSION}} --build-arg target=message
           
-          docker push ${{ env.REGISTRY }}/doutok/message:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/message:${{steps.get_version.outputs.VERSION}}
 
-          docker build -t messageDomain . --tag ${{ env.REGISTRY }}/doutok/messageDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=messageDomain
+#           docker build -t messageDomain . --tag ${{ env.REGISTRY }}/doutok/messageDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=messageDomain
           
-          docker push ${{ env.REGISTRY }}/doutok/messageDomain:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/messageDomain:${{steps.get_version.outputs.VERSION}}
           
-          docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publish:${{steps.get_version.outputs.VERSION}} --build-arg target=publish
+#           docker build -t publish . --tag ${{ env.REGISTRY }}/doutok/publish:${{steps.get_version.outputs.VERSION}} --build-arg target=publish
           
-          docker push ${{ env.REGISTRY }}/doutok/publish:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/publish:${{steps.get_version.outputs.VERSION}}
           
-          docker build -t relation . --tag ${{ env.REGISTRY }}/doutok/relation:${{steps.get_version.outputs.VERSION}} --build-arg target=relation
+#           docker build -t relation . --tag ${{ env.REGISTRY }}/doutok/relation:${{steps.get_version.outputs.VERSION}} --build-arg target=relation
           
-          docker push ${{ env.REGISTRY }}/doutok/relation:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/relation:${{steps.get_version.outputs.VERSION}}
 
-          docker build -t relationDomain . --tag ${{ env.REGISTRY }}/doutok/relationDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=relationDomain
+#           docker build -t relationDomain . --tag ${{ env.REGISTRY }}/doutok/relationDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=relationDomain
           
-          docker push ${{ env.REGISTRY }}/doutok/relationDomain:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/relationDomain:${{steps.get_version.outputs.VERSION}}
           
-          docker build -t user . --tag ${{ env.REGISTRY }}/doutok/user:${{steps.get_version.outputs.VERSION}} --build-arg target=user
+#           docker build -t user . --tag ${{ env.REGISTRY }}/doutok/user:${{steps.get_version.outputs.VERSION}} --build-arg target=user
           
-          docker push ${{ env.REGISTRY }}/doutok/user:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/user:${{steps.get_version.outputs.VERSION}}
 
-          docker build -t userDomain . --tag ${{ env.REGISTRY }}/doutok/userDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=userDomain
+#           docker build -t userDomain . --tag ${{ env.REGISTRY }}/doutok/userDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=userDomain
           
-          docker push ${{ env.REGISTRY }}/doutok/userDomain:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/userDomain:${{steps.get_version.outputs.VERSION}}
 
-          docker build -t videoDomain . --tag ${{ env.REGISTRY }}/doutok/videoDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=videoDomain
+#           docker build -t videoDomain . --tag ${{ env.REGISTRY }}/doutok/videoDomain:${{steps.get_version.outputs.VERSION}} --build-arg target=videoDomain
           
-          docker push ${{ env.REGISTRY }}/doutok/videoDomain:${{steps.get_version.outputs.VERSION}}
+#           docker push ${{ env.REGISTRY }}/doutok/videoDomain:${{steps.get_version.outputs.VERSION}}
