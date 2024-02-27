@@ -15,7 +15,7 @@ DouTok is a backend for TikTok client based on Kitex and Hertz.
 
 2. Update config files
 
-   There's a elegent way to run applications in this repo which is using `docker-compose`. So update config files in `./config_docker_compose` if you use `docker-comopse`. If you don't want to run them in this way, you must update config files in `./config` for ensuring them working.
+   There's an elegant way to run applications in this repo which is using `docker-compose`. So update config files in `./config_docker_compose` if you use `docker-comopse`. If you don't want to run them in this way, you must update config files in `./config` for ensuring them working.
 
 3. Run applications by using `docker-compose`
    Everything is ready now, ensure that there's a `docker-compose.yml` in the root directory and run this command in terminal
@@ -26,7 +26,7 @@ DouTok is a backend for TikTok client based on Kitex and Hertz.
 
 ### Download Client
 
-We can download `.apk` file form `./ui` of this repo. Now the client is only support Android. After downloading and installing of this app. We can open it firstly. Then we can click `我` on the right bottom to enter configure page. After opening `高级配置`, we can input base url of the backend. An example is `http://localhost:8080/`.
+We can download `.apk` file from `./ui` of this repo. Now the client is only support Android. After downloading and installing of this app. We can open it firstly. Then we can click `我` on the right bottom to enter configure page. After opening `高级配置`, we can input base url of the backend. An example is `http://localhost:8080/`.
 
 ## Architecture
 
