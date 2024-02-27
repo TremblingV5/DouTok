@@ -23,3 +23,4 @@ For a better flow to manage PRs, we suggest that:
 1. Use the given PR templates
 2. Use `rebase` to resolve conflicts
 3. Submit as few commit as possible in a PR
+4. Use a linter to check code before open a PR
