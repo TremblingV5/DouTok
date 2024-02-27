@@ -1,8 +1,6 @@
 name: Unit Test for Golang Code
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
