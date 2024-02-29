@@ -11,8 +11,8 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "hertz-contrib",
-            "url": "https://github.com/hertz-contrib"
+            "name": "DouTok",
+            "url": "https://github.com/TremblingV5/DouTok"
         },
         "license": {
             "name": "Apache 2.0",
@@ -532,35 +532,7 @@ const docTemplate = `{
         },
         "/douyin/user/login": {
             "post": {
-                "tags": [
-                    "User用户相关"
-                ],
-                "summary": "用户登录",
-                "parameters": [
-                    {
-                        "description": "用户信息",
-                        "name": "req",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/api.DouyinUserLoginRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/api.DouyinUserLoginResponse"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/api.DouyinUserLoginResponse"
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/douyin/user/register": {
@@ -949,40 +921,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/api.User"
                     }
-                }
-            }
-        },
-        "api.DouyinUserLoginRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "description": "密码，最长32个字符",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "登陆用户名，最长32个字符",
-                    "type": "string"
-                }
-            }
-        },
-        "api.DouyinUserLoginResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "description": "状态码，0-成功，其他值-失败",
-                    "type": "integer"
-                },
-                "status_msg": {
-                    "description": "返回状态描述",
-                    "type": "string"
-                },
-                "token": {
-                    "description": "用户鉴权token",
-                    "type": "string"
-                },
-                "user_id": {
-                    "description": "用户id",
-                    "type": "integer"
                 }
             }
         },

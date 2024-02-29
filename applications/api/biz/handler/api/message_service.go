@@ -21,7 +21,7 @@ import (
 //
 //	@Summary	获取和某人的聊天记录
 //	@Description
-//	@Param		req		query		api.DouyinMessageChatRequest	true	"获取"
+//	@Param		req		query		api.DouyinMessageChatRequest	true	"获取聊天记录的参数"
 //	@Success	200		{object}	message.DouyinMessageChatResponse
 //	@Failure	default	{object}	api.DouyinMessageChatResponse
 //	@router		/douyin/message/chat [GET]

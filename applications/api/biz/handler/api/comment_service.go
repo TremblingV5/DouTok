@@ -58,7 +58,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary	获取某个视频之下的评论列表
 //	@Description
-//	@Param		req		query		api.DouyinCommentListRequest	true	"获取"
+//	@Param		req		query		api.DouyinCommentListRequest	true	"获取评论的参数"
 //	@Success	200		{object}	comment.DouyinCommentListResponse
 //	@Failure	default	{object}	api.DouyinCommentListResponse
 //	@router		/douyin/comment/list [GET]

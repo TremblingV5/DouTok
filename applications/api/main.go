@@ -17,8 +17,8 @@ import (
 //	@version		1.0
 //	@description	DouTok 项目后端
 
-//	@contact.name	hertz-contrib
-//	@contact.url	https://github.com/hertz-contrib
+//	@contact.name	DouTok
+//	@contact.url	https://github.com/TremblingV5/DouTok
 
 //	@license.name	Apache 2.0
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html

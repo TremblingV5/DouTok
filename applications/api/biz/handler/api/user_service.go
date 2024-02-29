@@ -50,14 +50,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 
 // Login .
 //
-//	@Tags			User用户相关
-//
-//	@Summary		用户登录
-//	@Description
-//	@Param			req		body		api.DouyinUserLoginRequest	true	"用户信息"
-//	@Success		200		{object}	api.DouyinUserLoginResponse
-//	@Failure		default	{object}	api.DouyinUserLoginResponse
-//	@router			/douyin/user/login [POST]
+//	@router		/douyin/user/login [POST]
 //
 // 使用 hertz-jwt 时需要替换掉这个 LoginHandler
 func Login(ctx context.Context, c *app.RequestContext) {
@@ -80,7 +73,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary	通过用户ID获取用户
 //	@Description
-//	@Param		req		query		api.DouyinUserRequest	true	"获取"
+//	@Param		req		query		api.DouyinUserRequest	true	"指明需要获取的用户的参数"
 //	@Success	200		{object}	user.DouyinUserResponse
 //	@Failure	default	{object}	api.DouyinUserResponse
 //	@router		/douyin/user [GET]

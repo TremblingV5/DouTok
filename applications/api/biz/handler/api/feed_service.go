@@ -21,7 +21,7 @@ import (
 //
 //	@Summary	返回一个视频列表
 //	@Description
-//	@Param		req		query		api.DouyinFeedRequest	false	"获取"
+//	@Param		req		query		api.DouyinFeedRequest	false	"返回哪些视频的限制参数"
 //	@Success	200		{object}	feed.DouyinFeedResponse
 //	@Failure	default	{object}	api.DouyinFeedResponse
 //	@router		/douyin/feed [GET]

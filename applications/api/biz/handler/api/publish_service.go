@@ -69,7 +69,7 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary	获取用户已发布视频的列表
 //	@Description
-//	@Param		req		query		api.DouyinPublishListRequest	true	"获取"
+//	@Param		req		query		api.DouyinPublishListRequest	true	"获取某个用户发布的视频列表的参数"
 //	@Success	200		{object}	publish.DouyinPublishListResponse
 //	@Failure	default	{object}	api.DouyinPublishListResponse
 //	@router		/douyin/publish/list [GET]

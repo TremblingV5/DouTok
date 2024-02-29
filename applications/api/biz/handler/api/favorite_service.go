@@ -54,7 +54,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary	返回点赞视频列表
 //	@Description
-//	@Param		req		query		api.DouyinFavoriteListRequest	true	"获取"
+//	@Param		req		query		api.DouyinFavoriteListRequest	true	"获取某个用户点赞了的视频的参数"
 //	@Success	200		{object}	favorite.DouyinFavoriteListResponse
 //	@Failure	default	{object}	api.DouyinFavoriteListResponse
 //
