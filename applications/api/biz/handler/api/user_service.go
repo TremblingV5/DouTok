@@ -4,13 +4,14 @@ package api
 
 import (
 	"context"
+
+	"github.com/cloudwego/hertz/pkg/app"
+
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/errno"
-
-	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
-	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // Register .
@@ -46,25 +47,6 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	}
 	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
-}
-
-// Login .
-//
-//	@router		/douyin/user/login [POST]
-//
-// 使用 hertz-jwt 时需要替换掉这个 LoginHandler
-func Login(ctx context.Context, c *app.RequestContext) {
-	//	var err error
-	//	var req api.DouyinUserRegisterRequest
-	//	err = c.BindAndValidate(&req)
-	//	if err != nil {
-	//		c.String(consts.StatusBadRequest, err.Error())
-	//		return
-	//	}
-	//
-	//	resp := new(api.DouyinUserRegisterResponse)
-	//
-	//	c.JSON(consts.StatusOK, resp)
 }
 
 // GetUserById .
