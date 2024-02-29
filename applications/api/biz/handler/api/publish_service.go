@@ -18,7 +18,17 @@ import (
 )
 
 // PublishAction .
-// @router /douyin/publish/action [POST]
+//
+//	@Tags		Publish视频投稿相关
+//
+//	@Summary	发布视频操作
+//	@Description
+//	@Param		token	formData	string	true	"用户鉴权token"
+//	@Param		title	formData	string	true	"视频标题"
+//	@Param		data	formData	file	true	"视频数据"
+//	@Success	200		{object}	publish.DouyinPublishActionResponse
+//	@Failure	default	{object}	api.DouyinPublishActionResponse
+//	@router		/douyin/publish/action [POST]
 func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinPublishActionRequest
@@ -54,7 +64,15 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 }
 
 // PublishList .
-// @router /douyin/publish/list [GET]
+//
+//	@Tags		Publish视频投稿相关
+//
+//	@Summary	获取用户已发布视频的列表
+//	@Description
+//	@Param		req		query		api.DouyinPublishListRequest	true	"获取"
+//	@Success	200		{object}	publish.DouyinPublishListResponse
+//	@Failure	default	{object}	api.DouyinPublishListResponse
+//	@router		/douyin/publish/list [GET]
 func PublishList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinPublishListRequest

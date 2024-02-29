@@ -16,7 +16,15 @@ import (
 )
 
 // CommentAction .
-// @router /douyin/comment/action [POST]
+//
+//	@Tags		Comment评论
+//
+//	@Summary	添加或删除评论
+//	@Description
+//	@Param		req		body		api.DouyinCommentActionRequest	true	"评论操作信息"
+//	@Success	200		{object}	comment.DouyinCommentActionResponse
+//	@Failure	default	{object}	api.DouyinCommentActionResponse
+//	@router		/douyin/comment/action [POST]
 func CommentAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinCommentActionRequest
@@ -45,7 +53,15 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 }
 
 // CommentList .
-// @router /douyin/comment/list [GET]
+//
+//	@Tags		Comment评论
+//
+//	@Summary	获取某个视频之下的评论列表
+//	@Description
+//	@Param		req		query		api.DouyinCommentListRequest	true	"获取"
+//	@Success	200		{object}	comment.DouyinCommentListResponse
+//	@Failure	default	{object}	api.DouyinCommentListResponse
+//	@router		/douyin/comment/list [GET]
 func CommentList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinCommentListRequest

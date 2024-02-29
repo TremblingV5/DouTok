@@ -16,7 +16,15 @@ import (
 )
 
 // RelationAction .
-// @router /douyin/relation/action [POST]
+//
+//	@Tags		Relation关注
+//
+//	@Summary	关注或取消关注
+//	@Description
+//	@Param		req		body		api.DouyinRelationActionRequest	true	"关注操作信息"
+//	@Success	200		{object}	relation.DouyinRelationActionResponse
+//	@Failure	default	{object}	api.DouyinRelationActionResponse
+//	@router		/douyin/relation/action [POST]
 func RelationAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinRelationActionRequest
@@ -43,7 +51,16 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 }
 
 // RelationFollowList .
-// @router /douyin/relation/follow/list [GET]
+//
+//	@Tags		Relation关注
+//
+//	@Summary	获取已关注用户的列表
+//	@Description
+//	@Param		req		query		api.DouyinRelationFollowListRequest	true	"获取操作信息"
+//	@Success	200		{object}	relation.DouyinRelationFollowListResponse
+//	@Failure	default	{object}	api.DouyinRelationFollowListResponse
+//
+//	@router		/douyin/relation/follow/list [GET]
 func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinRelationFollowListRequest
@@ -65,7 +82,15 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 }
 
 // RelationFollowerList .
-// @router /douyin/relation/follower/list [GET]
+//
+//	@Tags		Relation关注
+//
+//	@Summary	获取粉丝用户列表
+//	@Description
+//	@Param		req		query		api.DouyinRelationFollowerListRequest	true	"获取操作信息"
+//	@Success	200		{object}	relation.DouyinRelationFollowerListResponse
+//	@Failure	default	{object}	api.DouyinRelationFollowerListResponse
+//	@router		/douyin/relation/follower/list [GET]
 func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinRelationFollowerListRequest
@@ -87,7 +112,16 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 }
 
 // RelationFriendList .
-// @router /douyin/relation/friend/list [GET]
+//
+//	@Tags		Relation关注
+//
+//	@Summary	获取好友列表
+//	@Description
+//	@Param		req		query		api.DouyinRelationFollowerListRequest	true	"获取操作信息"
+//	@Success	200		{object}	relation.DouyinRelationFollowerListResponse
+//	@Failure	default	{object}	api.DouyinRelationFollowerListResponse
+//	@router		/douyin/relation/friend/list [GET]
+//
 // 内部为调用获取粉丝列表
 func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 	var err error

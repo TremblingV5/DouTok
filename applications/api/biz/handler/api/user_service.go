@@ -14,7 +14,15 @@ import (
 )
 
 // Register .
-// @router /douyin/user/register [POST]
+//
+//	@Tags			User用户相关
+//
+//	@Summary		用户注册
+//	@Description	添加一个用户到数据库中
+//	@Param			req		body		api.DouyinUserRegisterRequest	true	"用户信息"
+//	@Success		200		{object}	user.DouyinUserResponse
+//	@Failure		default	{object}	api.DouyinUserRegisterResponse
+//	@router			/douyin/user/register [POST]
 func Register(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinUserRegisterRequest
@@ -41,24 +49,41 @@ func Register(ctx context.Context, c *app.RequestContext) {
 }
 
 // Login .
-// @router /douyin/user/login [POST]
+//
+//	@Tags			User用户相关
+//
+//	@Summary		用户登录
+//	@Description
+//	@Param			req		body		api.DouyinUserLoginRequest	true	"用户信息"
+//	@Success		200		{object}	api.DouyinUserLoginResponse
+//	@Failure		default	{object}	api.DouyinUserLoginResponse
+//	@router			/douyin/user/login [POST]
+//
 // 使用 hertz-jwt 时需要替换掉这个 LoginHandler
-//func Login(ctx context.Context, c *app.RequestContext) {
-//	var err error
-//	var req api.DouyinUserRegisterRequest
-//	err = c.BindAndValidate(&req)
-//	if err != nil {
-//		c.String(consts.StatusBadRequest, err.Error())
-//		return
-//	}
-//
-//	resp := new(api.DouyinUserRegisterResponse)
-//
-//	c.JSON(consts.StatusOK, resp)
-//}
+func Login(ctx context.Context, c *app.RequestContext) {
+	//	var err error
+	//	var req api.DouyinUserRegisterRequest
+	//	err = c.BindAndValidate(&req)
+	//	if err != nil {
+	//		c.String(consts.StatusBadRequest, err.Error())
+	//		return
+	//	}
+	//
+	//	resp := new(api.DouyinUserRegisterResponse)
+	//
+	//	c.JSON(consts.StatusOK, resp)
+}
 
 // GetUserById .
-// @router /douyin/user [GET]
+//
+//	@Tags		User用户相关
+//
+//	@Summary	通过用户ID获取用户
+//	@Description
+//	@Param		req		query		api.DouyinUserRequest	true	"获取"
+//	@Success	200		{object}	user.DouyinUserResponse
+//	@Failure	default	{object}	api.DouyinUserResponse
+//	@router		/douyin/user [GET]
 func GetUserById(ctx context.Context, c *app.RequestContext) {
 	// 如果是需要授权访问的接口，则在进入时已经被中间件从 body 中获取 token 解析完成了，这里无需额外解析
 	var err error

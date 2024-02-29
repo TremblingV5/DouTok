@@ -1,0 +1,1013 @@
+basePath: /
+definitions:
+  api.Comment:
+    properties:
+      content:
+        description: 评论内容
+        type: string
+      create_date:
+        description: 评论发布日期，格式 mm-dd
+        type: string
+      id:
+        description: 视频评论id
+        type: integer
+      like_count:
+        description: 该评论点赞数
+        type: integer
+      tease_count:
+        description: 该评论diss数
+        type: integer
+      user:
+        allOf:
+        - $ref: '#/definitions/api.User'
+        description: 评论用户信息
+    type: object
+  api.DouyinCommentActionRequest:
+    properties:
+      action_type:
+        description: 1-发布评论，2-删除评论
+        type: integer
+      comment_id:
+        description: 要删除的评论id，在action_type=2的时候使用
+        type: integer
+      comment_text:
+        description: 用户填写的评论内容，在action_type=1的时候使用
+        type: string
+      token:
+        description: 用户鉴权token
+        type: string
+      video_id:
+        description: 视频id
+        type: integer
+    type: object
+  api.DouyinCommentActionResponse:
+    properties:
+      comment:
+        allOf:
+        - $ref: '#/definitions/api.Comment'
+        description: 评论成功返回评论内容，不需要重新拉取整个列表
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  api.DouyinCommentListResponse:
+    properties:
+      comment_list:
+        description: 评论列表
+        items:
+          $ref: '#/definitions/api.Comment'
+        type: array
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  api.DouyinFavoriteActionRequest:
+    properties:
+      action_type:
+        description: 1-点赞，2-取消点赞
+        type: integer
+      token:
+        description: 用户鉴权token
+        type: string
+      video_id:
+        description: 视频id
+        type: integer
+    type: object
+  api.DouyinFavoriteActionResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  api.DouyinFavoriteListResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+      video_list:
+        description: 用户点赞视频列表
+        items:
+          $ref: '#/definitions/api.Video'
+        type: array
+    type: object
+  api.DouyinFeedResponse:
+    properties:
+      next_time:
+        description: 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+        type: integer
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+      video_list:
+        description: 视频列表
+        items:
+          $ref: '#/definitions/api.Video'
+        type: array
+    type: object
+  api.DouyinMessageActionRequest:
+    properties:
+      action_type:
+        description: 1-发送消息
+        type: integer
+      content:
+        description: 消息内容
+        type: string
+      to_user_id:
+        description: 对方用户id
+        type: integer
+      token:
+        description: 用户鉴权token
+        type: string
+    type: object
+  api.DouyinMessageActionResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  api.DouyinMessageChatResponse:
+    properties:
+      message_list:
+        description: 消息列表
+        items:
+          $ref: '#/definitions/api.Message'
+        type: array
+      status_code:
+        description: 状态码，0-成功，其他-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  api.DouyinPublishActionResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  api.DouyinPublishListResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+      video_list:
+        description: 用户发布的视频列表
+        items:
+          $ref: '#/definitions/api.Video'
+        type: array
+    type: object
+  api.DouyinRelationActionRequest:
+    properties:
+      action_type:
+        description: 1-关注，2-取消关注
+        type: integer
+      to_user_id:
+        description: 对方用户id
+        type: integer
+      token:
+        description: 用户鉴权token
+        type: string
+    type: object
+  api.DouyinRelationActionResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  api.DouyinRelationFollowListResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+      user_list:
+        description: 用户信息列表
+        items:
+          $ref: '#/definitions/api.User'
+        type: array
+    type: object
+  api.DouyinRelationFollowerListResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+      user_list:
+        description: 用户列表
+        items:
+          $ref: '#/definitions/api.User'
+        type: array
+    type: object
+  api.DouyinUserLoginRequest:
+    properties:
+      password:
+        description: 密码，最长32个字符
+        type: string
+      username:
+        description: 登陆用户名，最长32个字符
+        type: string
+    type: object
+  api.DouyinUserLoginResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+      token:
+        description: 用户鉴权token
+        type: string
+      user_id:
+        description: 用户id
+        type: integer
+    type: object
+  api.DouyinUserRegisterRequest:
+    properties:
+      password:
+        description: 密码，最长32个字符
+        type: string
+      username:
+        description: 注册用户名，最长32个字符
+        type: string
+    type: object
+  api.DouyinUserRegisterResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+      token:
+        description: 用户鉴权token
+        type: string
+      user_id:
+        description: 用户id
+        type: integer
+    type: object
+  api.DouyinUserResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/api.User'
+        description: 用户信息
+    type: object
+  api.Message:
+    properties:
+      content:
+        description: 消息内容
+        type: string
+      create_time:
+        description: 消息创建时间
+        type: string
+      from_user_id:
+        description: 该消息发送者的id
+        type: integer
+      id:
+        description: 消息id
+        type: integer
+      to_user_id:
+        description: 该消息接收者的id
+        type: integer
+    type: object
+  api.User:
+    properties:
+      avatar:
+        description: 用户头像Url
+        type: string
+      background_image:
+        description: 用户个人页顶部大图
+        type: string
+      favorite_count:
+        description: 点赞数量
+        type: integer
+      follow_count:
+        description: 关注总数
+        type: integer
+      follower_count:
+        description: 粉丝总数
+        type: integer
+      id:
+        description: 用户id
+        type: integer
+      is_follow:
+        description: true-已关注，false-未关注
+        type: boolean
+      name:
+        description: 用户名称
+        type: string
+      signature:
+        description: 个人简介
+        type: string
+      total_favorited:
+        description: 获赞数量
+        type: integer
+      work_count:
+        description: 作品数量
+        type: integer
+    type: object
+  api.Video:
+    properties:
+      author:
+        allOf:
+        - $ref: '#/definitions/api.User'
+        description: 视频作者信息
+      comment_count:
+        description: 视频的评论总数
+        type: integer
+      cover_url:
+        description: 视频封面地址
+        type: string
+      favorite_count:
+        description: 视频的点赞总数
+        type: integer
+      id:
+        description: 视频唯一标识
+        type: integer
+      is_favorite:
+        description: true-已点赞，false-未点赞
+        type: boolean
+      play_url:
+        description: 视频播放地址
+        type: string
+      title:
+        description: 视频标题
+        type: string
+    type: object
+  comment.DouyinCommentActionResponse:
+    properties:
+      comment:
+        allOf:
+        - $ref: '#/definitions/entity.Comment'
+        description: 评论成功返回评论内容，不需要重新拉取整个列表
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+    type: object
+  comment.DouyinCommentListResponse:
+    properties:
+      comment_list:
+        description: 评论列表
+        items:
+          $ref: '#/definitions/entity.Comment'
+        type: array
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+    type: object
+  entity.Comment:
+    properties:
+      content:
+        description: 评论内容
+        type: string
+      create_date:
+        description: 评论发布日期，格式 mm-dd
+        type: string
+      id:
+        description: 视频评论id
+        type: integer
+      like_count:
+        description: 该评论的点赞数
+        type: integer
+      tease_count:
+        description: 该评论diss数量
+        type: integer
+      user:
+        allOf:
+        - $ref: '#/definitions/entity.User'
+        description: 评论用户信息
+    type: object
+  entity.Message:
+    properties:
+      content:
+        description: 消息内容
+        type: string
+      create_time:
+        description: 消息创建时间
+        type: integer
+      from_user_id:
+        description: 该消息发送者的id
+        type: integer
+      id:
+        description: 消息id
+        type: integer
+      to_user_id:
+        description: 该消息接收者的id
+        type: integer
+    type: object
+  entity.User:
+    properties:
+      avatar:
+        description: 用户头像Url
+        type: string
+      background_image:
+        description: 用户个人页顶部大图
+        type: string
+      favorite_count:
+        description: 点赞数量
+        type: integer
+      follow_count:
+        description: 关注总数
+        type: integer
+      follower_count:
+        description: 粉丝总数
+        type: integer
+      id:
+        description: 用户id
+        type: integer
+      is_follow:
+        description: true-已关注，false-未关注
+        type: boolean
+      name:
+        description: 用户名称
+        type: string
+      signature:
+        description: 个人简介
+        type: string
+      total_favorited:
+        description: 获赞数量
+        type: integer
+      work_count:
+        description: 作品数量
+        type: integer
+    type: object
+  entity.Video:
+    properties:
+      author:
+        allOf:
+        - $ref: '#/definitions/entity.User'
+        description: 视频作者信息
+      comment_count:
+        description: 视频的评论总数
+        type: integer
+      cover_url:
+        description: 视频封面地址
+        type: string
+      favorite_count:
+        description: 视频的点赞总数
+        type: integer
+      id:
+        description: 视频唯一标识
+        type: integer
+      is_favorite:
+        description: true-已点赞，false-未点赞
+        type: boolean
+      play_url:
+        description: 视频播放地址
+        type: string
+      title:
+        description: 视频标题
+        type: string
+    type: object
+  favorite.DouyinFavoriteActionResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+    type: object
+  favorite.DouyinFavoriteListResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      video_list:
+        description: 用户点赞视频列表
+        items:
+          $ref: '#/definitions/entity.Video'
+        type: array
+    type: object
+  feed.DouyinFeedResponse:
+    properties:
+      next_time:
+        description: 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+        type: integer
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      video_list:
+        description: 视频列表
+        items:
+          $ref: '#/definitions/entity.Video'
+        type: array
+    type: object
+  message.DouyinMessageActionResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+    type: object
+  message.DouyinMessageChatResponse:
+    properties:
+      message_list:
+        description: 消息列表
+        items:
+          $ref: '#/definitions/entity.Message'
+        type: array
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+    type: object
+  publish.DouyinPublishActionResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+    type: object
+  publish.DouyinPublishListResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      video_list:
+        description: 用户发布的视频列表
+        items:
+          $ref: '#/definitions/entity.Video'
+        type: array
+    type: object
+  relation.DouyinRelationActionResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+    type: object
+  relation.DouyinRelationFollowListResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      user_list:
+        description: 用户信息列表
+        items:
+          $ref: '#/definitions/entity.User'
+        type: array
+    type: object
+  relation.DouyinRelationFollowerListResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      user_list:
+        description: 用户列表
+        items:
+          $ref: '#/definitions/entity.User'
+        type: array
+    type: object
+  user.DouyinUserResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/entity.User'
+        description: 用户信息
+    type: object
+host: localhost:8088
+info:
+  contact:
+    name: hertz-contrib
+    url: https://github.com/hertz-contrib
+  description: DouTok 项目后端
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: DouTokApi
+  version: "1.0"
+paths:
+  /douyin/comment/action:
+    post:
+      parameters:
+      - description: 评论操作信息
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/api.DouyinCommentActionRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/comment.DouyinCommentActionResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinCommentActionResponse'
+      summary: 添加或删除评论
+      tags:
+      - Comment评论
+  /douyin/comment/list:
+    get:
+      parameters:
+      - description: 用户鉴权token
+        in: query
+        name: token
+        type: string
+      - description: 视频id
+        in: query
+        name: video_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/comment.DouyinCommentListResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinCommentListResponse'
+      summary: 获取某个视频之下的评论列表
+      tags:
+      - Comment评论
+  /douyin/favorite/action:
+    post:
+      parameters:
+      - description: 点赞操作信息
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/api.DouyinFavoriteActionRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/favorite.DouyinFavoriteActionResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinFavoriteActionResponse'
+      summary: 点赞或取消点赞
+      tags:
+      - Favorite点赞
+  /douyin/favorite/list:
+    get:
+      parameters:
+      - description: 用户鉴权token
+        in: query
+        name: token
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/favorite.DouyinFavoriteListResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinFavoriteListResponse'
+      summary: 返回点赞视频列表
+      tags:
+      - Favorite点赞
+  /douyin/feed:
+    get:
+      parameters:
+      - description: 可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
+        in: query
+        name: latest_time
+        type: integer
+      - description: 可选参数，登录用户设置
+        in: query
+        name: token
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/feed.DouyinFeedResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinFeedResponse'
+      summary: 返回一个视频列表
+      tags:
+      - Feed视频流相关
+  /douyin/message/action:
+    post:
+      parameters:
+      - description: 发送的消息的相关信息
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/api.DouyinMessageActionRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/message.DouyinMessageActionResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinMessageActionResponse'
+      summary: 发送消息操作
+      tags:
+      - Message聊天相关
+  /douyin/message/chat:
+    get:
+      parameters:
+      - description: 上次最新消息的时间
+        in: query
+        name: pre_msg_time
+        type: integer
+      - description: 对方用户id
+        in: query
+        name: to_user_id
+        type: integer
+      - description: 用户鉴权token
+        in: query
+        name: token
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/message.DouyinMessageChatResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinMessageChatResponse'
+      summary: 获取和某人的聊天记录
+      tags:
+      - Message聊天相关
+  /douyin/publish/action:
+    post:
+      parameters:
+      - description: 用户鉴权token
+        in: formData
+        name: token
+        required: true
+        type: string
+      - description: 视频标题
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: 视频数据
+        in: formData
+        name: data
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/publish.DouyinPublishActionResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinPublishActionResponse'
+      summary: 发布视频操作
+      tags:
+      - Publish视频投稿相关
+  /douyin/publish/list:
+    get:
+      parameters:
+      - description: 用户鉴权token
+        in: query
+        name: token
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/publish.DouyinPublishListResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinPublishListResponse'
+      summary: 获取用户已发布视频的列表
+      tags:
+      - Publish视频投稿相关
+  /douyin/relation/action:
+    post:
+      parameters:
+      - description: 关注操作信息
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/api.DouyinRelationActionRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/relation.DouyinRelationActionResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinRelationActionResponse'
+      summary: 关注或取消关注
+      tags:
+      - Relation关注
+  /douyin/relation/follow/list:
+    get:
+      parameters:
+      - description: 用户鉴权token
+        in: query
+        name: token
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/relation.DouyinRelationFollowListResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinRelationFollowListResponse'
+      summary: 获取已关注用户的列表
+      tags:
+      - Relation关注
+  /douyin/relation/follower/list:
+    get:
+      parameters:
+      - description: 用户鉴权token
+        in: query
+        name: token
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/relation.DouyinRelationFollowerListResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinRelationFollowerListResponse'
+      summary: 获取粉丝用户列表
+      tags:
+      - Relation关注
+  /douyin/relation/friend/list:
+    get:
+      parameters:
+      - description: 用户鉴权token
+        in: query
+        name: token
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/relation.DouyinRelationFollowerListResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinRelationFollowerListResponse'
+      summary: 获取好友列表
+      tags:
+      - Relation关注
+  /douyin/user:
+    get:
+      parameters:
+      - description: 用户鉴权token
+        in: query
+        name: token
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.DouyinUserResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinUserResponse'
+      summary: 通过用户ID获取用户
+      tags:
+      - User用户相关
+  /douyin/user/login:
+    post:
+      parameters:
+      - description: 用户信息
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/api.DouyinUserLoginRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.DouyinUserLoginResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinUserLoginResponse'
+      summary: 用户登录
+      tags:
+      - User用户相关
+  /douyin/user/register:
+    post:
+      description: 添加一个用户到数据库中
+      parameters:
+      - description: 用户信息
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/api.DouyinUserRegisterRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.DouyinUserResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/api.DouyinUserRegisterResponse'
+      summary: 用户注册
+      tags:
+      - User用户相关
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: 测试 Description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Ping测试
+      tags:
+      - Ping
+schemes:
+- http
+swagger: "2.0"

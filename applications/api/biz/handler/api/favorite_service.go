@@ -16,7 +16,15 @@ import (
 )
 
 // FavoriteAction .
-// @router /douyin/favorite/action [POST]
+//
+//	@Tags		Favorite点赞
+//
+//	@Summary	点赞或取消点赞
+//	@Description
+//	@Param		req		body		api.DouyinFavoriteActionRequest	true	"点赞操作信息"
+//	@Success	200		{object}	favorite.DouyinFavoriteActionResponse
+//	@Failure	default	{object}	api.DouyinFavoriteActionResponse
+//	@router		/douyin/favorite/action [POST]
 func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinFavoriteActionRequest
@@ -41,7 +49,16 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 }
 
 // FavoriteList .
-// @router /douyin/favorite/list [GET]
+//
+//	@Tags		Favorite点赞
+//
+//	@Summary	返回点赞视频列表
+//	@Description
+//	@Param		req		query		api.DouyinFavoriteListRequest	true	"获取"
+//	@Success	200		{object}	favorite.DouyinFavoriteListResponse
+//	@Failure	default	{object}	api.DouyinFavoriteListResponse
+//
+//	@router		/douyin/favorite/list [GET]
 func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinFavoriteListRequest
