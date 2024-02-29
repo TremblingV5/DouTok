@@ -4,3 +4,5 @@ init:
 update:
 	hz update -idl ../../proto/api.proto
 
+swag:
+	swag init --parseDependency

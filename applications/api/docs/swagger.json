@@ -1,0 +1,1449 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "DouTok 项目后端",
+        "title": "DouTokApi",
+        "contact": {
+            "name": "DouTok",
+            "url": "https://github.com/TremblingV5/DouTok"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8088",
+    "basePath": "/",
+    "paths": {
+        "/douyin/comment/action": {
+            "post": {
+                "tags": [
+                    "Comment评论"
+                ],
+                "summary": "添加或删除评论",
+                "parameters": [
+                    {
+                        "description": "评论操作信息",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinCommentActionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/comment.DouyinCommentActionResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinCommentActionResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/comment/list": {
+            "get": {
+                "tags": [
+                    "Comment评论"
+                ],
+                "summary": "获取某个视频之下的评论列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "视频id",
+                        "name": "video_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/comment.DouyinCommentListResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinCommentListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/favorite/action": {
+            "post": {
+                "tags": [
+                    "Favorite点赞"
+                ],
+                "summary": "点赞或取消点赞",
+                "parameters": [
+                    {
+                        "description": "点赞操作信息",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinFavoriteActionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.DouyinFavoriteActionResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinFavoriteActionResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/favorite/list": {
+            "get": {
+                "tags": [
+                    "Favorite点赞"
+                ],
+                "summary": "返回点赞视频列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.DouyinFavoriteListResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinFavoriteListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/feed": {
+            "get": {
+                "tags": [
+                    "Feed视频流相关"
+                ],
+                "summary": "返回一个视频列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间",
+                        "name": "latest_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "可选参数，登录用户设置",
+                        "name": "token",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/feed.DouyinFeedResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinFeedResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/message/action": {
+            "post": {
+                "tags": [
+                    "Message聊天相关"
+                ],
+                "summary": "发送消息操作",
+                "parameters": [
+                    {
+                        "description": "发送的消息的相关信息",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinMessageActionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/message.DouyinMessageActionResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinMessageActionResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/message/chat": {
+            "get": {
+                "tags": [
+                    "Message聊天相关"
+                ],
+                "summary": "获取和某人的聊天记录",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "上次最新消息的时间",
+                        "name": "pre_msg_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "对方用户id",
+                        "name": "to_user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/message.DouyinMessageChatResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinMessageChatResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/publish/action": {
+            "post": {
+                "tags": [
+                    "Publish视频投稿相关"
+                ],
+                "summary": "发布视频操作",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "视频标题",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "视频数据",
+                        "name": "data",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/publish.DouyinPublishActionResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinPublishActionResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/publish/list": {
+            "get": {
+                "tags": [
+                    "Publish视频投稿相关"
+                ],
+                "summary": "获取用户已发布视频的列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/publish.DouyinPublishListResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinPublishListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/relation/action": {
+            "post": {
+                "tags": [
+                    "Relation关注"
+                ],
+                "summary": "关注或取消关注",
+                "parameters": [
+                    {
+                        "description": "关注操作信息",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinRelationActionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/relation.DouyinRelationActionResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinRelationActionResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/relation/follow/list": {
+            "get": {
+                "tags": [
+                    "Relation关注"
+                ],
+                "summary": "获取已关注用户的列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/relation.DouyinRelationFollowListResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinRelationFollowListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/relation/follower/list": {
+            "get": {
+                "tags": [
+                    "Relation关注"
+                ],
+                "summary": "获取粉丝用户列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/relation.DouyinRelationFollowerListResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinRelationFollowerListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/relation/friend/list": {
+            "get": {
+                "tags": [
+                    "Relation关注"
+                ],
+                "summary": "获取好友列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/relation.DouyinRelationFollowerListResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinRelationFollowerListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/user": {
+            "get": {
+                "tags": [
+                    "User用户相关"
+                ],
+                "summary": "通过用户ID获取用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.DouyinUserResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/douyin/user/register": {
+            "post": {
+                "description": "添加一个用户到数据库中",
+                "tags": [
+                    "User用户相关"
+                ],
+                "summary": "用户注册",
+                "parameters": [
+                    {
+                        "description": "用户信息",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinUserRegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.DouyinUserResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/api.DouyinUserRegisterResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "description": "测试 Description",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ping"
+                ],
+                "summary": "Ping测试",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.Comment": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "评论内容",
+                    "type": "string"
+                },
+                "create_date": {
+                    "description": "评论发布日期，格式 mm-dd",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "视频评论id",
+                    "type": "integer"
+                },
+                "like_count": {
+                    "description": "该评论点赞数",
+                    "type": "integer"
+                },
+                "tease_count": {
+                    "description": "该评论diss数",
+                    "type": "integer"
+                },
+                "user": {
+                    "description": "评论用户信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/api.User"
+                        }
+                    ]
+                }
+            }
+        },
+        "api.DouyinCommentActionRequest": {
+            "type": "object",
+            "properties": {
+                "action_type": {
+                    "description": "1-发布评论，2-删除评论",
+                    "type": "integer"
+                },
+                "comment_id": {
+                    "description": "要删除的评论id，在action_type=2的时候使用",
+                    "type": "integer"
+                },
+                "comment_text": {
+                    "description": "用户填写的评论内容，在action_type=1的时候使用",
+                    "type": "string"
+                },
+                "token": {
+                    "description": "用户鉴权token",
+                    "type": "string"
+                },
+                "video_id": {
+                    "description": "视频id",
+                    "type": "integer"
+                }
+            }
+        },
+        "api.DouyinCommentActionResponse": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "description": "评论成功返回评论内容，不需要重新拉取整个列表",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/api.Comment"
+                        }
+                    ]
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinCommentListResponse": {
+            "type": "object",
+            "properties": {
+                "comment_list": {
+                    "description": "评论列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.Comment"
+                    }
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinFavoriteActionRequest": {
+            "type": "object",
+            "properties": {
+                "action_type": {
+                    "description": "1-点赞，2-取消点赞",
+                    "type": "integer"
+                },
+                "token": {
+                    "description": "用户鉴权token",
+                    "type": "string"
+                },
+                "video_id": {
+                    "description": "视频id",
+                    "type": "integer"
+                }
+            }
+        },
+        "api.DouyinFavoriteActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinFavoriteListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                },
+                "video_list": {
+                    "description": "用户点赞视频列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.Video"
+                    }
+                }
+            }
+        },
+        "api.DouyinFeedResponse": {
+            "type": "object",
+            "properties": {
+                "next_time": {
+                    "description": "本次返回的视频中，发布最早的时间，作为下次请求时的latest_time",
+                    "type": "integer"
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                },
+                "video_list": {
+                    "description": "视频列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.Video"
+                    }
+                }
+            }
+        },
+        "api.DouyinMessageActionRequest": {
+            "type": "object",
+            "properties": {
+                "action_type": {
+                    "description": "1-发送消息",
+                    "type": "integer"
+                },
+                "content": {
+                    "description": "消息内容",
+                    "type": "string"
+                },
+                "to_user_id": {
+                    "description": "对方用户id",
+                    "type": "integer"
+                },
+                "token": {
+                    "description": "用户鉴权token",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinMessageActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinMessageChatResponse": {
+            "type": "object",
+            "properties": {
+                "message_list": {
+                    "description": "消息列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.Message"
+                    }
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinPublishActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinPublishListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                },
+                "video_list": {
+                    "description": "用户发布的视频列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.Video"
+                    }
+                }
+            }
+        },
+        "api.DouyinRelationActionRequest": {
+            "type": "object",
+            "properties": {
+                "action_type": {
+                    "description": "1-关注，2-取消关注",
+                    "type": "integer"
+                },
+                "to_user_id": {
+                    "description": "对方用户id",
+                    "type": "integer"
+                },
+                "token": {
+                    "description": "用户鉴权token",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinRelationActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinRelationFollowListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                },
+                "user_list": {
+                    "description": "用户信息列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.User"
+                    }
+                }
+            }
+        },
+        "api.DouyinRelationFollowerListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                },
+                "user_list": {
+                    "description": "用户列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.User"
+                    }
+                }
+            }
+        },
+        "api.DouyinUserRegisterRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "description": "密码，最长32个字符",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "注册用户名，最长32个字符",
+                    "type": "string"
+                }
+            }
+        },
+        "api.DouyinUserRegisterResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                },
+                "token": {
+                    "description": "用户鉴权token",
+                    "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "api.DouyinUserResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                },
+                "user": {
+                    "description": "用户信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/api.User"
+                        }
+                    ]
+                }
+            }
+        },
+        "api.Message": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "消息内容",
+                    "type": "string"
+                },
+                "create_time": {
+                    "description": "消息创建时间",
+                    "type": "string"
+                },
+                "from_user_id": {
+                    "description": "该消息发送者的id",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "消息id",
+                    "type": "integer"
+                },
+                "to_user_id": {
+                    "description": "该消息接收者的id",
+                    "type": "integer"
+                }
+            }
+        },
+        "api.User": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "用户头像Url",
+                    "type": "string"
+                },
+                "background_image": {
+                    "description": "用户个人页顶部大图",
+                    "type": "string"
+                },
+                "favorite_count": {
+                    "description": "点赞数量",
+                    "type": "integer"
+                },
+                "follow_count": {
+                    "description": "关注总数",
+                    "type": "integer"
+                },
+                "follower_count": {
+                    "description": "粉丝总数",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "is_follow": {
+                    "description": "true-已关注，false-未关注",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "用户名称",
+                    "type": "string"
+                },
+                "signature": {
+                    "description": "个人简介",
+                    "type": "string"
+                },
+                "total_favorited": {
+                    "description": "获赞数量",
+                    "type": "integer"
+                },
+                "work_count": {
+                    "description": "作品数量",
+                    "type": "integer"
+                }
+            }
+        },
+        "api.Video": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "视频作者信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/api.User"
+                        }
+                    ]
+                },
+                "comment_count": {
+                    "description": "视频的评论总数",
+                    "type": "integer"
+                },
+                "cover_url": {
+                    "description": "视频封面地址",
+                    "type": "string"
+                },
+                "favorite_count": {
+                    "description": "视频的点赞总数",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "视频唯一标识",
+                    "type": "integer"
+                },
+                "is_favorite": {
+                    "description": "true-已点赞，false-未点赞",
+                    "type": "boolean"
+                },
+                "play_url": {
+                    "description": "视频播放地址",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "视频标题",
+                    "type": "string"
+                }
+            }
+        },
+        "comment.DouyinCommentActionResponse": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "description": "评论成功返回评论内容，不需要重新拉取整个列表",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.Comment"
+                        }
+                    ]
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "comment.DouyinCommentListResponse": {
+            "type": "object",
+            "properties": {
+                "comment_list": {
+                    "description": "评论列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Comment"
+                    }
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Comment": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "评论内容",
+                    "type": "string"
+                },
+                "create_date": {
+                    "description": "评论发布日期，格式 mm-dd",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "视频评论id",
+                    "type": "integer"
+                },
+                "like_count": {
+                    "description": "该评论的点赞数",
+                    "type": "integer"
+                },
+                "tease_count": {
+                    "description": "该评论diss数量",
+                    "type": "integer"
+                },
+                "user": {
+                    "description": "评论用户信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.User"
+                        }
+                    ]
+                }
+            }
+        },
+        "entity.Message": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "消息内容",
+                    "type": "string"
+                },
+                "create_time": {
+                    "description": "消息创建时间",
+                    "type": "integer"
+                },
+                "from_user_id": {
+                    "description": "该消息发送者的id",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "消息id",
+                    "type": "integer"
+                },
+                "to_user_id": {
+                    "description": "该消息接收者的id",
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.User": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "用户头像Url",
+                    "type": "string"
+                },
+                "background_image": {
+                    "description": "用户个人页顶部大图",
+                    "type": "string"
+                },
+                "favorite_count": {
+                    "description": "点赞数量",
+                    "type": "integer"
+                },
+                "follow_count": {
+                    "description": "关注总数",
+                    "type": "integer"
+                },
+                "follower_count": {
+                    "description": "粉丝总数",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "is_follow": {
+                    "description": "true-已关注，false-未关注",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "用户名称",
+                    "type": "string"
+                },
+                "signature": {
+                    "description": "个人简介",
+                    "type": "string"
+                },
+                "total_favorited": {
+                    "description": "获赞数量",
+                    "type": "integer"
+                },
+                "work_count": {
+                    "description": "作品数量",
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.Video": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "视频作者信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.User"
+                        }
+                    ]
+                },
+                "comment_count": {
+                    "description": "视频的评论总数",
+                    "type": "integer"
+                },
+                "cover_url": {
+                    "description": "视频封面地址",
+                    "type": "string"
+                },
+                "favorite_count": {
+                    "description": "视频的点赞总数",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "视频唯一标识",
+                    "type": "integer"
+                },
+                "is_favorite": {
+                    "description": "true-已点赞，false-未点赞",
+                    "type": "boolean"
+                },
+                "play_url": {
+                    "description": "视频播放地址",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "视频标题",
+                    "type": "string"
+                }
+            }
+        },
+        "favorite.DouyinFavoriteActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "favorite.DouyinFavoriteListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "video_list": {
+                    "description": "用户点赞视频列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Video"
+                    }
+                }
+            }
+        },
+        "feed.DouyinFeedResponse": {
+            "type": "object",
+            "properties": {
+                "next_time": {
+                    "description": "本次返回的视频中，发布最早的时间，作为下次请求时的latest_time",
+                    "type": "integer"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "video_list": {
+                    "description": "视频列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Video"
+                    }
+                }
+            }
+        },
+        "message.DouyinMessageActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "message.DouyinMessageChatResponse": {
+            "type": "object",
+            "properties": {
+                "message_list": {
+                    "description": "消息列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Message"
+                    }
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "publish.DouyinPublishActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "publish.DouyinPublishListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "video_list": {
+                    "description": "用户发布的视频列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Video"
+                    }
+                }
+            }
+        },
+        "relation.DouyinRelationActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "relation.DouyinRelationFollowListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user_list": {
+                    "description": "用户信息列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.User"
+                    }
+                }
+            }
+        },
+        "relation.DouyinRelationFollowerListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user_list": {
+                    "description": "用户列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.User"
+                    }
+                }
+            }
+        },
+        "user.DouyinUserResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user": {
+                    "description": "用户信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.User"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

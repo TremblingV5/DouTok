@@ -16,7 +16,15 @@ import (
 )
 
 // MessageChat .
-// @router /douyin/message/chat [GET]
+//
+//	@Tags		Message聊天相关
+//
+//	@Summary	获取和某人的聊天记录
+//	@Description
+//	@Param		req		query		api.DouyinMessageChatRequest	true	"获取聊天记录的参数"
+//	@Success	200		{object}	message.DouyinMessageChatResponse
+//	@Failure	default	{object}	api.DouyinMessageChatResponse
+//	@router		/douyin/message/chat [GET]
 func MessageChat(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinMessageChatRequest
@@ -42,7 +50,15 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 }
 
 // MessageAction .
-// @router /douyin/message/action [POST]
+//
+//	@Tags		Message聊天相关
+//
+//	@Summary	发送消息操作
+//	@Description
+//	@Param		req		body		api.DouyinMessageActionRequest	true	"发送的消息的相关信息"
+//	@Success	200		{object}	message.DouyinMessageActionResponse
+//	@Failure	default	{object}	api.DouyinMessageActionResponse
+//	@router		/douyin/message/action [POST]
 func MessageAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinMessageActionRequest
