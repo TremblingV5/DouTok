@@ -526,11 +526,6 @@
                 }
             }
         },
-        "/douyin/user/login": {
-            "post": {
-                "responses": {}
-            }
-        },
         "/douyin/user/register": {
             "post": {
                 "description": "添加一个用户到数据库中",
