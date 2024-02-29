@@ -96,7 +96,7 @@ services:
     restart: always
 
   kafka-ui:
-    image: freakchicken/kafka-ui-lite
+    image: leixuewen/kafka-ui-lite
     networks:
         - total
     ports:
