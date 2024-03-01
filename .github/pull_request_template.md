@@ -23,5 +23,5 @@
 - [ ] Link to an issue if it really related.
 - [ ] At least describe what this PR does.
 - [ ] Use `rebase` to confirm that current branch doesn't conflict with main branch.
-- [ ] Unit tests. At least do not reduce the single test coverage.
+- [ ] Unit tests. At least do not reduce the unit test coverage.
 - [ ] Checked and updated `guidelines.md` which used to describe how to build, deploy and use DouTok.

@@ -7,9 +7,9 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "DoutokMessageDomainServer"
+  Name: "DouTokMessageDomainServer"
   Address: "127.0.0.1"
-  Port: 8081
+  Port: 8091
 
 Client:
   Echo: true
@@ -29,13 +29,13 @@ Hbase:
 Redis:
   Host: "localhost"
   Port: 6379
-  Password: "PWD"
+  Password: "root"
   DataBases:
     Default: 5
 
 Kafka:
   Brokers:
-    - "192.168.2.120:9092"
+    - "YOUR_OWN_IP:9092"
   Topics:
     - "message_1"
 #    - "message_2"
