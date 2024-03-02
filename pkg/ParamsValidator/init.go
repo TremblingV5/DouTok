@@ -24,9 +24,7 @@ func (r *Rule) Set(f func() (bool, *errno.ErrNo)) *Rule {
 }
 
 func (r *Rule) SetMore(f ...func() (bool, *errno.ErrNo)) *Rule {
-	for _, v := range f {
-		r.Ops = append(r.Ops, v)
-	}
+	r.Ops = append(r.Ops, f...)
 	return r
 }
 

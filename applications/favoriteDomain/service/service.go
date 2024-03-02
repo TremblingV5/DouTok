@@ -12,10 +12,10 @@ import (
 
 type Service struct {
 	favorite           favorite.Repository
-	favoriteCount      favorite_count.Repository
-	favoriteCountCache *favorite_count_cache.Cache
+	favoriteCount      favorite_count.Repository   //nolint
+	favoriteCountCache *favorite_count_cache.Cache //nolint
 	favoriteRedis      *favorite_redis.Redis
-	favoriteCountRedis *favorite_count_redis.Redis
+	favoriteCountRedis *favorite_count_redis.Redis //nolint
 }
 
 type IService interface {

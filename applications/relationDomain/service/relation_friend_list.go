@@ -130,7 +130,7 @@ func GetFriendList(user_id int64) (error, []int64) {
 	}
 	friendList := make([]int64, 0)
 	for _, v := range follower {
-		if followMap[v] == true {
+		if followMap[v] {
 			friendList = append(friendList, v)
 		}
 	}

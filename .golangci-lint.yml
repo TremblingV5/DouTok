@@ -1,0 +1,164 @@
+linters:
+  disable-all: true  # 关闭其他linter
+  enable:
+    # 进制使用非ASCII字符
+    - asciicheck
+    - bidichk
+    # 降低代码复杂度
+    - cyclop        
+    - gocognit
+    - gocyclo
+    - maintidx
+    # 高可拓展性的go源码linter
+    - gocritic
+    # 禁止保留未使用的代码块
+    #---------------------------------------
+    #- deadcode  
+    # The linter 'deadcode' is deprecated (since v1.49.0) due to: The owner seems to have abandoned the linter
+    # 新版本的linter已经不建议使用deadcode了，不使用的代码不会被报错了
+    #---------------------------------------
+    - ineffassign
+    # 减少代码拷贝
+    - dupl
+    # 禁止两个time.Duration类型相乘
+    - durationcheck
+    # 所有err都要处理
+    - errcheck
+    # 在Go 1.13之后使用errors.Wrap可能导致的问题
+    - errorlint
+    # 检查switch的全面性，以免遗漏场景
+    - exhaustive
+    # 禁止将for-range value的指针暴露给外部
+    - exportloopref
+    # 禁止使用特定的标识符
+    - forbidigo
+    # 禁止出现长函数
+    - funlen
+    # 控制golang的包引用的顺序
+    - gci
+    # 禁止使用全局变量  --需要使用  //nolint:gochecknoglobals // 说明原因
+    - gochecknoglobals
+    # 禁止使用init函数
+    - gochecknoinits
+    # 如果有相同的string变量请使用consts替换
+    - goconst
+    # 检查if语句是否有简单的语法
+    - ifshort
+    # 禁止出现长语句
+    - lll
+    # struct禁止包含context.Context字段
+    - containedctx
+    # 返回两个参数，一个数据，一个是err，禁止两个都是nil
+    - nilnil
+    # 禁止使用Sprintf去构造URL中的host和port
+    - nosprintfhostport
+    # 如果知道slice大小，定义时需分配空间
+    - prealloc
+    # 检查prometheus meteics的指标名是否规范
+    - promlinter
+    # 强制要求const/import/var在一个组
+    - grouper
+    # 检查go1.17的版本是否使用os.Setenv替换t.Setenv
+    - tenv
+    # 检查变量名长度
+    - varnamelen
+    # 强制一致性的impotr别名
+    - importas
+    # 类型断言时需检查是否成功
+    - forcetypeassert
+    # 保证类型、常量、变量和函数的声明顺序和数量
+    - decorder
+    # 检查err的定义规范--types类型的定义是以Error结尾的，常量的定义是Err打头的
+    - errname
+    # SQL Query方法错误检查
+    - execinquery
+    # 禁止errors使用'=='和'!='等表达式--与nil和io.EOF比较除外
+    - goerr113
+    # 官方代码格式化
+    - gofmt
+    - gofumpt
+    - goimports
+    # 禁止使用魔法数字
+    - gomnd
+    # 检查依赖的黑白名单
+    - gomodguard
+    # 检查类似printf的函数是否以f结尾
+    - goprintffuncname
+    # 安全检查
+    - gosec
+    # 官方错误检查
+    - govet
+    # 检查拼写错误
+    - misspell
+    # 如果函数过长，禁用裸返回
+    - nakedret
+    # 禁止深度嵌套的if语句
+    - nestif
+    # 如果使用nolint指令需要给出理由-- //nolint:gochecknoglobals // 原因
+    - nolintlint
+    # 禁止使用Go关键字命名
+    - predeclared
+    # 去掉没有必要的type转换
+    - unconvert
+    # 强制使用空行
+    - wsl
+    # 检查文件头部和尾部的换行
+    - whitespace
+    # 替换golint的
+    - revive
+    # 测试代码使用*_test的包目录
+    - testpackage
+    # 启用并行测试
+    - paralleltest
+    # 检查帮助函数里面有没有调用t.Helper()函数
+    - thelper
+linters-settings:
+errcheck:
+    check-type-assertions: true   # 检查类型断言
+    check-blank: true             # 检查使用 _ 来处理错误
+errorlint:
+    errorf: true                # 检查fmt.Errorf错误是否用%w
+exhaustive:
+    check-generated: false               # 不检查生成的文件
+    default-signifies-exhaustive: false  # 不检查是否有default
+funlen:
+    lines: 65         # 一个函数总行数限制
+    statements: 40    # 检查函数中语句的数量
+gci:
+    sections:
+      - standard                  # 标准库
+      - default                   # 默认按字典顺序排序
+      - prefix(cos/lobbyplatform) # 特殊前缀的包
+gomodguard: # 检查依赖的黑白名单
+    allowed:
+      # List of allowed modules.
+      # Default: []
+      modules:
+        - gopkg.in/yaml.v2
+      # List of allowed module domains.
+      # Default: []
+      domains:
+        - golang.org
+    blocked:
+      # List of blocked modules.
+      # Default: []
+      modules:
+        # Blocked module.
+        - github.com/uudashr/go-module:
+            # Recommended modules that should be used instead. (Optional)
+            recommendations:
+              - golang.org/x/mod
+            # Reason why the recommended module should be used. (Optional)
+            reason: "`mod` is the official go.mod parser library."
+      # List of blocked module version constraints.
+      # Default: []
+      versions:
+        # Blocked module with version constraint.
+        - github.com/mitchellh/go-homedir:
+            # Version constraint, see https://github.com/Masterminds/semver#basic-comparisons.
+            version: "< 1.1.0"
+            # Reason why the version constraint exists. (Optional)
+            reason: "testing if blocked version constraint works."
+      # Set to true to raise lint issues for packages that are loaded from a local path via replace directive.
+      # Default: false
+      local_replace_directives: false

@@ -14,8 +14,9 @@ func (b Base) GetAddr() string {
 	return fmt.Sprintf("%s:%d", b.Address, b.Port)
 }
 
+// TODO: GetName should be add more details about how to confirm a service name
 func (b Base) GetName() string {
-	return fmt.Sprintf("%s", b.Name)
+	return b.Name
 }
 
 func (b Base) GetNameCode() int32 {

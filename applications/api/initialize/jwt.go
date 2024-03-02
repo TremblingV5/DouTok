@@ -2,9 +2,10 @@ package initialize
 
 import (
 	"context"
-	"github.com/hertz-contrib/jwt"
 	"strings"
 	"time"
+
+	"github.com/hertz-contrib/jwt"
 
 	"github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
@@ -31,9 +32,9 @@ func InitJwt() {
 			return jwt.MapClaims{}
 		},
 		HTTPStatusMessageFunc: func(e error, ctx context.Context, c *app.RequestContext) string {
-			switch e.(type) {
+			switch e.(type) { //nolint
 			case errno.ErrNo:
-				return e.(errno.ErrNo).ErrMsg
+				return e.(errno.ErrNo).ErrMsg //nolint
 			default:
 				return e.Error()
 			}

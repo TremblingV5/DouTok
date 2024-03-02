@@ -3,6 +3,8 @@ package initHelper
 import (
 	"context"
 	"fmt"
+	"net"
+
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -11,7 +13,6 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"net"
 )
 
 type etcdConfig interface {
@@ -55,12 +56,12 @@ func InitRPCServerArgsV2(base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig
 			server.WithSuite(tracing.NewServerSuite()),
 			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: base.GetName()}),
 		}, func() {
-			p.Shutdown(context.Background())
+			p.Shutdown(context.Background()) //nolint
 		}
 }
 
 /*
-	返回初始化RPC客户端所需要的一些配置，减少这部分代码的重复
+返回初始化RPC客户端所需要的一些配置，减少这部分代码的重复
 */
 func InitRPCServerArgs(config *dtviper.Config) ([]server.Option, func()) {
 	addr := config.Viper.GetString("Etcd.Address") + ":" + config.Viper.GetString("Etcd.Port")
@@ -91,6 +92,6 @@ func InitRPCServerArgs(config *dtviper.Config) ([]server.Option, func()) {
 			server.WithSuite(tracing.NewServerSuite()),
 			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.Viper.GetString("Server.Name")}),
 		}, func() {
-			p.Shutdown(context.Background())
+			p.Shutdown(context.Background()) //nolint
 		}
 }

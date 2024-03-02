@@ -18,9 +18,12 @@ func (m favCountConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, cl
 		fmt.Printf("Message topic:%q partition:%d offset:%d  value:%s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Value))
 
 		req := FavReqInKafka{}
-		json.Unmarshal(msg.Value, &req)
+		err := json.Unmarshal(msg.Value, &req)
+		if err != nil {
+			return err
+		}
 
-		err := CreateFavoriteInRDB(req.UserId, req.VideoId, req.Op)
+		err = CreateFavoriteInRDB(req.UserId, req.VideoId, req.Op)
 
 		if err != nil {
 			// TODO: 写日志

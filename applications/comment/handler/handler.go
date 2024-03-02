@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/comment/errs"
 	"github.com/TremblingV5/DouTok/applications/comment/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment"
@@ -60,6 +61,11 @@ func (h *Handler) CommentCount(ctx context.Context, req *comment.DouyinCommentCo
 	result, err := h.clients.Comment.Client.CountComment(ctx, &commentDomain.DoutokCountCommentReq{
 		VideoIdList: req.VideoIdList,
 	})
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &comment.DouyinCommentCountResponse{
 		StatusCode: result.StatusCode,
 		StatusMsg:  result.StatusMsg,

@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"strconv"
+
 	"github.com/TremblingV5/DouTok/applications/commentDomain/handler"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/redis/commentTotalCountRedis"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/service"
@@ -14,7 +16,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"go.uber.org/zap"
-	"strconv"
 )
 
 type Config struct {
@@ -42,7 +43,7 @@ func init() {
 	config = cfg
 	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger
-	ctx = DouTokContext.AddLoggerToContext(ctx, logger)
+	DouTokContext.AddLoggerToContext(ctx, logger)
 
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))

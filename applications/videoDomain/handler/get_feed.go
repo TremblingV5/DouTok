@@ -3,17 +3,17 @@ package handler
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/TremblingV5/DouTok/applications/videoDomain/misc"
 	"github.com/TremblingV5/DouTok/applications/videoDomain/pack"
 	"github.com/TremblingV5/DouTok/applications/videoDomain/service"
 	"github.com/TremblingV5/DouTok/applications/videoDomain/typedef"
 	"github.com/TremblingV5/DouTok/kitex_gen/videoDomain"
-	"time"
+	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 func (s *VideoDomainServiceImpl) GetFeed(ctx context.Context, req *videoDomain.DoutokGetFeedRequest) (resp *videoDomain.DoutokGetFeedResponse, err error) {
-	log_list := []string{}
-
 	if req.LatestTime == 0 {
 		req.LatestTime = time.Now().Unix()
 	}
@@ -61,29 +61,24 @@ func (s *VideoDomainServiceImpl) GetFeed(ctx context.Context, req *videoDomain.D
 	if err != nil {
 		marked_time = fmt.Sprint(current_time)
 		if err := service.SetMarkedTime(ctx, user_id_string, marked_time); err != nil {
-			// TODO: 此处只进行日志记录，并向返回信息中说明
-			log_list = append(log_list, "user_id为"+user_id_string+"的用户设置新的marked_time失败")
+			klog.Info("set marked time error")
 		}
 	}
 
 	if service.JudgeTimeDiff(current_time, marked_time, 60*60*6) {
 		// 时间差值已经超过了6个小时
 		laterVideoListInHB, new_marked_time, err := service.SearchFeedLaterInHB(marked_time, fmt.Sprint(current_time))
-
 		if err != nil {
-			// TODO: 此处只进行日志记录，并向返回信息中说明
-			log_list = append(log_list, "user_id为"+user_id_string+"的用户SearchFeedlaterInHB失败")
+			klog.Info("search feed later in hb error")
 		}
 
 		if err := service.SetMarkedTime(ctx, user_id_string, new_marked_time); err != nil {
-			// TODO: 此处只进行日志记录，并向返回信息中说明
-			log_list = append(log_list, "user_id为"+user_id_string+"的用户SetMarkedTime失败")
+			klog.Info("set marked time error")
 		}
 
 		// 5. 若存在新更新的内容，将结果存入投递箱，根据比例选择RPush或LPush
 		if err := service.SetFeedCache(ctx, "r", user_id_string, laterVideoListInHB...); err != nil {
-			// TODO: 此处只进行日志记录，并向返回信息中说明
-			log_list = append(log_list, "user_id为"+user_id_string+"的用户SetFeedCache失败")
+			klog.Info("set feed cache error")
 		}
 	}
 

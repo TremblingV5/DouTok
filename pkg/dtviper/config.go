@@ -149,7 +149,9 @@ func ConfigInit(envPrefix string, cfgName string) *Config {
 		viper.BindPFlags 自动绑定了所有命令行参数，如果只需要其中一部分，可以用viper.BingPflag选择性绑定，如
 		viper.BindPFlag("global.source", pflag.Lookup("global.source"))
 	*/
-	viper.BindPFlags(pflag.CommandLine)
+	if err := viper.BindPFlags(pflag.CommandLine); err != nil {
+		panic(err)
+	}
 	config.SetDefaultValue()
 
 	// read from env
@@ -201,7 +203,10 @@ func ConfigInit(envPrefix string, cfgName string) *Config {
 		}
 		klog.Infof("Using Remote Config: '%s'", configVar)
 
-		viper.WatchRemoteConfig()
+		if err := viper.WatchRemoteConfig(); err != nil {
+			klog.Errorf("unable to read remote config: %v", err)
+		}
+
 		// 另启动一个协程来监测远程配置文件
 		go config.WatchRemoteConf()
 
@@ -209,6 +214,7 @@ func ConfigInit(envPrefix string, cfgName string) *Config {
 		if err := viper.ReadInConfig(); err != nil {
 			klog.Fatalf("error reading config: %s", err)
 		}
+
 		klog.Infof("Using configuration file '%s'", viper.ConfigFileUsed())
 
 		viper.WatchConfig()

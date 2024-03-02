@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/go-redis/redis/v8"
 
 	"github.com/Shopify/sarama"
@@ -52,7 +53,7 @@ func (s *ActionFavoriteService) ActionFavorite(user_id int64, video_id int64, op
 	}
 
 	// 3. 更新内存中的计数Map
-	if (existed == "1" && op == false) || (existed == "2" && op == true) {
+	if (existed == "1" && !op) || (existed == "2" && op) {
 		err = UpdateCacheFavCount(video_id, op)
 		if err != nil {
 			return &misc.QueryCacheErr, err

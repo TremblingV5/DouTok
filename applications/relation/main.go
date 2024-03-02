@@ -62,7 +62,7 @@ func main() {
 		provider.WithExportEndpoint(fmt.Sprintf("%s:%s", service.ViperConfig.Viper.GetString("Otel.Host"), service.ViperConfig.Viper.GetString("Otel.Port"))),
 		provider.WithInsecure(),
 	)
-	defer p.Shutdown(context.Background())
+	defer p.Shutdown(context.Background()) //nolint
 
 	svr := relationservice.NewServer(
 		new(handler.Handler),

@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"net"
+
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -9,7 +11,6 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"net"
 )
 
 func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
@@ -40,6 +41,6 @@ func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, 
 			server.WithSuite(tracing.NewServerSuite()),
 			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
 		}, func() {
-			p.Shutdown(context.Background())
+			p.Shutdown(context.Background()) //nolint
 		}
 }

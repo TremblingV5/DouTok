@@ -9,13 +9,17 @@ import (
 func main() {
 	misc.InitViperConfig()
 
-	service.InitDb(
+	if err := service.InitDb(
 		misc.GetConfig("MySQL.Username"),
 		misc.GetConfig("MySQL.Password"),
 		misc.GetConfig("MySQL.Host"),
 		misc.GetConfig("MySQL.Port"),
 		misc.GetConfig("MySQL.Database"),
-	)
+	); err != nil {
+		panic(err)
+	}
 
-	service.DB.AutoMigrate(&model.Video{}, &model.VideoCount{})
+	if err := service.DB.AutoMigrate(&model.Video{}, &model.VideoCount{}); err != nil {
+		panic(err)
+	}
 }
