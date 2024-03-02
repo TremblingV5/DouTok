@@ -13,23 +13,26 @@ import (
 	"go.uber.org/zap"
 )
 
-type Config struct {
-	Base   configStruct.Base   `envPrefix:"DOUTOK_COMMENT_"`
-	Etcd   configStruct.Etcd   `envPrefix:"DOUTOK_COMMENT_"`
-	Jwt    configStruct.Jwt    `envPrefix:"DOUTOK_COMMENT_"`
-	Otel   configStruct.Otel   `envPrefix:"DOUTOK_COMMENT_"`
-	Logger configStruct.Logger `envPrefix:"DOUTOK_COMMENT_"`
-}
+//type Config struct {
+//	Base   configStruct.Base   `envPrefix:"DOUTOK_COMMENT_"`
+//	Etcd   configStruct.Etcd   `envPrefix:"DOUTOK_COMMENT_"`
+//	Jwt    configStruct.Jwt    `envPrefix:"DOUTOK_COMMENT_"`
+//	Otel   configStruct.Otel   `envPrefix:"DOUTOK_COMMENT_"`
+//	Logger configStruct.Logger `envPrefix:"DOUTOK_COMMENT_"`
+//}
 
 var (
 	logger *zap.Logger
-	config = &Config{}
+	config = &configStruct.Config{}
 )
 
 func init() {
 	ctx := context.Background()
-	cfg, err := configStruct.Load[*Config](ctx, &Config{})
+	cfg, err := configStruct.Load[*configStruct.Config](ctx, &configStruct.Config{})
 	config = cfg
+
+	config.InitViper("DOUTOK_API", "comment")
+	config.ResolveViperConfig()
 	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger
 	ctx = DouTokContext.AddLoggerToContext(ctx, logger)

@@ -10,5 +10,6 @@ type baseConfig interface {
 }
 
 type otelConfig interface {
+	IsEnable() bool
 	GetAddr() string
 }

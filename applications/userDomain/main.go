@@ -20,26 +20,30 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/services"
 )
 
-type Config struct {
-	Base      configStruct.Base      `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Etcd      configStruct.Etcd      `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Jwt       configStruct.Jwt       `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	MySQL     configStruct.MySQL     `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Snowflake configStruct.Snowflake `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Otel      configStruct.Otel      `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Logger    configStruct.Logger    `envPrefix:"DOUTOK_USER_DOMAIN_"`
-}
+//type Config struct {
+//	Base      configStruct.Base      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+//	Etcd      configStruct.Etcd      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+//	Jwt       configStruct.Jwt       `envPrefix:"DOUTOK_USER_DOMAIN_"`
+//	MySQL     configStruct.MySQL     `envPrefix:"DOUTOK_USER_DOMAIN_"`
+//	Snowflake configStruct.Snowflake `envPrefix:"DOUTOK_USER_DOMAIN_"`
+//	Otel      configStruct.Otel      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+//	Logger    configStruct.Logger    `envPrefix:"DOUTOK_USER_DOMAIN_"`
+//}
 
 var (
 	logger *zap.Logger
-	config = &Config{}
+	config = &configStruct.Config{}
 )
 
 func init() {
 	ctx := context.Background()
 
-	cfg, err := configStruct.Load[*Config](ctx, &Config{})
+	cfg, err := configStruct.Load[*configStruct.Config](ctx, &configStruct.Config{})
 	config = cfg
+
+	config.InitViper("DOUTOK_API", "userDomain")
+	config.ResolveViperConfig()
+
 	errs.Init(config.Base)
 	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger

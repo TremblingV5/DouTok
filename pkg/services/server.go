@@ -24,11 +24,14 @@ func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, 
 		panic(err)
 	}
 
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(serviceName),
-		provider.WithExportEndpoint(otelCfg.GetAddr()),
-		provider.WithInsecure(),
-	)
+	var p provider.OtelProvider
+	if otelCfg.IsEnable() {
+		p = provider.NewOpenTelemetryProvider(
+			provider.WithServiceName(serviceName),
+			provider.WithExportEndpoint(otelCfg.GetAddr()),
+			provider.WithInsecure(),
+		)
+	}
 
 	return []server.Option{
 			server.WithServiceAddr(serverAddr),
@@ -40,6 +43,8 @@ func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, 
 			server.WithSuite(tracing.NewServerSuite()),
 			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
 		}, func() {
-			p.Shutdown(context.Background())
+			if otelCfg.IsEnable() {
+				p.Shutdown(context.Background())
+			}
 		}
 }
