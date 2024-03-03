@@ -1,9 +1,10 @@
 package chat
 
 import (
-	"github.com/jellydator/ttlcache/v2"
 	"sync"
 	"time"
+
+	"github.com/jellydator/ttlcache/v2"
 )
 
 // Hub maintains the set of active clients and send messages to the client
@@ -29,19 +30,23 @@ func newHub() *Hub {
 	}
 }
 
-func (h *Hub) run() {
+func (h *Hub) run() { //nolint
 	for {
 		select {
 		case client := <-h.register:
-			h.Register(client.userId, client)
+			if err := h.Register(client.userId, client); err != nil {
+				continue
+			}
 		case client := <-h.unregister:
-			h.Unregister(client.userId)
+			if err := h.Unregister(client.userId); err != nil {
+				continue
+			}
 		}
 	}
 }
 
-func (h *Hub) Register(key string, client *Client) {
-	h.AddClient(key, client)
+func (h *Hub) Register(key string, client *Client) error {
+	return h.AddClient(key, client)
 }
 
 func (h *Hub) AddClient(key string, client *Client) error {
@@ -50,8 +55,8 @@ func (h *Hub) AddClient(key string, client *Client) error {
 	return h.clients.SetWithTTL(key, client, time.Hour)
 }
 
-func (h *Hub) Unregister(key string) {
-	h.DelClient(key)
+func (h *Hub) Unregister(key string) error {
+	return h.DelClient(key)
 }
 
 func (h *Hub) DelClient(key string) error {

@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/TremblingV5/DouTok/applications/message/rpc"
 	"net"
+
+	"github.com/TremblingV5/DouTok/applications/message/rpc"
 
 	"github.com/TremblingV5/DouTok/applications/message/handler"
 	"github.com/TremblingV5/DouTok/applications/message/service"
@@ -63,7 +64,7 @@ func main() {
 		provider.WithExportEndpoint(fmt.Sprintf("%s:%s", service.ViperConfig.Viper.GetString("Otel.Host"), service.ViperConfig.Viper.GetString("Otel.Port"))),
 		provider.WithInsecure(),
 	)
-	defer p.Shutdown(context.Background())
+	defer p.Shutdown(context.Background()) //nolint
 
 	svr := messageservice.NewServer(
 		new(handler.MessageServiceImpl),

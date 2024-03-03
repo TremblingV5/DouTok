@@ -23,7 +23,9 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 		klog.Infof("Message topic:%q partition:%d offset:%d  value:%s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Value))
 
 		relation := pack.Relation{}
-		json.Unmarshal(msg.Value, &relation)
+		if err := json.Unmarshal(msg.Value, &relation); err != nil {
+			return err
+		}
 		userId := fmt.Sprintf("%d", relation.UserId)
 		toUserId := fmt.Sprintf("%d", relation.ToUserId)
 		actionType := fmt.Sprintf("%d", relation.ActionType)
@@ -99,16 +101,30 @@ func iter(key string, v interface{}) {
 			klog.Infof("关注更新 %d\n", value)
 			// follow_
 			// 更新关注数 db
-			UpdateFollowCountFromDB(userId, value)
+			err = UpdateFollowCountFromDB(userId, value)
+			if err != nil {
+				klog.Errorf("update follow count defeat, err = %s", err)
+			}
+
 			// 删除关注数 cache
 			err = DeleteFollowCountCache(pair[1])
+			if err != nil {
+				klog.Errorf("delete follow count defeat, err = %s", err)
+			}
 		} else {
 			klog.Infof("粉丝更新 %d\n", value)
 			// follower_
 			// 更新粉丝数 db
-			UpdateFollowerCountFromDB(userId, value)
+			err = UpdateFollowerCountFromDB(userId, value)
+			if err != nil {
+				klog.Errorf("update follow count defeat, err = %s", err)
+			}
+
 			// 删除粉丝数 cache
 			err = DeleteFollowerCountCache(pair[1])
+			if err != nil {
+				klog.Errorf("delete follow count defeat, err = %s", err)
+			}
 		}
 	}
 }

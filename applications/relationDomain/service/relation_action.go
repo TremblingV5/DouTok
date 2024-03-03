@@ -35,6 +35,9 @@ func NewRelationActionService(ctx context.Context) *RelationActionService {
 
 func (s *RelationActionService) AddRelation(req *relationDomain.DoutokAddRelationRequest) error {
 	err, followList := ReadFollowListFromCache(fmt.Sprint(req.UserId))
+	if err != nil {
+		return err
+	}
 
 	isFollowed := false
 
@@ -118,6 +121,9 @@ func (s *RelationActionService) AddRelation(req *relationDomain.DoutokAddRelatio
 
 func (s *RelationActionService) RmRelation(req *relationDomain.DoutokRmRelationRequest) error {
 	err, followList := ReadFollowListFromCache(fmt.Sprint(req.UserId))
+	if err != nil {
+		return nil
+	}
 
 	isFollowed := false
 

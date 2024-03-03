@@ -20,5 +20,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&model.Relation{}, &model.FollowCount{}, &model.FollowerCount{})
+	if err := db.AutoMigrate(&model.Relation{}, &model.FollowCount{}, &model.FollowerCount{}); err != nil {
+		panic(err)
+	}
 }

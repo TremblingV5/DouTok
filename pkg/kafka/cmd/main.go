@@ -19,10 +19,10 @@ func init() {
 }
 
 var (
-	brokers       = flag.String("brokers", "150.158.237.39:50004", "The Kafka brokers to connect to, as a comma separated list")
-	userName      = flag.String("username", "ckafka-jamo8r7b#doutok", "The SASL username")
-	passwd        = flag.String("passwd", "doutokno1", "The SASL password")
-	algorithm     = flag.String("algorithm", "", "The SASL SCRAM SHA algorithm sha256 or sha512 as mechanism")
+	brokers  = flag.String("brokers", "150.158.237.39:50004", "The Kafka brokers to connect to, as a comma separated list")
+	userName = flag.String("username", "ckafka-jamo8r7b#doutok", "The SASL username")
+	passwd   = flag.String("passwd", "doutokno1", "The SASL password")
+	// algorithm     = flag.String("algorithm", "", "The SASL SCRAM SHA algorithm sha256 or sha512 as mechanism")
 	topic         = flag.String("topic", "integration", "The Kafka topic to use")
 	certFile      = flag.String("certificate", "", "The optional certificate file for client authentication")
 	keyFile       = flag.String("key", "", "The optional key file for client authentication")

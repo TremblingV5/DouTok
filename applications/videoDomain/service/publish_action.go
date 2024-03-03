@@ -124,13 +124,13 @@ func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cove
 	if err := HBClient.Put(
 		"publish", publish_rowkey, hbData,
 	); err != nil {
-
+		return nil
 	}
 
 	if err := HBClient.Put(
 		"feed", feed_rowkey, hbData,
 	); err != nil {
-
+		return nil
 	}
 
 	return nil

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/favorite/handler"
 	"github.com/TremblingV5/DouTok/applications/favorite/rpc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
@@ -32,7 +33,7 @@ func init() {
 	config = cfg
 	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger
-	ctx = DouTokContext.AddLoggerToContext(ctx, logger)
+	DouTokContext.AddLoggerToContext(ctx, logger)
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
 	}

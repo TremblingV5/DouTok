@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+
 	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/TremblingV5/DouTok/kitex_gen/messageDomain"
@@ -87,6 +88,9 @@ func (s *Handler) RelationFollowerList(ctx context.Context, req *relation.Douyin
 		UserId:     req.UserId,
 		ActionType: 1,
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	var userIdList []int64
 	for _, v := range result.UserList {

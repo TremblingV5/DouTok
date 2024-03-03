@@ -1,30 +1,27 @@
 package kafka
 
 import (
-	"flag"
 	"fmt"
-	"log"
-	"os"
 	"time"
 
 	"github.com/Shopify/sarama"
 )
 
 var (
-	//brokers       = flag.String("brokers", "150.158.237.39:50004", "The Kafka brokers to connect to, as a comma separated list")
-	userName      = flag.String("username", "admin", "The SASL username")
-	passwd        = flag.String("passwd", "root", "The SASL password")
-	algorithm     = flag.String("algorithm", "", "The SASL SCRAM SHA algorithm sha256 or sha512 as mechanism")
-	topic         = flag.String("topic", "test", "The Kafka topic to use")
-	certFile      = flag.String("certificate", "", "The optional certificate file for client authentication")
-	keyFile       = flag.String("key", "", "The optional key file for client authentication")
-	caFile        = flag.String("ca", "", "The optional certificate authority file for TLS client authentication")
-	tlsSkipVerify = flag.Bool("tls-skip-verify", false, "Whether to skip TLS server cert verification")
-	useTLS        = flag.Bool("tls", false, "Use TLS to communicate with the cluster")
-	mode          = flag.String("mode", "produce", "Mode to run in: \"produce\" to produce, \"consume\" to consume")
-	logMsg        = flag.Bool("logmsg", false, "True to log consumed messages to console")
+//brokers       = flag.String("brokers", "150.158.237.39:50004", "The Kafka brokers to connect to, as a comma separated list")
+// userName      = flag.String("username", "admin", "The SASL username")
+// passwd        = flag.String("passwd", "root", "The SASL password")
+// algorithm     = flag.String("algorithm", "", "The SASL SCRAM SHA algorithm sha256 or sha512 as mechanism")
+// topic         = flag.String("topic", "test", "The Kafka topic to use")
+// certFile      = flag.String("certificate", "", "The optional certificate file for client authentication")
+// keyFile       = flag.String("key", "", "The optional key file for client authentication")
+// caFile        = flag.String("ca", "", "The optional certificate authority file for TLS client authentication")
+// tlsSkipVerify = flag.Bool("tls-skip-verify", false, "Whether to skip TLS server cert verification")
+// useTLS        = flag.Bool("tls", false, "Use TLS to communicate with the cluster")
+// mode          = flag.String("mode", "produce", "Mode to run in: \"produce\" to produce, \"consume\" to consume")
+// logMsg        = flag.Bool("logmsg", false, "True to log consumed messages to console")
 
-	logger = log.New(os.Stdout, "[Producer] ", log.LstdFlags)
+// logger = log.New(os.Stdout, "[Producer] ", log.LstdFlags)
 )
 
 type msgConsumerGroup struct{}

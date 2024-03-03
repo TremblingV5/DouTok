@@ -15,9 +15,11 @@ func main() {
 	})
 
 	var config configStruct.MySQLConfig
-	configurator.InitConfig(
+	if err := configurator.InitConfig(
 		&config, "mysql.yaml",
-	)
+	); err != nil {
+		panic(err)
+	}
 
 	db, err := mysqlIniter.InitDb(
 		config.Username,

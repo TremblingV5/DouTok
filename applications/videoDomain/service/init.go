@@ -15,32 +15,44 @@ import (
 func Init() {
 	misc.InitViperConfig()
 
-	InitDb(
+	if err := InitDb(
 		misc.GetConfig("MySQL.Username"),
 		misc.GetConfig("MySQL.Password"),
 		misc.GetConfig("MySQL.Host"),
 		misc.GetConfig("MySQL.Port"),
 		misc.GetConfig("MySQL.Database"),
-	)
-	InitHB(
+	); err != nil {
+		panic(err)
+	}
+
+	if err := InitHB(
 		misc.GetConfig("HBase.Host"),
-	)
-	InitMinio(
+	); err != nil {
+		panic(err)
+	}
+
+	if err := InitMinio(
 		misc.GetConfig("Minio.Endpoint"),
 		misc.GetConfig("Minio.Key"),
 		misc.GetConfig("Minio.Secret"),
 		misc.GetConfig("Minio.Bucket"),
-	)
+	); err != nil {
+		panic(nil)
+	}
+
 	utils.InitSnowFlake(misc.GetConfigNum("Snowflake.Node"))
 	redisMap := map[string]int{
 		misc.SendBox:    int(misc.GetConfigNum("Redis.SendBox.Num")),
 		misc.MarkedTime: int(misc.GetConfigNum("Redis.MarkedTime.Num")),
 	}
-	InitRedis(
+
+	if err := InitRedis(
 		misc.GetConfig("Redis.Dest"),
 		misc.GetConfig("Redis.Password"),
 		redisMap,
-	)
+	); err != nil {
+		panic(err)
+	}
 }
 
 func InitRedis(dest string, password string, dbs map[string]int) error {
@@ -82,9 +94,11 @@ func InitHB(host string) error {
 }
 
 func InitOSS(endpoint string, key string, secret string, bucketName string) error {
-	OSSClient.Init(
+	if err := OSSClient.Init(
 		endpoint, key, secret, bucketName,
-	)
+	); err != nil {
+		return err
+	}
 
 	config := configStruct.OssConfig{
 		Endpoint:   endpoint,

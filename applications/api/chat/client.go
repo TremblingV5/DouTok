@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -20,22 +19,22 @@ import (
 )
 
 const (
-	// Time allowed to write a message to the peer.
-	writeWait = 10 * time.Second
+// Time allowed to write a message to the peer.
+// writeWait = 10 * time.Second
 
-	// Time allowed to read the next pong message from the peer.
-	pongWait = 60 * time.Second
+// Time allowed to read the next pong message from the peer.
+// pongWait = 60 * time.Second
 
-	// Send pings to peer with this period. Must be less than pongWait.
-	pingPeriod = (pongWait * 9) / 10
+// Send pings to peer with this period. Must be less than pongWait.
+// pingPeriod = (pongWait * 9) / 10
 
-	// Maximum message size allowed from peer.
-	maxMessageSize = 512
+// Maximum message size allowed from peer.
+// maxMessageSize = 512
 )
 
 var (
-	newline  = []byte{'\n'}
-	space    = []byte{' '}
+	// newline  = []byte{'\n'}
+	// space    = []byte{' '}
 	upgrader = websocket.HertzUpgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
@@ -83,7 +82,10 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 			}
 			// TODO 这里消息编解码可能有问题，需要考虑到客户端的处理方式
 			clientMsg := ClientMsg{}
-			json.Unmarshal(msg, &clientMsg)
+			if err := json.Unmarshal(msg, &clientMsg); err != nil {
+				continue
+			}
+
 			clientFrom, err := hub.clients.Get(fmt.Sprint(clientMsg.UserId))
 			if errors.Is(err, ttlcache.ErrNotFound) {
 				// 注册 client
@@ -130,7 +132,9 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 						handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
 						return
 					}
-					clientTo.(Client).conn.WriteMessage(websocket.TextMessage, data)
+					if err := clientTo.(Client).conn.WriteMessage(websocket.TextMessage, data); err != nil {
+						return
+					}
 				}
 			}
 			// 返回 websocket 响应
@@ -139,7 +143,9 @@ func ServeWs(ctx context.Context, c *app.RequestContext) {
 				handler.SendResponse(c, handler.BuildMessageActionResp(errno.ConvertErr(err)))
 				return
 			}
-			clientFrom.(Client).conn.WriteMessage(websocket.TextMessage, data)
+			if err := clientFrom.(Client).conn.WriteMessage(websocket.TextMessage, data); err != nil {
+				return
+			}
 		}
 	})
 	if err != nil {

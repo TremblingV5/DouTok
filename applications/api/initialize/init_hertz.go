@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
@@ -20,7 +22,6 @@ import (
 	"github.com/hertz-contrib/obs-opentelemetry/provider"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
 	"github.com/hertz-contrib/registry/etcd"
-	"time"
 )
 
 var (
@@ -183,6 +184,6 @@ func InitHertz() (*server.Hertz, func()) {
 	}
 
 	return h, func() {
-		p.Shutdown(context.Background())
+		p.Shutdown(context.Background()) //nolint
 	}
 }
