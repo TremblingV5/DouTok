@@ -4,6 +4,10 @@ DouTok is a backend for TikTok client based on Kitex and Hertz.
 
 ![Hertz](https://img.shields.io/static/v1?label=Golang&message=1.18&color=brightgreen&style=plastic&logo=go) ![Hertz](https://img.shields.io/static/v1?label=Hertz&message=using&color=green&style=plastic&logo=go) ![Hertz](https://img.shields.io/static/v1?label=Kitex&message=using&color=yellowgreen&style=plastic&logo=go) ![Hertz](https://img.shields.io/static/v1?label=gorm/gen&message=using&color=yellow&style=plastic&logo=etcd) ![Hertz](https://img.shields.io/static/v1?label=etcd&message=3.4&color=orange&style=plastic&logo=etcd) ![Hertz](https://img.shields.io/static/v1?label=MySQL&message=8.0&color=red&style=plastic&logo=mysql) ![Hertz](https://img.shields.io/static/v1?label=Redis&message=7.0&color=blue&style=plastic&logo=redis) ![Hertz](https://img.shields.io/static/v1?label=HBase&message=2.1.3&color=blueviolet&style=plastic&logo=ApacheHadoop) ![Hertz](https://img.shields.io/static/v1?label=kafka&message=Tencent&color=ff69b4&style=plastic&logo=ApacheKafka)
 
+## Documents
+
+DouTok now have a documents site: [https://doutok.zhengfei.xin](https://doutok.zhengfei.xin)
+
 ## Quick Start
 
 1. Deploy dependencies
@@ -15,7 +19,7 @@ DouTok is a backend for TikTok client based on Kitex and Hertz.
 
 2. Update config files
 
-   There's a elegent way to run applications in this repo which is using `docker-compose`. So update config files in `./config_docker_compose` if you use `docker-comopse`. If you don't want to run them in this way, you must update config files in `./config` for ensuring them working.
+   There's an elegant way to run applications in this repo which is using `docker-compose`. So update config files in `./config_docker_compose` if you use `docker-comopse`. If you don't want to run them in this way, you must update config files in `./config` for ensuring them working.
 
 3. Run applications by using `docker-compose`
    Everything is ready now, ensure that there's a `docker-compose.yml` in the root directory and run this command in terminal
@@ -26,7 +30,7 @@ DouTok is a backend for TikTok client based on Kitex and Hertz.
 
 ### Download Client
 
-We can download `.apk` file form `./ui` of this repo. Now the client is only support Android. After downloading and installing of this app. We can open it firstly. Then we can click `我` on the right bottom to enter configure page. After opening `高级配置`, we can input base url of the backend. An example is `http://localhost:8080/`.
+We can download `.apk` file from `./ui` of this repo. Now the client is only support Android. After downloading and installing of this app. We can open it firstly. Then we can click `我` on the right bottom to enter configure page. After opening `高级配置`, we can input base url of the backend. An example is `http://localhost:8080/`.
 
 ## Architecture
 
