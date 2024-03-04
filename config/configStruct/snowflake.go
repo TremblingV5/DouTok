@@ -1,5 +1,5 @@
 package configStruct
 
 type Snowflake struct {
-	Node int64 `mapstructure:"SNOWFLAKE_NODE" default:"1"`
+	Node int64 `env:"SNOWFLAKE_NODE" envDefault:"1" configPath:"Snowflake.Node"`
 }
