@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/TremblingV5/DouTok/applications/comment/handler"
 	"github.com/TremblingV5/DouTok/applications/comment/rpc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
@@ -40,7 +39,6 @@ func init() {
 	ViperConfig = dtviper.ConfigInit("DOUTOK_COMMENT", "comment")
 	ViperConfig.UnmarshalStructTags(reflect.TypeOf(commentConfig), "")
 	ViperConfig.UnmarshalStruct(&commentConfig)
-	fmt.Println(commentConfig.Etcd)
 
 	logcfg, err := configStruct.Load[*LoggerConfig](ctx, &logcfg)
 

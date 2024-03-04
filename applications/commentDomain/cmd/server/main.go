@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/handler"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/redis/commentTotalCountRedis"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/service"
@@ -49,7 +48,6 @@ func init() {
 	viperConfig = dtviper.ConfigInit("DOUTOK_COMMENT_DOMAIN", "commentDomain")
 	viperConfig.UnmarshalStructTags(reflect.TypeOf(commentDomainConfig), "")
 	viperConfig.UnmarshalStruct(&commentDomainConfig)
-	fmt.Println(commentDomainConfig.Etcd)
 
 	logcfg, err := configStruct.Load[*LoggerConfig](ctx, &logcfg)
 
