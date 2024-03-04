@@ -44,7 +44,7 @@ func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, 
 			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
 		}, func() {
 			if otelCfg.IsEnable() {
-				p.Shutdown(context.Background())
+				_ = p.Shutdown(context.Background())
 			}
 		}
 }

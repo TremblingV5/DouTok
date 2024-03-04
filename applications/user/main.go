@@ -44,7 +44,7 @@ func init() {
 
 	logger = DouTokLogger.InitLogger(logcfg.Logger)
 	DouTokContext.DefaultLogger = logger
-	ctx = DouTokContext.AddLoggerToContext(ctx, logger)
+	DouTokContext.AddLoggerToContext(ctx, logger)
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", logcfg))
 	}
