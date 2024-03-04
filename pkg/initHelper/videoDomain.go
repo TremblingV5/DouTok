@@ -15,7 +15,7 @@ type VideoDomainClient struct {
 }
 
 func InitVideoDomainRPCClient() *VideoDomainClient {
-	config := dtviper.ConfigInit("DOUTOK_VIDEODOMAIN", "videoDomain", nil)
+	config := dtviper.ConfigInit("DOUTOK_VIDEODOMAIN", "videoDomain")
 	c, err := videodomainservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
 	if err != nil {
 		panic(err)

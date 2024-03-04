@@ -7,5 +7,5 @@ var (
 )
 
 func InitViper() {
-	ViperConfig = dtviper.ConfigInit("DOUTOK_API", "api", nil)
+	ViperConfig = dtviper.ConfigInit("DOUTOK_API", "api")
 }

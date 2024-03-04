@@ -5,7 +5,7 @@ import "github.com/TremblingV5/DouTok/pkg/dtviper"
 var Config *dtviper.Config
 
 func InitViperConfig() {
-	config := dtviper.ConfigInit(ViperConfigEnvPrefix, ViperConfigEnvFilename, nil)
+	config := dtviper.ConfigInit(ViperConfigEnvPrefix, ViperConfigEnvFilename)
 	Config = config
 }
 

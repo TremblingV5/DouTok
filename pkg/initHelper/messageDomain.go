@@ -14,7 +14,7 @@ type MessageDomainClient struct {
 }
 
 func InitMessageDomainRPCClient() *MessageDomainClient {
-	config := dtviper.ConfigInit("DOUTOK_MESSAGEDOMAIN", "messageDomain", nil)
+	config := dtviper.ConfigInit("DOUTOK_MESSAGEDOMAIN", "messageDomain")
 	c, err := messagedomainservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
 	if err != nil {
 		panic(err)

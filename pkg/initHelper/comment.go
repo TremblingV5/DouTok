@@ -13,7 +13,7 @@ type CommentClient struct {
 }
 
 func InitCommentRPCClient() *CommentClient {
-	config := dtviper.ConfigInit("DOUTOK_COMMENT", "comment", nil)
+	config := dtviper.ConfigInit("DOUTOK_COMMENT", "comment")
 	c, err := commentservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
 	if err != nil {
 		panic(err)

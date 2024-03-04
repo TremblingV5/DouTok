@@ -140,7 +140,7 @@ func (v *Config) ZapLogConfig() []byte {
 }
 
 // ConfigInit initializes the configuration
-func ConfigInit(envPrefix string, cfgName string, typ reflect.Type) *Config {
+func ConfigInit(envPrefix string, cfgName string) *Config {
 	pflag.Parse()
 
 	v := viper.New()
@@ -154,8 +154,6 @@ func ConfigInit(envPrefix string, cfgName string, typ reflect.Type) *Config {
 		panic(err)
 	}
 	config.SetDefaultValue()
-
-	config.UnmarshalStructTags(typ, "")
 
 	// read from env
 	viper.AutomaticEnv()
@@ -270,7 +268,6 @@ func (v *Config) UnmarshalStructTags(typ reflect.Type, prefix string) {
 			continue
 		}
 		v.Viper.SetDefault(key, defaultValue)
-		//fmt.Println(fmt.Sprintf("Set key: %s to value: %s", key, defaultValue))
 	}
 }
 

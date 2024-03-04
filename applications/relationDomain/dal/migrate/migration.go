@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	cfg := dtviper.ConfigInit("", "relation", nil)
+	cfg := dtviper.ConfigInit("", "relation")
 
 	db, err := mysqlIniter.InitDb(
 		cfg.Viper.GetString("MySQL.Username"),

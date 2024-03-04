@@ -14,7 +14,7 @@ type PublishClient struct {
 }
 
 func InitPublishRPCClient() *PublishClient {
-	config := dtviper.ConfigInit("DOUTOK_PUBLISH", "publish", nil)
+	config := dtviper.ConfigInit("DOUTOK_PUBLISH", "publish")
 	c, err := publishservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
 	if err != nil {
 		panic(err)

@@ -13,7 +13,7 @@ type UserDomainClient struct {
 }
 
 func InitUserDomainRPCClient() *UserDomainClient {
-	config := dtviper.ConfigInit("DOUTOK_USERDOMAIN", "userDomain", nil)
+	config := dtviper.ConfigInit("DOUTOK_USERDOMAIN", "userDomain")
 	c, err := userdomainservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
 	if err != nil {
 		panic(err)
