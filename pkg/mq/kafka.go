@@ -1,8 +1,9 @@
 package mq
 
 import (
-	"github.com/Shopify/sarama"
 	"sync"
+
+	"github.com/Shopify/sarama"
 )
 
 type KafkaConfig struct {
@@ -36,7 +37,7 @@ func NewKafkaConfig(topic string, config *sarama.Config) *KafkaConfig {
 func NewKafkaProducer(config *KafkaConfig) (*KafkaProducer, func(), error) {
 	client, err := sarama.NewSyncProducer(config.addr, config.config)
 	shutdown := func() {
-		client.Close()
+		client.Close() //nolint
 	}
 	if err != nil {
 		return nil, shutdown, err
@@ -51,7 +52,7 @@ func NewKafkaProducer(config *KafkaConfig) (*KafkaProducer, func(), error) {
 func NewKafkaConsumer(config *KafkaConfig) (*KafkaConsumer, func(), error) {
 	consumer, err := sarama.NewConsumer(config.addr, nil)
 	shutdown := func() {
-		consumer.Close()
+		consumer.Close() //nolint
 	}
 	if err != nil {
 		return nil, shutdown, err

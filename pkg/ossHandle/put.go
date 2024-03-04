@@ -19,7 +19,9 @@ func GetCallBackMap(config configStruct.OssConfig) string {
 	callbackBuffer := bytes.NewBuffer([]byte{})
 	callbackEncoder := json.NewEncoder(callbackBuffer)
 	callbackEncoder.SetEscapeHTML(false)
-	callbackEncoder.Encode(callbackMap)
+	if err := callbackEncoder.Encode(callbackMap); err != nil {
+		return ""
+	}
 
 	callbackVal := base64.StdEncoding.EncodeToString(callbackBuffer.Bytes())
 	return callbackVal

@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/Shopify/sarama"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
-	"github.com/TremblingV5/DouTok/pkg/kafka"
 	"math/rand"
 	"strconv"
 	"time"
+
+	"github.com/Shopify/sarama"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/kafka"
 )
 
 func main() {
@@ -19,13 +20,14 @@ func main() {
 		_ = producer.Close()
 	}()
 
+	r := rand.New(rand.NewSource(int64(time.Now().Nanosecond())))
+
 	msgCount := 4
 	// 模拟4个消息
 	for i := 0; i < msgCount; i++ {
-		rand.Seed(int64(time.Now().Nanosecond()))
 		msg := &sarama.ProducerMessage{
 			Topic: cfg.Viper.GetStringSlice("Kafka.Topics")[0],
-			Value: sarama.StringEncoder("hello+" + strconv.Itoa(rand.Int())),
+			Value: sarama.StringEncoder("hello+" + strconv.Itoa(r.Int())),
 		}
 
 		t1 := time.Now().Nanosecond()

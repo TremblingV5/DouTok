@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"strconv"
 
 	tools "github.com/TremblingV5/DouTok/applications/videoDomain/misc"
 	"github.com/TremblingV5/DouTok/applications/videoDomain/typedef"
@@ -20,8 +19,7 @@ func NewQueryPublishListService(ctx context.Context) *QueryPublishListService {
 }
 
 func (s *QueryPublishListService) QueryPublishListInHBase(user_id int64) ([]*typedef.VideoInHB, error) {
-	user_id_string := strconv.FormatInt(user_id, 10)
-	user_id_string = tools.FillUserId(fmt.Sprint(user_id))
+	user_id_string := tools.FillUserId(fmt.Sprint(user_id))
 
 	filters := hbaseHandle.GetFilterByRowKeyPrefix(user_id_string)
 

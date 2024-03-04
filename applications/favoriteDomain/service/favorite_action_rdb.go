@@ -39,12 +39,12 @@ func CreateFavoriteInRDB(user_id int64, video_id int64, is_fav bool) error {
 		}
 
 		if is_fav {
-			AddCount(video_id)
+			err = AddCount(video_id)
 		} else {
-			ReduceCount(video_id)
+			err = ReduceCount(video_id)
 		}
 
-		return nil
+		return err
 	} else {
 		// 尚未存在用户与视频之间的关系记录
 		id := utils.GetSnowFlakeId()
@@ -62,9 +62,9 @@ func CreateFavoriteInRDB(user_id int64, video_id int64, is_fav bool) error {
 		}
 
 		if is_fav {
-			AddCount(video_id)
+			err = AddCount(video_id)
 		}
 
-		return nil
+		return err
 	}
 }

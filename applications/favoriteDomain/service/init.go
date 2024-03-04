@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/query"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/misc"
 	"github.com/TremblingV5/DouTok/pkg/kafka"
@@ -14,24 +15,30 @@ import (
 func Init() {
 	misc.InitViperConfig()
 
-	InitDb(
+	if err := InitDb(
 		misc.GetConfig(misc.ConfigIndex_MySQLUsername),
 		misc.GetConfig(misc.ConfigIndex_MySQLPassword),
 		misc.GetConfig(misc.ConfigIndex_MySQLHost),
 		misc.GetConfig(misc.ConfigIndex_MySQLPort),
 		misc.GetConfig(misc.ConfigIndex_MySQLDb),
-	)
+	); err != nil {
+		panic(err)
+	}
 
 	redisMap := map[string]int{
 		misc.FavCache:         int(misc.GetConfigNum(misc.ConfigIndex_RedisFavCacheDbNum)),
 		misc.FavCntCache:      int(misc.GetConfigNum(misc.ConfigIndex_RedisFavCntCacheDbNum)),
 		misc.FavTotalCntCache: int(misc.GetConfigNum("Redis.FavTotalCountCache.Num")),
 	}
-	InitRedis(
+
+	if err := InitRedis(
 		misc.GetConfig(misc.ConfigIndex_RedisDest),
 		misc.GetConfig(misc.ConfigIndex_RedisPassword),
 		redisMap,
-	)
+	); err != nil {
+		panic(err)
+	}
+
 	InitMemoryMap()
 
 	kafkaBrokers := []string{

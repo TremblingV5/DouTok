@@ -3,9 +3,10 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/model"
 	"strconv"
 	"time"
+
+	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/model"
 
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/misc"
 	"github.com/go-redis/redis/v8"
@@ -66,7 +67,10 @@ func (s *QueryFavoriteCountService) QueryFavoriteCount(video_id []int64) (map[in
 
 	for _, v := range res {
 		resMap[v.VideoId] = v.Number
-		WriteCount2Cache(v.VideoId, v.Number)
+		if err := WriteCount2Cache(v.VideoId, v.Number); err != nil {
+			return nil, err
+		}
+
 	}
 
 	// 4. 如果仍然没有查找到该记录，则置0

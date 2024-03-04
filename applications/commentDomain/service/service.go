@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/hbModel"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/go-redis/redis/v8"
 	"golang.org/x/exp/maps"
-	"time"
 )
 
 var (
@@ -61,7 +62,7 @@ func (s *CommentDomainService) CountComments(ctx context.Context, videoId ...int
 	for _, v := range queryAgain {
 		cnt, err := s.commentTotalCountRedis.Get(ctx, v)
 		if err != nil && err != redis.Nil {
-			fmt.Errorf(err.Error())
+			return nil, err
 		} else if err == redis.Nil {
 			query3times = append(query3times, v)
 		} else {

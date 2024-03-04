@@ -57,16 +57,16 @@ func (s *Handler) Register(ctx context.Context, req *user.DouyinUserRegisterRequ
 
 func (s *Handler) GetUserById(ctx context.Context, req *user.DouyinUserRequest) (resp *user.DouyinUserResponse, err error) {
 	userInfo, err := s.clients.User.Client.GetUserInfo(ctx, &userDomain.DoutokGetUserInfoRequest{UserId: []int64{req.UserId}})
-	if err != nil {
+	if userInfo == nil || err != nil {
 		return nil, err
 	}
 
 	resp = &user.DouyinUserResponse{
-		StatusCode: userInfo.StatusCode,
-		StatusMsg:  userInfo.StatusMsg,
+		StatusCode: userInfo.StatusCode, //nolint
+		StatusMsg:  userInfo.StatusMsg,  //nolint
 	}
 
-	if userInfo == nil || len(userInfo.UserList) <= 0 {
+	if len(userInfo.UserList) <= 0 {
 		resp.StatusCode = int32(errs.EmptyUserListErrCode)
 		resp.StatusMsg = errs.EmptyUserListErr.ErrMsg
 		return resp, nil
