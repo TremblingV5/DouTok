@@ -2,8 +2,6 @@ package services
 
 import (
 	"context"
-	"net"
-
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -11,6 +9,7 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
+	"net"
 )
 
 func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
@@ -25,11 +24,14 @@ func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, 
 		panic(err)
 	}
 
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(serviceName),
-		provider.WithExportEndpoint(otelCfg.GetAddr()),
-		provider.WithInsecure(),
-	)
+	var p provider.OtelProvider
+	if otelCfg.IsEnable() {
+		p = provider.NewOpenTelemetryProvider(
+			provider.WithServiceName(serviceName),
+			provider.WithExportEndpoint(otelCfg.GetAddr()),
+			provider.WithInsecure(),
+		)
+	}
 
 	return []server.Option{
 			server.WithServiceAddr(serverAddr),
@@ -41,6 +43,8 @@ func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, 
 			server.WithSuite(tracing.NewServerSuite()),
 			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
 		}, func() {
-			p.Shutdown(context.Background()) //nolint
+			if otelCfg.IsEnable() {
+				_ = p.Shutdown(context.Background())
+			}
 		}
 }

@@ -1,14 +1,14 @@
 package configStruct
 
 type MySQL struct {
-	Host      string `env:"MYSQL_HOST" envDefault:"localhost"`
-	Port      int    `env:"MYSQL_PORT" envDefault:"3306"`
-	Username  string `env:"MYSQL_USERNAME" envDefault:"root"`
-	Password  string `env:"MYSQL_PASSWORD" envDefault:"root"`
-	Database  string `env:"MYSQL_DATABASE" envDefault:"DouTok"`
-	CharSet   string `env:"MYSQL_CHARSET" envDefault:"utf8mb4"`
-	ParseTime bool   `env:"MYSQL_PARSETIME" envDefault:"true"`
-	Loc       string `env:"MYSQL_LOC" envDefault:"Local"`
+	Host      string `mapstructure:"Host" default:"localhost"`
+	Port      int    `mapstructure:"Port" default:"3306"`
+	Username  string `mapstructure:"Username" default:"root"`
+	Password  string `mapstructure:"Password" default:"root"`
+	Database  string `mapstructure:"Database" default:"DouTok"`
+	CharSet   string `mapstructure:"CharSet" default:"utf8mb4"`
+	ParseTime bool   `mapstructure:"ParseTime" default:"true"`
+	Loc       string `mapstructure:"Loc" default:"Local"`
 }
 
 type MySQLConfig struct {

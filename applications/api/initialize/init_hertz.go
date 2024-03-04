@@ -124,12 +124,15 @@ func InitHertz() (*server.Hertz, func()) {
 		}))
 	}
 
-	// 链路追踪
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(ServiceName),
-		provider.WithExportEndpoint(fmt.Sprintf("%s:%s", ViperConfig.Viper.GetString("Otel.Host"), ViperConfig.Viper.GetString("Otel.Port"))),
-		provider.WithInsecure(),
-	)
+	var p provider.OtelProvider
+	if ViperConfig.Viper.GetBool("Otel.Enable") {
+		//链路追踪
+		p = provider.NewOpenTelemetryProvider(
+			provider.WithServiceName(ServiceName),
+			provider.WithExportEndpoint(fmt.Sprintf("%s:%s", ViperConfig.Viper.GetString("Otel.Host"), ViperConfig.Viper.GetString("Otel.Port"))),
+			provider.WithInsecure(),
+		)
+	}
 
 	tracer, tracerCfg := hertztracing.NewServerTracer()
 	opts = append(opts, tracer)
@@ -183,6 +186,10 @@ func InitHertz() (*server.Hertz, func()) {
 		}
 	}
 
+	if ViperConfig.Viper.GetBool("Otel.Enable") {
+		return h, func() {
+		}
+	}
 	return h, func() {
 		p.Shutdown(context.Background()) //nolint
 	}

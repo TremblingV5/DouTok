@@ -3,11 +3,11 @@ package configStruct
 import "fmt"
 
 type Base struct {
-	Name     string `env:"SERVER_NAME" envDefault:"unknown"`
-	Address  string `env:"SERVER_ADDRESS" envDefault:"localhost"`
-	Port     int    `env:"SERVER_PORT" envDefault:"8080"`
-	NameCode int32  `env:"NAME_CODE" envDefault:"0"`
-	NodeCode int32  `env:"NODE_CODE" envDefault:"0"`
+	Name     string `mapstructure:"Name" default:"unknown" `
+	Address  string `mapstructure:"Address" default:"localhost"`
+	Port     int    `mapstructure:"Port" default:"8080"`
+	NameCode int32  `mapstructure:"NAME_CODE" default:"0"`
+	NodeCode int32  `mapstructure:"NODE_CODE" default:"0"`
 }
 
 func (b Base) GetAddr() string {

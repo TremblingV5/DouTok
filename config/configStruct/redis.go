@@ -1,10 +1,12 @@
 package configStruct
 
 type Redis struct {
-	Dsn      string `env:"REDIS_DSN" envDefault:"localhost:6379"`
-	Password string `env:"REDIS_PASSWORD" envDefault:"root"`
+	Host     string `mapstructure:"Host" default:"localhost"`
+	Port     string `mapstructure:"Port" default:"6379"`
+	Dsn      string `mapstructure:"Dsn" default:"localhost:6379"`
+	Password string `mapstructure:"Password" default:"root"`
 	// {db name 1}:{db num 1},{db name 2}:{db num 2}
-	Databases string `env:"REDIS_DATABASES" envDefault:""`
+	Databases string `mapstructure:"Databases" default:""`
 }
 
 type RedisConfig struct {
