@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	cfg := dtviper.ConfigInit("DOUTOK_MESSAGE", "message")
+	cfg := dtviper.ConfigInit("DOUTOK_MESSAGE", "message", nil)
 
 	cGroup := kafka.InitConsumerGroup(cfg.Viper.GetStringSlice("Kafka.Brokers"), cfg.Viper.GetStringSlice("Kafka.GroupIds")[0])
 

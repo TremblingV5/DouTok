@@ -1,7 +1,7 @@
 package configStruct
 
 type HBase struct {
-	Host string `env:"HBASE_HOST" envDefault:"localhost"`
+	Host string `mapstructure:"Host" default:"localhost"`
 }
 
 type HBaseConfig struct {

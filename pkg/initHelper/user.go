@@ -14,7 +14,7 @@ type UserClient struct {
 }
 
 func InitUserRPCClient() *UserClient {
-	config := dtviper.ConfigInit("DOUTOK_USER", "user")
+	config := dtviper.ConfigInit("DOUTOK_USER", "user", nil)
 	c, err := userservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
 	if err != nil {
 		panic(err)

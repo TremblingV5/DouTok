@@ -188,9 +188,8 @@ func InitHertz() (*server.Hertz, func()) {
 	if ViperConfig.Viper.GetBool("Otel.Enable") {
 		return h, func() {
 		}
-	} else {
-		return h, func() {
-			p.Shutdown(context.Background())
-		}
+	}
+	return h, func() {
+		p.Shutdown(context.Background())
 	}
 }

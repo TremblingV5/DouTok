@@ -42,7 +42,7 @@ func InitMutex() {
 }
 
 func InitViper() {
-	ViperConfig = dtviper.ConfigInit("DOUTOK_RELATION", "relation")
+	ViperConfig = dtviper.ConfigInit("DOUTOK_RELATION", "relation", nil)
 }
 
 func InitSyncProducer() {

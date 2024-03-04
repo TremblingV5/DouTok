@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"time"
 
@@ -139,7 +140,7 @@ func (v *Config) ZapLogConfig() []byte {
 }
 
 // ConfigInit initializes the configuration
-func ConfigInit(envPrefix string, cfgName string) *Config {
+func ConfigInit(envPrefix string, cfgName string, typ reflect.Type) *Config {
 	pflag.Parse()
 
 	v := viper.New()
@@ -151,6 +152,8 @@ func ConfigInit(envPrefix string, cfgName string) *Config {
 	*/
 	viper.BindPFlags(pflag.CommandLine)
 	config.SetDefaultValue()
+
+	config.UnmarshalStructTags(typ, "")
 
 	// read from env
 	viper.AutomaticEnv()
@@ -221,4 +224,52 @@ func ConfigInit(envPrefix string, cfgName string) *Config {
 	}
 
 	return &config
+}
+
+func (v *Config) UnmarshalStructTags(typ reflect.Type, prefix string) {
+	if typ == nil {
+		return
+	}
+	if typ.Kind() == reflect.Ptr {
+		typ = typ.Elem()
+	}
+	if typ.Kind() != reflect.Struct {
+		return
+	}
+
+	for i := 0; i < typ.NumField(); i++ {
+		fieldType := typ.Field(i)
+		if !fieldType.IsExported() {
+			continue
+		}
+
+		var key string
+		key = fieldType.Tag.Get("mapstructure")
+		if key == "" {
+			// if you don't define mapstructure, it will use the name
+			key = fieldType.Name
+		}
+
+		if prefix != "" {
+			key = prefix + key
+		}
+
+		if fieldType.Type.Kind() == reflect.Struct {
+			v.UnmarshalStructTags(fieldType.Type, key+".")
+			continue
+		}
+
+		defaultValue := fieldType.Tag.Get("default")
+		if defaultValue == "" {
+			continue
+		}
+		v.Viper.SetDefault(key, defaultValue)
+		//fmt.Println(fmt.Sprintf("Set key: %s to value: %s", key, defaultValue))
+	}
+}
+
+func (v *Config) UnmarshalStruct(stc any) {
+	if err := v.Viper.Unmarshal(stc); err != nil {
+		klog.Infof("unmarshal config file failed, %v", err)
+	}
 }

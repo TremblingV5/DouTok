@@ -19,7 +19,7 @@ import (
 // 基于 klog 和 zap 封装的 Logger 及其接口
 var (
 	logger klog.FullLogger
-	config = dtviper.ConfigInit("DOUTOK_LOG", "log")
+	config = dtviper.ConfigInit("DOUTOK_LOG", "log", nil)
 )
 
 // build Logger Core from config

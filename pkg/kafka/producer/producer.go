@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	cfg := dtviper.ConfigInit("DOUTOK_MESSAGE", "message")
+	cfg := dtviper.ConfigInit("DOUTOK_MESSAGE", "message", nil)
 
 	// 使用同步producer，异步模式下有更高的性能，但是处理更复杂，这里建议先从简单的入手
 	producer := kafka.InitSynProducer(cfg.Viper.GetStringSlice("Kafka.Brokers"))

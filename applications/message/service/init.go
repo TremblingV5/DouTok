@@ -21,7 +21,7 @@ var (
 )
 
 func InitViper() {
-	ViperConfig = dtviper.ConfigInit("DOUTOK_MESSAGE", "message")
+	ViperConfig = dtviper.ConfigInit("DOUTOK_MESSAGE", "message", nil)
 }
 
 func InitHB() {

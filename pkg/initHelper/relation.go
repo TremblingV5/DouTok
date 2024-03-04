@@ -14,7 +14,7 @@ type RelationClient struct {
 }
 
 func InitRelationRPCClient() *RelationClient {
-	config := dtviper.ConfigInit("DOUTOK_RELATION", "relation")
+	config := dtviper.ConfigInit("DOUTOK_RELATION", "relation", nil)
 	c, err := relationservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
 	if err != nil {
 		panic(err)

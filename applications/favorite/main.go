@@ -1,15 +1,13 @@
 package main
 
 import (
-	"context"
 	"github.com/TremblingV5/DouTok/applications/favorite/handler"
+	"github.com/TremblingV5/DouTok/applications/favorite/initialize"
 	"github.com/TremblingV5/DouTok/applications/favorite/rpc"
-	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/kitex_gen/favorite/favoriteservice"
-	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
-	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/services"
+	"github.com/bytedance/gopkg/util/logger"
 	"go.uber.org/zap"
 )
 
@@ -21,33 +19,34 @@ import (
 //	Logger configStruct.Logger `envPrefix:"DOUTOK_FAVORITE_"`
 //}
 
-var (
-	logger *zap.Logger
-	config = &configStruct.Config{}
-)
-
-func init() {
-	ctx := context.Background()
-	cfg, err := configStruct.Load[*configStruct.Config](ctx, &configStruct.Config{})
-	config = cfg
-
-	config.InitViper("DOUTOK_API", "favorite")
-	config.ResolveViperConfig()
-
-	logger = DouTokLogger.InitLogger(config.Logger)
-	DouTokContext.DefaultLogger = logger
-	ctx = DouTokContext.AddLoggerToContext(ctx, logger)
-	if err != nil {
-		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
-	}
-}
+//var (
+//	logger *zap.Logger
+//	config = &configStruct.Config{}
+//)
+//
+//func init() {
+//	ctx := context.Background()
+//	cfg, err := configStruct.Load[*configStruct.Config](ctx, &configStruct.Config{})
+//	config = cfg
+//
+//	config.InitViper("DOUTOK_API", "favorite")
+//	config.ResolveViperConfig()
+//
+//	logger = DouTokLogger.InitLogger(config.Logger)
+//	DouTokContext.DefaultLogger = logger
+//	ctx = DouTokContext.AddLoggerToContext(ctx, logger)
+//	if err != nil {
+//		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
+//	}
+//}
 
 func main() {
-	options, shutdown := services.InitRPCServerArgs(constants.FAVORITE_SERVER_NAME, config.Base, config.Etcd, config.Otel)
+	initialize.InitFavorite()
+	options, shutdown := services.InitRPCServerArgs(constants.FAVORITE_SERVER_NAME, initialize.FavoriteConfig.Server, initialize.FavoriteConfig.Etcd, initialize.FavoriteConfig.Otel)
 	defer shutdown()
 
 	svr := favoriteservice.NewServer(
-		handler.New(rpc.New(services.InitRPCClientArgs(constants.FAVORITE_SERVER_NAME, config.Etcd))),
+		handler.New(rpc.New(services.InitRPCClientArgs(constants.FAVORITE_SERVER_NAME, initialize.FavoriteConfig.Etcd))),
 		options...,
 	)
 
