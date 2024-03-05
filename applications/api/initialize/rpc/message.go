@@ -9,10 +9,12 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/errno"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/client"
+	"github.com/cloudwego/kitex/pkg/remote/trans/gonet"
 	"github.com/cloudwego/kitex/pkg/retry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
+	"runtime"
 	"time"
 )
 
@@ -33,19 +35,25 @@ func initMessageRpc(Config *dtviper.Config) {
 	//	provider.WithInsecure(),
 	//)
 	//defer p.Shutdown(context.Background())
-
-	c, err := messageservice.NewClient(
-		ServiceName,
+	options := []client.Option{
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
-		client.WithMuxConnection(1),                       // mux
-		client.WithRPCTimeout(30*time.Second),             // rpc timeout
-		client.WithConnectTimeout(30000*time.Millisecond), // conn timeout
-		client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		client.WithSuite(tracing.NewClientSuite()),        // tracer
-		client.WithResolver(r),                            // resolver
+		client.WithRPCTimeout(30 * time.Second),             // rpc timeout
+		client.WithConnectTimeout(30000 * time.Millisecond), // conn timeout
+		client.WithFailureRetry(retry.NewFailurePolicy()),   // retry
+		client.WithSuite(tracing.NewClientSuite()),          // tracer
+		client.WithResolver(r),                              // resolver
 		// Please keep the same as provider.WithServiceName
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: ServiceName}),
+	}
+	if runtime.GOOS == "windows" {
+		options = append(options, client.WithTransHandlerFactory(gonet.NewCliTransHandlerFactory()))
+	} else {
+		options = append(options, client.WithMuxConnection(1)) // mux
+	}
+	c, err := messageservice.NewClient(
+		ServiceName,
+		options...,
 	)
 	if err != nil {
 		panic(err)

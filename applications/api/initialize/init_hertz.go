@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/TremblingV5/DouTok/pkg/dtnetwork"
 	"time"
 
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
@@ -14,8 +15,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/config"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
-	"github.com/cloudwego/hertz/pkg/network/netpoll"
-	"github.com/cloudwego/hertz/pkg/network/standard"
 	"github.com/hertz-contrib/gzip"
 	h2config "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
@@ -138,10 +137,8 @@ func InitHertz() (*server.Hertz, func()) {
 	opts = append(opts, tracer)
 
 	// 网络库
-	hertzNet := standard.NewTransporter
-	if hertzCfg.UseNetpoll {
-		hertzNet = netpoll.NewTransporter
-	}
+	hertzNet := dtnetwork.GetTransporter(hertzCfg.UseNetpoll)
+
 	opts = append(opts, server.WithTransport(hertzNet))
 
 	// TLS & Http2
