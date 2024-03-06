@@ -2,63 +2,51 @@ package main
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/applications/userDomain/errs"
-	"github.com/TremblingV5/DouTok/config/configStruct"
-	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
-	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
-	"reflect"
 	"strconv"
 
 	"go.uber.org/zap"
 
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/query"
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/repository/user"
+	"github.com/TremblingV5/DouTok/applications/userDomain/errs"
 	"github.com/TremblingV5/DouTok/applications/userDomain/handler"
 	"github.com/TremblingV5/DouTok/applications/userDomain/service"
+	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/kitex_gen/userDomain/userdomainservice"
+	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
+	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
+	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	"github.com/TremblingV5/DouTok/pkg/services"
 )
 
 type Config struct {
-	Server configStruct.Base
-	Etcd   configStruct.Etcd
-	MySQL  configStruct.MySQL
-	Otel   configStruct.Otel
-}
-
-type LoggerConfig struct {
-	Logger configStruct.Logger `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Base      configStruct.Base      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Etcd      configStruct.Etcd      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Jwt       configStruct.Jwt       `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	MySQL     configStruct.MySQL     `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Snowflake configStruct.Snowflake `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Otel      configStruct.Otel      `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Logger    configStruct.Logger    `envPrefix:"DOUTOK_USER_DOMAIN_"`
 }
 
 var (
-	logger           *zap.Logger
-	userDomainConfig Config
-	logcfg           LoggerConfig
-	viperConfig      *dtviper.Config
+	logger *zap.Logger
+	config = &Config{}
 )
 
 func init() {
 	ctx := context.Background()
 
-	userDomainConfig = Config{}
-	logcfg = LoggerConfig{}
-	viperConfig = dtviper.ConfigInit("DOUTOK_USER_DOMAIN", "userDomain")
-	viperConfig.UnmarshalStructTags(reflect.TypeOf(userDomainConfig), "")
-	viperConfig.UnmarshalStruct(&userDomainConfig)
-
-	logcfg, err := configStruct.Load[*LoggerConfig](ctx, &logcfg)
-
-	errs.Init(userDomainConfig.Server)
-
-	logger = DouTokLogger.InitLogger(logcfg.Logger)
+	err := configurator.Load(ctx, config, "DOUTOK_USER_DOMAIN", "userDomain")
+	errs.Init(config.Base)
+	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger
 	DouTokContext.AddLoggerToContext(ctx, logger)
 
 	if err != nil {
-		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", logcfg))
+		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
 	}
 
 	logger = DouTokContext.Extract(ctx)
@@ -66,11 +54,7 @@ func init() {
 
 func loadFeature() *handler.Handler {
 	db, err := mysqlIniter.InitDb(
-		userDomainConfig.MySQL.Username,
-		userDomainConfig.MySQL.Password,
-		userDomainConfig.MySQL.Host,
-		strconv.Itoa(userDomainConfig.MySQL.Port),
-		userDomainConfig.MySQL.Database,
+		config.MySQL.Username, config.MySQL.Password, config.MySQL.Host, strconv.Itoa(config.MySQL.Port), config.MySQL.Database,
 	)
 	if err != nil {
 		panic(err)
@@ -83,8 +67,7 @@ func loadFeature() *handler.Handler {
 }
 
 func main() {
-
-	options, shutdown := services.InitRPCServerArgs(constants.USER_DOMAIN_SERVER_NAME, userDomainConfig.Server, userDomainConfig.Etcd, userDomainConfig.Otel)
+	options, shutdown := services.InitRPCServerArgs(constants.USER_DOMAIN_SERVER_NAME, config.Base, config.Etcd, config.Otel)
 	defer shutdown()
 
 	svr := userdomainservice.NewServer(
