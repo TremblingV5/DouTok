@@ -12,7 +12,7 @@ Etcd:
 Server:
   Name: "DouTokFavoriteDomainServer"
   Address: "127.0.0.1"
-  Port: 8086
+  Port: 8092
 
 Client:
   Echo: true
@@ -27,15 +27,16 @@ Snowflake:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "admin"
-  Password: "root"
-  Database: "DouTok"
+  Username: "DBName"
+  Password: "mBTjsHfXrKtfychP"
+  Database: "dbname"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
 
 Redis:
-  Dest: "localhost:6379"
+  Host: "localhost"
+  Port: 6379
   Password: "root"
   FavCache:
     Num: 3
@@ -44,8 +45,9 @@ Redis:
   FavTotalCountCache:
     Num: 8
 
+
 Kafka:
-  Broker: "YOUR_OWN_IP:9092"
+  Broker: "localhost:9092"
 
 Otel:
   Host: "82.156.171.8"

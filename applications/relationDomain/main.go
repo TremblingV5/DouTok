@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/TremblingV5/DouTok/applications/relationDomain/handler"
-	"github.com/TremblingV5/DouTok/applications/relationDomain/misc"
 	"github.com/TremblingV5/DouTok/applications/relationDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain/relationdomainservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
@@ -13,15 +12,13 @@ var (
 	Logger = dlog.InitLog(3)
 )
 
-func Init() {
-	misc.InitViperConfig()
-	service.Init()
+func init() {
+	service.Init("relationDomain")
 }
 
 func main() {
-	Init()
 
-	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	options, shutdown := initHelper.InitRPCServerArgs(service.ViperConfig)
 	defer shutdown()
 
 	svr := relationdomainservice.NewServer(

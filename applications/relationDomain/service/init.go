@@ -1,31 +1,39 @@
 package service
 
 import (
-	"fmt"
+	"github.com/TremblingV5/DouTok/config/configStruct"
+	"reflect"
 	"sync"
 
 	"github.com/Shopify/sarama"
 	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/query"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/kafka"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
-	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/safeMap"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 	"github.com/go-redis/redis/v8"
 )
 
+type Config struct {
+	Server configStruct.Base
+	MySQL  configStruct.MySQL
+	Etcd   configStruct.Etcd
+	Redis  configStruct.Redis
+	HBase  configStruct.HBase
+}
+
 var (
-	RedisClient   *redis.Client
-	SyncProducer  sarama.SyncProducer
-	ViperConfig   *dtviper.Config
-	ConsumerGroup sarama.ConsumerGroup
-	ConcurrentMap *safeMap.SafeMap
-	mu            *sync.Mutex
+	RedisClient    *redis.Client
+	SyncProducer   sarama.SyncProducer
+	ViperConfig    *dtviper.Config
+	ConsumerGroup  sarama.ConsumerGroup
+	ConcurrentMap  *safeMap.SafeMap
+	mu             *sync.Mutex
+	RelationConfig Config
 )
 
-func Init() {
-	InitViper()
+func Init(server string) {
+	InitViper(server)
 	InitRedisClient()
 	InitSyncProducer()
 	InitConsumerGroup()
@@ -41,8 +49,10 @@ func InitMutex() {
 	mu = &sync.Mutex{}
 }
 
-func InitViper() {
-	ViperConfig = dtviper.ConfigInit("DOUTOK_RELATION", "relation")
+func InitViper(server string) {
+	ViperConfig = dtviper.ConfigInit("DOUTOK_RELATION", server)
+	ViperConfig.UnmarshalStructTags(reflect.TypeOf(RelationConfig), "")
+	ViperConfig.UnmarshalStruct(&RelationConfig)
 }
 
 func InitSyncProducer() {
@@ -56,16 +66,7 @@ func InitConsumerGroup() {
 }
 
 func InitRedisClient() {
-
-	Client, err := redishandle.InitRedisClient(
-		fmt.Sprintf("%s:%d", ViperConfig.Viper.GetString("Redis.Host"), ViperConfig.Viper.GetInt("Redis.Port")),
-		ViperConfig.Viper.GetString("Redis.Password"),
-		ViperConfig.Viper.GetInt("Redis.Databases.Default"),
-	)
-	if err != nil {
-		panic(err)
-	}
-	RedisClient = Client
+	RedisClient = RelationConfig.Redis.InitRedisClient(configStruct.DEFAULT_DATABASE)
 }
 
 func InitId() {
@@ -74,12 +75,7 @@ func InitId() {
 }
 
 func InitDB() {
-	username := ViperConfig.Viper.GetString("MySQL.Username")
-	password := ViperConfig.Viper.GetString("MySQL.Password")
-	host := ViperConfig.Viper.GetString("MySQL.Host")
-	port := ViperConfig.Viper.GetString("MySQL.Port")
-	database := ViperConfig.Viper.GetString("MySQL.Database")
-	db, err := mysqlIniter.InitDb(username, password, host, port, database)
+	db, err := RelationConfig.MySQL.InitDB()
 	if err != nil {
 		panic(err)
 	}

@@ -3,7 +3,9 @@ package initHelper
 import (
 	"context"
 	"fmt"
+	"github.com/cloudwego/kitex/pkg/remote/trans/gonet"
 	"net"
+	"runtime"
 
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
@@ -14,51 +16,6 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
-
-type etcdConfig interface {
-	GetAddr() string
-}
-
-type baseConfig interface {
-	GetAddr() string
-	GetName() string
-}
-
-type otelConfig interface {
-	GetAddr() string
-}
-
-func InitRPCServerArgsV2(base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
-	etcdAddr := etcdCfg.GetAddr()
-	registry, err := etcd.NewEtcdRegistry([]string{etcdAddr})
-	if err != nil {
-		panic(err)
-	}
-
-	serverAddr, err := net.ResolveTCPAddr("tcp", base.GetAddr())
-	if err != nil {
-		panic(err)
-	}
-
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(base.GetName()),
-		provider.WithExportEndpoint(otelCfg.GetAddr()),
-		provider.WithInsecure(),
-	)
-
-	return []server.Option{
-			server.WithServiceAddr(serverAddr),
-			server.WithMiddleware(middleware.CommonMiddleware),
-			server.WithMiddleware(middleware.ServerMiddleware),
-			server.WithRegistry(registry),
-			server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}),
-			server.WithMuxTransport(),
-			server.WithSuite(tracing.NewServerSuite()),
-			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: base.GetName()}),
-		}, func() {
-			p.Shutdown(context.Background()) //nolint
-		}
-}
 
 /*
 返回初始化RPC客户端所需要的一些配置，减少这部分代码的重复
@@ -76,22 +33,36 @@ func InitRPCServerArgs(config *dtviper.Config) ([]server.Option, func()) {
 		panic(err)
 	}
 
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(config.Viper.GetString("Server.Name")),
-		provider.WithExportEndpoint(fmt.Sprintf("%s:%s", config.Viper.GetString("Otel.Host"), config.Viper.GetString("Otel.Port"))),
-		provider.WithInsecure(),
-	)
+	var p provider.OtelProvider
+	OtelEnable := config.Viper.GetBool("Otel.Enable")
+	if OtelEnable {
+		p = provider.NewOpenTelemetryProvider(
+			provider.WithServiceName(config.Viper.GetString("Server.Name")),
+			provider.WithExportEndpoint(fmt.Sprintf("%s:%s", config.Viper.GetString("Otel.Host"), config.Viper.GetString("Otel.Port"))),
+			provider.WithInsecure(),
+		)
+	}
 
-	return []server.Option{
-			server.WithServiceAddr(serverAddr),
-			server.WithMiddleware(middleware.CommonMiddleware),
-			server.WithMiddleware(middleware.ServerMiddleware),
-			server.WithRegistry(registry),
-			server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
-			server.WithMuxTransport(),
-			server.WithSuite(tracing.NewServerSuite()),
-			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.Viper.GetString("Server.Name")}),
-		}, func() {
-			p.Shutdown(context.Background()) //nolint
+	options := []server.Option{
+		server.WithServiceAddr(serverAddr),
+		server.WithMiddleware(middleware.CommonMiddleware),
+		server.WithMiddleware(middleware.ServerMiddleware),
+		server.WithRegistry(registry),
+		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}),
+		server.WithMuxTransport(),
+		server.WithSuite(tracing.NewServerSuite()),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.Viper.GetString("Server.Name")}),
+	}
+	if runtime.GOOS == "windows" {
+		options = append(options,
+			server.WithTransServerFactory(gonet.NewTransServerFactory()),
+			server.WithTransHandlerFactory(gonet.NewSvrTransHandlerFactory()))
+	}
+	if OtelEnable {
+		return options, func() {
 		}
+	}
+	return options, func() {
+		_ = p.Shutdown(context.Background()) //nolint
+	}
 }

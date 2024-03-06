@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/handler"
-	"github.com/TremblingV5/DouTok/applications/favoriteDomain/misc"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/favoriteDomain/favoritedomainservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
@@ -13,15 +12,13 @@ var (
 	Logger = dlog.InitLog(3)
 )
 
-func Init() {
-	misc.InitViperConfig()
+func init() {
 	service.Init()
 }
 
 func main() {
-	Init()
 
-	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	options, shutdown := initHelper.InitRPCServerArgs(service.FavoriteConfig)
 	defer shutdown()
 
 	svr := favoritedomainservice.NewServer(

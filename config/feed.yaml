@@ -12,7 +12,7 @@ Etcd:
 Server:
   Name: "DouTokFeedServer"
   Address: "127.0.0.1"
-  Port: 8087
+  Port: 8093
 
 Client:
   Echo: true
@@ -24,9 +24,9 @@ Client:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "admin"
-  Password: "root"
-  Database: "DouTok"
+  Username: "DBName"
+  Password: "mBTjsHfXrKtfychP"
+  Database: "dbname"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
@@ -45,7 +45,8 @@ OSS:
   Callback: ""
 
 Redis:
-  Dest: "localhost:6379"
+  Host: "localhost"
+  Port: 6379
   Password: "root"
   SendBox:
     Num: 1

@@ -12,7 +12,7 @@ Etcd:
 Server:
   Name: "DouTokFavoriteServer"
   Address: "127.0.0.1"
-  Port: 8085
+  Port: 8091
 
 Client:
   Echo: true
@@ -23,29 +23,6 @@ Client:
 
 Snowflake:
   Node: 602
-
-MySQL:
-  Host: "localhost"
-  Port: 3306
-  Username: "admin"
-  Password: "root"
-  Database: "DouTok"
-  CharSet: "utf8mb4"
-  ParseTime: true
-  loc: "Local"
-
-Redis:
-  Dest: "localhost:6379"
-  Password: "root"
-  FavCache:
-    Num: 3
-  FavCntCache:
-    Num: 4
-  FavTotalCountCache:
-    Num: 8
-
-Kafka:
-  Broker: "YOUR_OWN_IP:9092"
 
 Otel:
   Host: "82.156.171.8"

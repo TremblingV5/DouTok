@@ -12,11 +12,9 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/initHelper"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"go.uber.org/zap"
 	"reflect"
-	"strconv"
 )
 
 type Config struct {
@@ -60,17 +58,19 @@ func init() {
 
 	logger = DouTokContext.Extract(ctx)
 
-	db, err := mysqlIniter.InitDb(
-		commentDomainConfig.MySQL.Username, commentDomainConfig.MySQL.Password, commentDomainConfig.MySQL.Host, strconv.Itoa(commentDomainConfig.MySQL.Port), commentDomainConfig.MySQL.Database,
-	)
+	db, err := commentDomainConfig.MySQL.InitDB()
 	if err != nil {
 		panic(err)
 	}
 
-	hb := hbaseHandle.InitHB(commentDomainConfig.HBase.Host)
+	hb := hbaseHandle.HBaseClient{
+		Client: commentDomainConfig.HBase.InitHB(),
+	}
 
-	redisClient := redishandle.NewRedisClient(commentDomainConfig.Redis.Dsn, commentDomainConfig.Redis.Password, 1)
-	commentTotalCountRedisClient := commentTotalCountRedis.NewClient(redisClient)
+	redisClient := redishandle.RedisClient{
+		Client: commentDomainConfig.Redis.InitRedisClient(1),
+	}
+	commentTotalCountRedisClient := commentTotalCountRedis.NewClient(&redisClient)
 	commentDomainService := service.NewCommentDomainService(
 		db, &hb, commentTotalCountRedisClient, commentDomainConfig.Snowflake.Node,
 	)
@@ -80,9 +80,7 @@ func init() {
 
 func main() {
 
-	options, shutdown := initHelper.InitRPCServerArgsV2(
-		commentDomainConfig.Server, commentDomainConfig.Etcd, commentDomainConfig.Otel,
-	)
+	options, shutdown := initHelper.InitRPCServerArgs(viperConfig)
 	defer shutdown()
 
 	svr := commentdomainservice.NewServer(

@@ -4,18 +4,24 @@ import (
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/model"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/misc"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/service"
+	"github.com/TremblingV5/DouTok/config/configStruct"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"reflect"
 )
 
-func main() {
-	misc.InitViperConfig()
+type Config struct {
+	MySQL configStruct.MySQL
+}
 
-	if err := service.InitDb(
-		misc.GetConfig("MySQL.Username"),
-		misc.GetConfig("MySQL.Password"),
-		misc.GetConfig("MySQL.Host"),
-		misc.GetConfig("MySQL.Port"),
-		misc.GetConfig("MySQL.Database"),
-	); err != nil {
+var migrateConfig Config
+
+func main() {
+
+	v := dtviper.ConfigInit(misc.ViperConfigEnvPrefix, misc.ViperConfigEnvFilename)
+	v.UnmarshalStructTags(reflect.TypeOf(migrateConfig), "")
+	v.UnmarshalStruct(&migrateConfig)
+
+	if _, err := migrateConfig.MySQL.InitDB(); err != nil {
 		panic(err)
 	}
 

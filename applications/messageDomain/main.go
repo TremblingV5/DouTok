@@ -2,10 +2,8 @@ package main
 
 import (
 	"github.com/TremblingV5/DouTok/applications/messageDomain/handler"
-	"github.com/TremblingV5/DouTok/kitex_gen/messageDomain/messagedomainservice"
-
-	// "github.com/TremblingV5/DouTok/applications/messageDomain/misc"
 	"github.com/TremblingV5/DouTok/applications/messageDomain/service"
+	"github.com/TremblingV5/DouTok/kitex_gen/messageDomain/messagedomainservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/initHelper"
 )
@@ -15,7 +13,6 @@ var (
 )
 
 func Init() {
-	// misc.InitViperConfig()
 	service.InitViper()
 	service.InitHB()
 	service.InitRedisClient()

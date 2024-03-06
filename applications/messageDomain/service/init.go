@@ -1,34 +1,43 @@
 package service
 
 import (
-	"fmt"
+	"github.com/TremblingV5/DouTok/config/configStruct"
+	"reflect"
 
 	"github.com/Shopify/sarama"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/kafka"
-	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 	"github.com/go-redis/redis/v8"
 )
 
+type Config struct {
+	Server configStruct.Base
+	Etcd   configStruct.Etcd
+	Redis  configStruct.Redis
+	HBase  configStruct.HBase
+}
+
 var (
-	HBClient      *hbaseHandle.HBaseClient
-	RedisClient   *redis.Client
-	SyncProducer  sarama.SyncProducer
-	ViperConfig   *dtviper.Config
-	ConsumerGroup sarama.ConsumerGroup
+	HBClient            *hbaseHandle.HBaseClient
+	RedisClient         *redis.Client
+	SyncProducer        sarama.SyncProducer
+	ViperConfig         *dtviper.Config
+	ConsumerGroup       sarama.ConsumerGroup
+	MessageDomainConfig Config
 )
 
 func InitViper() {
 	ViperConfig = dtviper.ConfigInit("DOUTOK_MESSAGEDOMAIN", "messageDomain")
+	ViperConfig.UnmarshalStructTags(reflect.TypeOf(MessageDomainConfig), "")
+	ViperConfig.UnmarshalStruct(&MessageDomainConfig)
 }
 
 func InitHB() {
-
-	client := hbaseHandle.InitHB(ViperConfig.Viper.GetString("Hbase.Host"))
-
-	HBClient = &client
+	HBClient = &hbaseHandle.HBaseClient{
+		Client: MessageDomainConfig.HBase.InitHB(),
+	}
 }
 
 func InitSyncProducer() {
@@ -42,16 +51,7 @@ func InitConsumerGroup() {
 }
 
 func InitRedisClient() {
-
-	Client, err := redishandle.InitRedisClient(
-		fmt.Sprintf("%s:%d", ViperConfig.Viper.GetString("Redis.Host"), ViperConfig.Viper.GetInt("Redis.Port")),
-		ViperConfig.Viper.GetString("Redis.Password"),
-		ViperConfig.Viper.GetInt("Redis.Databases.Default"),
-	)
-	if err != nil {
-		panic(err)
-	}
-	RedisClient = Client
+	RedisClient = MessageDomainConfig.Redis.InitRedisClient(configStruct.DEFAULT_DATABASE)
 }
 
 func InitId() {

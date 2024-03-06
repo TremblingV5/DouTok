@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Shopify/sarama"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/query"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/safeMap"
 	"gorm.io/gorm"
@@ -28,3 +29,5 @@ var FavRelationV2U *safeMap.SafeMap
 
 var FavCountKafkaProducer sarama.SyncProducer
 var FavCountKafkaConsumer sarama.ConsumerGroup
+
+var FavoriteConfig *dtviper.Config

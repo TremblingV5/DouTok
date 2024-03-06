@@ -19,8 +19,8 @@ import (
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
-func Init() {
-	service.InitViper()
+func init() {
+	service.InitViper("relation")
 	service.InitRedisClient()
 	service.InitSyncProducer()
 	service.InitConsumerGroup()
@@ -31,7 +31,7 @@ func Init() {
 }
 
 func main() {
-	Init()
+
 	defer func() {
 		_ = service.SyncProducer.Close()
 	}()

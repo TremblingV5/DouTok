@@ -13,16 +13,14 @@ var (
 	Logger = dlog.InitLog(3)
 )
 
-func Init() {
-	misc.InitViperConfig()
+func init() {
 	misc.InitLogger()
 	service.Init()
 }
 
 func main() {
-	Init()
 
-	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	options, shutdown := initHelper.InitRPCServerArgs(service.ViperConfig)
 	defer shutdown()
 
 	svr := videodomainservice.NewServer(

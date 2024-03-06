@@ -2,60 +2,58 @@ package service
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/config/configStruct"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
+	"reflect"
 
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/query"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/misc"
 	"github.com/TremblingV5/DouTok/pkg/kafka"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
-	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/safeMap"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 )
 
-func Init() {
-	misc.InitViperConfig()
+type Config struct {
+	MySQL configStruct.MySQL
+	Redis configStruct.Redis
+}
 
-	if err := InitDb(
-		misc.GetConfig(misc.ConfigIndex_MySQLUsername),
-		misc.GetConfig(misc.ConfigIndex_MySQLPassword),
-		misc.GetConfig(misc.ConfigIndex_MySQLHost),
-		misc.GetConfig(misc.ConfigIndex_MySQLPort),
-		misc.GetConfig(misc.ConfigIndex_MySQLDb),
-	); err != nil {
+var favoriteDomainConfig Config
+
+func Init() {
+
+	v := dtviper.ConfigInit(misc.ViperConfigEnvPrefix, misc.ViperConfigEnvFilename)
+	v.UnmarshalStructTags(reflect.TypeOf(favoriteDomainConfig), "")
+	v.UnmarshalStruct(&favoriteDomainConfig)
+	FavoriteConfig = v
+
+	if err := InitDb(); err != nil {
 		panic(err)
 	}
 
 	redisMap := map[string]int{
-		misc.FavCache:         int(misc.GetConfigNum(misc.ConfigIndex_RedisFavCacheDbNum)),
-		misc.FavCntCache:      int(misc.GetConfigNum(misc.ConfigIndex_RedisFavCntCacheDbNum)),
-		misc.FavTotalCntCache: int(misc.GetConfigNum("Redis.FavTotalCountCache.Num")),
+		misc.FavCache:         v.Viper.GetInt(misc.ConfigIndex_RedisFavCacheDbNum),
+		misc.FavCntCache:      v.Viper.GetInt(misc.ConfigIndex_RedisFavCntCacheDbNum),
+		misc.FavTotalCntCache: v.Viper.GetInt("Redis.FavTotalCountCache.Num"),
 	}
 
-	if err := InitRedis(
-		misc.GetConfig(misc.ConfigIndex_RedisDest),
-		misc.GetConfig(misc.ConfigIndex_RedisPassword),
-		redisMap,
-	); err != nil {
-		panic(err)
-	}
+	InitRedis(redisMap)
 
 	InitMemoryMap()
 
 	kafkaBrokers := []string{
-		misc.GetConfig("Kafka.Broker"),
+		v.Viper.GetString("Kafka.Broker"),
 	}
 	InitKafka(kafkaBrokers)
 
 	utils.InitSnowFlake(
-		misc.GetConfigNum(misc.ConfigIndex_SnowFlake),
+		v.Viper.GetInt64(misc.ConfigIndex_SnowFlake),
 	)
 }
 
-func InitDb(username string, password string, host string, port string, database string) error {
-	db, err := mysqlIniter.InitDb(
-		username, password, host, port, database,
-	)
-
+func InitDb() error {
+	db, err := favoriteDomainConfig.MySQL.InitDB()
 	if err != nil {
 		return err
 	}
@@ -73,14 +71,13 @@ func InitDb(username string, password string, host string, port string, database
 	return nil
 }
 
-func InitRedis(dest string, password string, dbs map[string]int) error {
-	redisCaches, _ := redishandle.InitRedis(
-		dest, password, dbs,
-	)
-
-	RedisClients = redisCaches
-
-	return nil
+func InitRedis(dbs map[string]int) {
+	RedisClients = make(map[string]*redishandle.RedisClient)
+	for k, v := range dbs {
+		RedisClients[k] = &redishandle.RedisClient{
+			Client: favoriteDomainConfig.Redis.InitRedisClient(v),
+		}
+	}
 }
 
 func InitMemoryMap() {

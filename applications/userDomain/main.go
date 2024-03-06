@@ -7,10 +7,8 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
-	"reflect"
-	"strconv"
-
 	"go.uber.org/zap"
+	"reflect"
 
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/query"
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/repository/user"
@@ -18,7 +16,6 @@ import (
 	"github.com/TremblingV5/DouTok/applications/userDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/userDomain/userdomainservice"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	"github.com/TremblingV5/DouTok/pkg/services"
 )
 
@@ -65,13 +62,7 @@ func init() {
 }
 
 func loadFeature() *handler.Handler {
-	db, err := mysqlIniter.InitDb(
-		userDomainConfig.MySQL.Username,
-		userDomainConfig.MySQL.Password,
-		userDomainConfig.MySQL.Host,
-		strconv.Itoa(userDomainConfig.MySQL.Port),
-		userDomainConfig.MySQL.Database,
-	)
+	db, err := userDomainConfig.MySQL.InitDB()
 	if err != nil {
 		panic(err)
 	}

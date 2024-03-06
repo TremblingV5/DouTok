@@ -190,6 +190,7 @@ func ConfigInit(envPrefix string, cfgName string) *Config {
 		*/
 
 		viper.SetConfigName(cfgName) // name of config file (without extension)
+		viper.AddConfigPath("./")
 		viper.AddConfigPath("/etc/tiktok/config")
 		viper.AddConfigPath("$HOME/.tiktok/")
 		viper.AddConfigPath("./config")

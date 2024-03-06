@@ -12,7 +12,7 @@ Etcd:
 Server:
   Name: "DouTokPublishServer"
   Address: "127.0.0.1"
-  Port: 8092
+  Port: 8096
 
 Client:
   Echo: true
@@ -20,9 +20,6 @@ Client:
   Servers:
     - "127.0.0.1"
     - "192.168.1.1"
-
-HBase:
-  Host: "localhost"
 
 Snowflake:
   Node: 66
@@ -37,9 +34,9 @@ OSS:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "admin"
-  Password: "root"
-  Database: "DouTok"
+  Username: "DBName"
+  Password: "mBTjsHfXrKtfychP"
+  Database: "dbname"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"

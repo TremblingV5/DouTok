@@ -12,7 +12,7 @@ Etcd:
 Server:
   Name: "DouTokVideoDomainServer"
   Address: "127.0.0.1"
-  Port: 8095
+  Port: 8101
 
 Client:
   Echo: true
@@ -21,12 +21,13 @@ Client:
     - "127.0.0.1"
     - "192.168.1.1"
 
+
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "admin"
-  Password: "root"
-  Database: "DouTok"
+  Username: "DBName"
+  Password: "mBTjsHfXrKtfychP"
+  Database: "dbname"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
@@ -52,7 +53,8 @@ Minio:
   Callback: ""
 
 Redis:
-  Dest: "localhost:6379"
+  Host: "localhost"
+  Port: "6379"
   Password: "root"
   SendBox:
     Num: 1

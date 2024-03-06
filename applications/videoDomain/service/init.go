@@ -2,73 +2,69 @@ package service
 
 import (
 	"context"
-
 	"github.com/TremblingV5/DouTok/applications/videoDomain/dal/query"
 	"github.com/TremblingV5/DouTok/applications/videoDomain/misc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/utils"
+	"reflect"
+)
+
+type Config struct {
+	Server configStruct.Base
+	Etcd   configStruct.Etcd
+	MySQL  configStruct.MySQL
+	Redis  configStruct.Redis
+	HBase  configStruct.HBase
+}
+
+var (
+	ViperConfig *dtviper.Config
+	VideoConfig Config
 )
 
 func Init() {
-	misc.InitViperConfig()
+	ViperConfig = dtviper.ConfigInit(misc.ViperConfigEnvPrefix, misc.ViperConfigEnvFilename)
+	ViperConfig.UnmarshalStructTags(reflect.TypeOf(VideoConfig), "")
+	ViperConfig.UnmarshalStruct(&VideoConfig)
 
-	if err := InitDb(
-		misc.GetConfig("MySQL.Username"),
-		misc.GetConfig("MySQL.Password"),
-		misc.GetConfig("MySQL.Host"),
-		misc.GetConfig("MySQL.Port"),
-		misc.GetConfig("MySQL.Database"),
-	); err != nil {
+	if err := InitDb(); err != nil {
 		panic(err)
 	}
 
-	if err := InitHB(
-		misc.GetConfig("HBase.Host"),
-	); err != nil {
-		panic(err)
-	}
+	InitHB()
 
 	if err := InitMinio(
-		misc.GetConfig("Minio.Endpoint"),
-		misc.GetConfig("Minio.Key"),
-		misc.GetConfig("Minio.Secret"),
-		misc.GetConfig("Minio.Bucket"),
+		ViperConfig.Viper.GetString("Minio.Endpoint"),
+		ViperConfig.Viper.GetString("Minio.Key"),
+		ViperConfig.Viper.GetString("Minio.Secret"),
+		ViperConfig.Viper.GetString("Minio.Bucket"),
 	); err != nil {
 		panic(nil)
 	}
 
-	utils.InitSnowFlake(misc.GetConfigNum("Snowflake.Node"))
+	utils.InitSnowFlake(ViperConfig.Viper.GetInt64("Snowflake.Node"))
 	redisMap := map[string]int{
-		misc.SendBox:    int(misc.GetConfigNum("Redis.SendBox.Num")),
-		misc.MarkedTime: int(misc.GetConfigNum("Redis.MarkedTime.Num")),
+		misc.SendBox:    ViperConfig.Viper.GetInt("Redis.SendBox.Num"),
+		misc.MarkedTime: ViperConfig.Viper.GetInt("Redis.MarkedTime.Num"),
 	}
 
-	if err := InitRedis(
-		misc.GetConfig("Redis.Dest"),
-		misc.GetConfig("Redis.Password"),
-		redisMap,
-	); err != nil {
-		panic(err)
+	InitRedis(redisMap)
+}
+
+func InitRedis(dbs map[string]int) {
+	RedisClients = make(map[string]*redishandle.RedisClient)
+	for k, v := range dbs {
+		RedisClients[k] = &redishandle.RedisClient{
+			Client: VideoConfig.Redis.InitRedisClient(v),
+		}
 	}
 }
 
-func InitRedis(dest string, password string, dbs map[string]int) error {
-	redisCaches, _ := redishandle.InitRedis(
-		dest, password, dbs,
-	)
-
-	RedisClients = redisCaches
-
-	return nil
-}
-
-func InitDb(username string, password string, host string, port string, database string) error {
-	db, err := mysqlIniter.InitDb(
-		username, password, host, port, database,
-	)
+func InitDb() error {
+	db, err := VideoConfig.MySQL.InitDB()
 
 	if err != nil {
 		return err
@@ -86,11 +82,10 @@ func InitDb(username string, password string, host string, port string, database
 	return nil
 }
 
-func InitHB(host string) error {
-	client := hbaseHandle.InitHB(host)
-	HBClient = &client
-
-	return nil
+func InitHB() {
+	HBClient = &hbaseHandle.HBaseClient{
+		Client: VideoConfig.HBase.InitHB(),
+	}
 }
 
 func InitOSS(endpoint string, key string, secret string, bucketName string) error {

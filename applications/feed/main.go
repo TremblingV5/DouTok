@@ -6,22 +6,24 @@ import (
 	"github.com/TremblingV5/DouTok/applications/feed/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed/feedservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/initHelper"
 )
 
 var (
-	Logger = dlog.InitLog(3)
+	Logger     = dlog.InitLog(3)
+	feedConfig *dtviper.Config
 )
 
-func Init() {
-	misc.InitViperConfig()
+func init() {
+	feedConfig = dtviper.ConfigInit(misc.ViperConfigEnvPrefix, misc.ViperConfigEnvFilename)
+
 	rpc.Init()
 }
 
 func main() {
-	Init()
 
-	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	options, shutdown := initHelper.InitRPCServerArgs(feedConfig)
 	defer shutdown()
 
 	svr := feedservice.NewServer(
