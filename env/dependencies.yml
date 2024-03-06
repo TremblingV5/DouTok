@@ -95,13 +95,13 @@ services:
         - KAFKA_HEAP_OPTS=-Xmx512M -Xms16M
     restart: always
 
-  kafka-ui:
-    image: leixuewen/kafka-ui-lite
-    networks:
-        - total
-    ports:
-        - 8889:8889
-    restart: always
+#  kafka-ui:
+#    image: leixuewen/kafka-ui-lite
+#    networks:
+#        - total
+#    ports:
+#        - 8889:8889
+#    restart: always
 
   minio:
     image: minio/minio:latest

@@ -1,47 +1,52 @@
 package user
 
 import (
+	"context"
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/model"
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/query"
-	"gorm.io/gorm"
+	"github.com/TremblingV5/DouTok/pkg/dtdb"
 )
 
 type Repository interface {
-	Save(user *model.User) error
-	LoadByUsername(username string) (*model.User, error)
-	LoadById(id uint64) (*model.User, error)
-	LoadUserListByIds(ids ...uint64) ([]*model.User, error)
-	IsUserNameExisted(username string) (bool, error)
+	Save(ctx context.Context, user *model.User) error
+	LoadByUsername(ctx context.Context, username string) (*model.User, error)
+	LoadById(ctx context.Context, id uint64) (*model.User, error)
+	LoadUserListByIds(ctx context.Context, ids ...uint64) ([]*model.User, error)
+	IsUserNameExisted(ctx context.Context, username string) (bool, error)
 }
 
 type PersistRepository struct {
 	user query.IUserDo
 }
 
-func New(db *gorm.DB) *PersistRepository {
-	return &PersistRepository{
-		user: query.User.WithContext(db.Statement.Context),
-	}
+func New() *PersistRepository {
+	return &PersistRepository{}
 }
 
-func (p *PersistRepository) Save(user *model.User) error {
-	return p.user.Create(user)
+func (p *PersistRepository) Save(ctx context.Context, user *model.User) error {
+	tx := dtdb.Tx(ctx).(*query.QueryTx)
+	return tx.User.Save(user)
 }
 
-func (p *PersistRepository) LoadByUsername(username string) (*model.User, error) {
-	return p.user.Where(query.User.UserName.Eq(username)).First()
+func (p *PersistRepository) LoadByUsername(ctx context.Context, username string) (*model.User, error) {
+	tx := dtdb.Tx(ctx).(*query.QueryTx)
+	return tx.User.Where(query.User.UserName.Eq(username)).First()
 }
 
-func (p *PersistRepository) LoadById(id uint64) (*model.User, error) {
-	return p.user.Where(query.User.ID.Eq(id)).First()
+func (p *PersistRepository) LoadById(ctx context.Context, id uint64) (*model.User, error) {
+	tx := dtdb.Tx(ctx).(*query.QueryTx)
+	return tx.User.Where(query.User.ID.Eq(id)).First()
 }
 
-func (p *PersistRepository) LoadUserListByIds(ids ...uint64) ([]*model.User, error) {
-	return p.user.Where(query.User.ID.In(ids...)).Find()
+func (p *PersistRepository) LoadUserListByIds(ctx context.Context, ids ...uint64) ([]*model.User, error) {
+	tx := dtdb.Tx(ctx).(*query.QueryTx)
+	return tx.User.Where(query.User.ID.In(ids...)).Find()
 }
 
-func (p *PersistRepository) IsUserNameExisted(username string) (bool, error) {
-	count, err := p.user.Where(query.User.UserName.Eq(username)).Count()
+func (p *PersistRepository) IsUserNameExisted(ctx context.Context, username string) (bool, error) {
+	tx := dtdb.Tx(ctx).(*query.QueryTx)
+
+	count, err := tx.User.Where(query.User.UserName.Eq(username)).Count()
 	if err != nil {
 		return false, err
 	}

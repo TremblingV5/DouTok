@@ -9,10 +9,11 @@ import (
 	"github.com/TremblingV5/DouTok/applications/user/rpc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/kitex_gen/user/userservice"
-	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/dtx"
 	"github.com/TremblingV5/DouTok/pkg/services"
 )
 
@@ -28,10 +29,17 @@ var (
 
 func init() {
 	ctx := context.Background()
-	_, err := configurator.Load(config, "DOUTOK_USER", "user")
-	logger = DouTokLogger.InitLogger(config.Logger)
-	DouTokContext.DefaultLogger = logger
-	DouTokContext.AddLoggerToContext(ctx, logger)
+	userConfig = Config{}
+	logcfg = LoggerConfig{}
+	viperConfig = dtviper.ConfigInit("DOUTOK_USER", "user")
+	viperConfig.UnmarshalStructTags(reflect.TypeOf(userConfig), "")
+	viperConfig.UnmarshalStruct(&userConfig)
+
+	logcfg, err := configStruct.Load[*LoggerConfig](ctx, &logcfg)
+
+	logger = DouTokLogger.InitLogger(logcfg.Logger)
+	dtx.DefaultLogger = logger
+	dtx.AddLoggerToContext(ctx, logger)
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
 	}

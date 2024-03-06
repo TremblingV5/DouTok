@@ -2,16 +2,19 @@ package main
 
 import (
 	"context"
+
+	"go.uber.org/zap"
+
 	"github.com/TremblingV5/DouTok/applications/comment/handler"
 	"github.com/TremblingV5/DouTok/applications/comment/rpc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment/commentservice"
-	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/dtx"
 	"github.com/TremblingV5/DouTok/pkg/services"
-	"go.uber.org/zap"
 )
 
 type Config struct {
@@ -28,10 +31,17 @@ var (
 func init() {
 
 	ctx := context.Background()
-	_, err := configurator.Load(config, "DOUTOK_COMMENT", "comment")
-	logger = DouTokLogger.InitLogger(config.Logger)
-	DouTokContext.DefaultLogger = logger
-	DouTokContext.AddLoggerToContext(ctx, logger)
+	commentConfig = Config{}
+	logcfg = LoggerConfig{}
+	ViperConfig = dtviper.ConfigInit("DOUTOK_COMMENT", "comment")
+	ViperConfig.UnmarshalStructTags(reflect.TypeOf(commentConfig), "")
+	ViperConfig.UnmarshalStruct(&commentConfig)
+
+	logcfg, err := configStruct.Load[*LoggerConfig](ctx, &logcfg)
+
+	logger = DouTokLogger.InitLogger(logcfg.Logger)
+	dtx.DefaultLogger = logger
+	dtx.AddLoggerToContext(ctx, logger)
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
 	}

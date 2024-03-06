@@ -2,19 +2,22 @@ package main
 
 import (
 	"context"
+
+	"go.uber.org/zap"
+
 	"github.com/TremblingV5/DouTok/applications/commentDomain/handler"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/redis/commentTotalCountRedis"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/service"
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/kitex_gen/commentDomain/commentdomainservice"
-	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
+	"github.com/TremblingV5/DouTok/pkg/dtx"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/services"
-	"go.uber.org/zap"
 )
 
 type Config struct {
@@ -39,15 +42,14 @@ func init() {
 
 	_, err := configurator.Load(config, "DOUTOK_COMMENT_DOMAIN", "commentDomain")
 
-	logger = DouTokLogger.InitLogger(config.Logger)
-	DouTokContext.DefaultLogger = logger
-	DouTokContext.AddLoggerToContext(ctx, logger)
-
+	logger = DouTokLogger.InitLogger(logcfg.Logger)
+	dtx.DefaultLogger = logger
+	ctx = dtx.AddLoggerToContext(ctx, logger)
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
 	}
 
-	logger = DouTokContext.Extract(ctx)
+	logger = dtx.Extract(ctx)
 
 	db, err := config.MySQL.InitDB()
 	if err != nil {

@@ -27,7 +27,7 @@ func (s *Handler) AddUser(ctx context.Context, req *userDomain.DoutokAddUserRequ
 		}, nil
 	}
 
-	userId, err := s.user.CreateNewUser(req.Username, req.Password)
+	userId, err := s.user.CreateNewUser(ctx, req.Username, req.Password)
 
 	if err != nil {
 		return &userDomain.DoutokAddUserResponse{
@@ -49,7 +49,7 @@ func (s *Handler) CheckUser(ctx context.Context, req *userDomain.DoutokCheckUser
 		return packCheckUserResp(errs.EmptyErr.Code(), errs.EmptyErr.Message(), 0)
 	}
 
-	userId, err := s.user.CheckPassword(req.Username, req.Password)
+	userId, err := s.user.CheckPassword(ctx, req.Username, req.Password)
 	if err != nil || userId == 0 {
 		return packCheckUserResp(errs.PasswordErr.Code(), errs.PasswordErr.Message(), 0)
 	}
@@ -65,7 +65,7 @@ func (s *Handler) GetUserInfo(ctx context.Context, req *userDomain.DoutokGetUser
 		}
 	}
 
-	userList, err := s.user.LoadUserListByIds(userIdList...)
+	userList, err := s.user.LoadUserListByIds(ctx, userIdList...)
 	if err != nil {
 		return packGetUserInfoResp(errs.SystemErr.Code(), err.Error(), nil)
 	}
