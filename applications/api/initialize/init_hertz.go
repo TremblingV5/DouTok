@@ -188,6 +188,6 @@ func InitHertz() (*server.Hertz, func()) {
 		}
 	}
 	return h, func() {
-		p.Shutdown(context.Background()) //nolint
+		_ = p.Shutdown(context.Background()) //nolint
 	}
 }
