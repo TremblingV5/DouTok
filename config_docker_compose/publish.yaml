@@ -29,8 +29,8 @@ Snowflake:
 
 OSS:
   Endpoint: "oss-cn-shanghai.aliyuncs.com"
-  Key: "LTAI5tE4KuLv9mURV2C73Umi"
-  Secret: "6GTV8iO6UDTjXitmnXgRrZvW6wHqXw"
+  Key: ""
+  Secret: ""
   Bucket: "DouTok-video"
   Callback: ""
 
