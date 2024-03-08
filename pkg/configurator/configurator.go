@@ -1,7 +1,6 @@
 package configurator
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -54,28 +53,29 @@ func getConfigFilesPath(configName string) (string, error) {
 	return "", errors.New(constants.ErrConfigFileNotFound + ", file name: " + configName)
 }
 
-func Load(ctx context.Context, config interface{}, envPrefix, configName string) error {
-	if err := loadFromEnv(ctx, config); err != nil {
-		return fmt.Errorf("could not load env variables: %w", err)
+func Load(config interface{}, envPrefix, configName string) (*dtviper.Config, error) {
+	var v *dtviper.Config
+	if err := loadFromEnv(config); err != nil {
+		return v, fmt.Errorf("could not load env variables: %w", err)
 	}
 
-	v := dtviper.ConfigInit(envPrefix, configName)
+	v = dtviper.ConfigInit(envPrefix, configName)
 
-	if err := loadFromFile(ctx, config, v); err != nil {
-		return fmt.Errorf("could not load config from files: %w", err)
+	if err := loadFromFile(config, v); err != nil {
+		return v, fmt.Errorf("could not load config from files: %w", err)
 	}
 
-	return nil
+	return v, nil
 }
 
-func loadFromEnv(ctx context.Context, config interface{}) error {
+func loadFromEnv(config interface{}) error {
 	if err := env.Parse(config); err != nil {
 		return err
 	}
 	return nil
 }
 
-func loadFromFile(ctx context.Context, config interface{}, v *dtviper.Config) error {
+func loadFromFile(config interface{}, v *dtviper.Config) error {
 	configType := reflect.TypeOf(config)
 
 	if configType.Kind() != reflect.Ptr {
@@ -123,7 +123,7 @@ func loadFromFile(ctx context.Context, config interface{}, v *dtviper.Config) er
 				fieldValue.SetBool(false)
 			}
 		case reflect.Struct:
-			if err := loadFromFile(ctx, fieldValue.Addr().Interface(), v); err != nil {
+			if err := loadFromFile(fieldValue.Addr().Interface(), v); err != nil {
 				continue
 			}
 		case reflect.String:

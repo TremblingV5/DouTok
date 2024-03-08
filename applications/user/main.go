@@ -17,15 +17,8 @@ import (
 )
 
 type Config struct {
-	Base      configStruct.Base      `envPrefix:"DOUTOK_USER_"`
-	Etcd      configStruct.Etcd      `envPrefix:"DOUTOK_USER_"`
-	Jwt       configStruct.Jwt       `envPrefix:"DOUTOK_USER_"`
-	MySQL     configStruct.MySQL     `envPrefix:"DOUTOK_USER_"`
-	Snowflake configStruct.Snowflake `envPrefix:"DOUTOK_USER_"`
-	HBase     configStruct.HBase     `envPrefix:"DOUTOK_USER_"`
-	Redis     configStruct.Redis     `envPrefix:"DOUTOK_USER_"`
-	Otel      configStruct.Otel      `envPrefix:"DOUTOK_USER_"`
-	Logger    configStruct.Logger    `envPrefix:"DOUTOK_USER_"`
+	configStruct.BaseConfig `envPrefix:"DOUTOK_USER_"`
+	Logger                  configStruct.Logger `envPrefix:"DOUTOK_USER_"`
 }
 
 var (
@@ -35,7 +28,7 @@ var (
 
 func init() {
 	ctx := context.Background()
-	err := configurator.Load(ctx, config, "DOUTOK_USER", "user")
+	_, err := configurator.Load(config, "DOUTOK_USER", "user")
 	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger
 	DouTokContext.AddLoggerToContext(ctx, logger)
@@ -47,7 +40,7 @@ func init() {
 func main() {
 	clients := rpc.New(services.InitRPCClientArgs(constants.USER_SERVER_NAME, config.Etcd))
 
-	options, shutdown := services.InitRPCServerArgs(constants.USER_SERVER_NAME, config.Base, config.Etcd, config.Otel)
+	options, shutdown := services.InitRPCServerArgs(constants.USER_SERVER_NAME, config.BaseConfig)
 	defer shutdown()
 
 	svr := userservice.NewServer(handler.New(clients), options...)

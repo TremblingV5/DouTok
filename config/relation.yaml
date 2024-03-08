@@ -9,7 +9,7 @@ Etcd:
 Server:
   Name: "DouTokRelationServer"
   Address: "127.0.0.1"
-  Port: 8093
+  Port: 8097
 
 Client:
   Echo: true
@@ -28,8 +28,7 @@ Redis:
   Host: "localhost"
   Port: 6379
   Password: "root"
-  DataBases:
-    Default: 6
+  DataBases: 6
 
 Kafka:
   Brokers:
@@ -46,10 +45,14 @@ Kafka:
 
 MySQL:
   Host: "localhost"
-  Port: "3306"
-  Database: "DouTok"
+  Port: 3306
   Username: "admin"
   Password: "root"
+  Database: "DouTok"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
+
 
 Otel:
   Host: "82.156.171.8"

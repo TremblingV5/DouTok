@@ -17,9 +17,9 @@ import (
 )
 
 type Config struct {
-	configStruct.BaseConfig `envPrefix:"DOUTOK_RELATIONDOMAIN_"`
-	Redis                   configStruct.Redis `envPrefix:"DOUTOK_RELATIONDOMAIN_"`
-	MySQL                   configStruct.MySQL `envPrefix:"DOUTOK_RELATIONDOMAIN_"`
+	configStruct.BaseConfig `envPrefix:"DOUTOK_RELATION_"`
+	Redis                   configStruct.Redis `envPrefix:"DOUTOK_RELATION_"`
+	MySQL                   configStruct.MySQL `envPrefix:"DOUTOK_RELATION_"`
 }
 
 var (
@@ -32,25 +32,12 @@ var (
 	DomainConfig  = &Config{}
 )
 
-func Init() {
-	InitViper()
-	InitRedisClient()
-	InitSyncProducer()
-	InitConsumerGroup()
-	InitId()
-	InitDB()
-	InitSafeMap()
-	InitMutex()
-
-	go Flush()
-}
-
 func InitMutex() {
 	mu = &sync.Mutex{}
 }
 
 func InitViper() {
-	v, err := configurator.Load(DomainConfig, "DOUTOK_RELATIONDOMAIN", "relationDomain")
+	v, err := configurator.Load(DomainConfig, "DOUTOK_RELATION", "relation")
 	ViperConfig = v
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", DomainConfig))

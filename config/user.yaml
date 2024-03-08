@@ -12,7 +12,7 @@ Etcd:
 Server:
   Name: "DouTokUserServer"
   Address: "127.0.0.1"
-  Port: 8076
+  Port: 8099
   Argon2ID:
     Memory: 64*1024
     Iterations: 3
@@ -29,16 +29,6 @@ Client:
 
 Snowflake:
   Node: 40
-
-MySQL:
-  Host: "localhost"
-  Port: 3306
-  Username: "admin"
-  Password: "root"
-  Database: "DouTok"
-  CharSet: "utf8mb4"
-  ParseTime: true
-  loc: "Local"
 
 Otel:
   Host: "82.156.171.8"

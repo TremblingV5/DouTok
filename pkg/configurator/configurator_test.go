@@ -1,7 +1,6 @@
 package configurator
 
 import (
-	"context"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"os"
 	"testing"
@@ -14,7 +13,7 @@ import (
 func TestLoadFromFiles(t *testing.T) {
 	v := dtviper.ConfigInit("DOUTOK_UNIT_TEST", "test", "./")
 
-	err := loadFromFile(context.Background(), 6, v)
+	err := loadFromFile(6, v)
 	require.EqualError(t, err, ErrNotPtrOfStruct)
 
 	type config struct {
@@ -25,7 +24,7 @@ func TestLoadFromFiles(t *testing.T) {
 	}
 
 	cfg := &config{}
-	err = loadFromFile(context.Background(), cfg, v)
+	err = loadFromFile(cfg, v)
 	require.NoError(t, err)
 	require.Equal(t, cfg.Name, "test")
 	require.Equal(t, cfg.Embed.Age, 12)
@@ -39,11 +38,11 @@ func TestLoadFromEnv(t *testing.T) {
 		}
 	}
 
-	os.Setenv("Name", "name") //nolint
-	os.Setenv("Age", "12")    //nolint
+	_ = os.Setenv("Name", "name") //nolint
+	_ = os.Setenv("Age", "12")    //nolint
 
 	cfg := &config{}
-	err := loadFromEnv(context.Background(), cfg)
+	err := loadFromEnv(cfg)
 	require.NoError(t, err)
 	require.Equal(t, cfg.Name, "name")
 	require.Equal(t, cfg.Embed.Age, 12)
@@ -58,10 +57,10 @@ func TestLoad(t *testing.T) {
 		}
 	}
 
-	os.Setenv("Name", "name") //nolint
+	_ = os.Setenv("Name", "name") //nolint
 
 	cfg := &config{}
-	err := Load(context.Background(), cfg, "DOUTOK_UNIT_TEST", "test")
+	_, err := Load(cfg, "DOUTOK_UNIT_TEST", "test")
 	require.NoError(t, err)
 	require.Equal(t, cfg.Name, "test")
 	require.Equal(t, cfg.Embed.Age, 12)

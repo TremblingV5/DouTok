@@ -27,7 +27,7 @@ func NewSavePublishService(ctx context.Context) *SavePublishService {
 
 func (s *SavePublishService) SavePublish(user_id int64, title string, data []byte) error {
 	log := LogBuilder.InitLogBuilder()
-	defer log.Write(misc.Logger)
+	defer log.Write(Logger)
 	log.Collect("user_id", strconv.FormatInt(user_id, 10))
 
 	timestamp := time.Now().Unix()

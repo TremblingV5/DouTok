@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/dtnetwork"
 	"time"
 
@@ -24,7 +25,6 @@ import (
 )
 
 var (
-	ServiceName string
 	ServiceAddr string
 	EtcdAddress string
 	hertzCfg    HertzCfg
@@ -88,7 +88,6 @@ func Init() {
 }
 
 func InitHertzCfg() {
-	ServiceName = ViperConfig.Viper.GetString("Server.Name")
 	ServiceAddr = fmt.Sprintf("%s:%d", ViperConfig.Viper.GetString("Server.Address"), ViperConfig.Viper.GetInt("Server.Port"))
 	EtcdAddress = fmt.Sprintf("%s:%d", ViperConfig.Viper.GetString("Etcd.Address"), ViperConfig.Viper.GetInt("Etcd.Port"))
 
@@ -116,7 +115,7 @@ func InitHertz() (*server.Hertz, func()) {
 			hlog.Fatal(err)
 		}
 		opts = append(opts, server.WithRegistry(r, &registry.Info{
-			ServiceName: ServiceName,
+			ServiceName: constants.API_SERVER_NAME,
 			Addr:        utils.NewNetAddr("tcp", ServiceAddr),
 			Weight:      10,
 			Tags:        nil,
@@ -127,7 +126,7 @@ func InitHertz() (*server.Hertz, func()) {
 	if ViperConfig.Viper.GetBool("Otel.Enable") {
 		//链路追踪
 		p = provider.NewOpenTelemetryProvider(
-			provider.WithServiceName(ServiceName),
+			provider.WithServiceName(constants.API_SERVER_NAME),
 			provider.WithExportEndpoint(fmt.Sprintf("%s:%s", ViperConfig.Viper.GetString("Otel.Host"), ViperConfig.Viper.GetString("Otel.Port"))),
 			provider.WithInsecure(),
 		)
@@ -188,6 +187,6 @@ func InitHertz() (*server.Hertz, func()) {
 		}
 	}
 	return h, func() {
-		p.Shutdown(context.Background()) //nolint
+		_ = p.Shutdown(context.Background()) //nolint
 	}
 }
