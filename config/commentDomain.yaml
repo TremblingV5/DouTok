@@ -24,9 +24,9 @@ Client:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "root"
+  Username: "admin"
   Password: "root"
-  Database: "dbname"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
@@ -40,7 +40,7 @@ HBase:
 Redis:
   Host: "localhost"
   Port: "6379"
-  Password: "npedresa"
+  Password: "root"
   ComCntCache:
     Num: 8
   ComTotalCntCache:

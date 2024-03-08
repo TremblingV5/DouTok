@@ -32,7 +32,7 @@ Redis:
 
 Kafka:
   Brokers:
-    - "localhost:9092"
+    - "YOUR_OWN_IP:9092"
   Topics:
     - "relation_1"
 #    - "relation_2"
@@ -46,9 +46,9 @@ Kafka:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "root"
+  Username: "admin"
   Password: "root"
-  Database: "dbname"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"

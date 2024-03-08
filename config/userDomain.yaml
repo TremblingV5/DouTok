@@ -33,9 +33,9 @@ Snowflake:
 MySQL:
   Host: "localhost"
   Port: 3306
-  Username: "root"
+  Username: "admin"
   Password: "root"
-  Database: "dbname"
+  Database: "DouTok"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"

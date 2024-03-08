@@ -34,7 +34,7 @@ Redis:
 
 Kafka:
   Brokers:
-    - "localhost:9092"
+    - "YOUR_OWN_IP:9092"
   Topics:
     - "message_1"
 #    - "message_2"

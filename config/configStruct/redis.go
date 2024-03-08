@@ -10,9 +10,8 @@ import (
 const DEFAULT_DATABASE = -1
 
 type Redis struct {
-	Host string `env:"REDIS_HOST" envDefault:"localhost" configPath:"Redis.Host"`
-	Port string `env:"REDIS_PORT" envDefault:"6379" configPath:"Redis.Port"`
-	//Dsn      string `env:"REDIS_DSN" envDefault:"localhost:6379" configPath:"Redis.Dest"`
+	Host     string `env:"REDIS_HOST" envDefault:"localhost" configPath:"Redis.Host"`
+	Port     string `env:"REDIS_PORT" envDefault:"6379" configPath:"Redis.Port"`
 	Password string `env:"REDIS_PASSWORD" envDefault:"root" configPath:"Redis.Password"`
 	// {db name 1}:{db num 1},{db name 2}:{db num 2}
 	Databases int `mapstructure:"Databases" default:"0"`
