@@ -11,7 +11,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/services"
@@ -30,17 +29,16 @@ type Config struct {
 }
 
 var (
-	logger      *zap.Logger
-	handle      = &handler.CommentDomainHandler{}
-	config      = &Config{}
-	viperConfig *dtviper.Config
+	logger *zap.Logger
+	handle = &handler.CommentDomainHandler{}
+	config = &Config{}
 )
 
 func init() {
 	ctx := context.Background()
 
-	v, err := configurator.Load(config, "DOUTOK_COMMENT_DOMAIN", "commentDomain")
-	viperConfig = v
+	_, err := configurator.Load(config, "DOUTOK_COMMENT_DOMAIN", "commentDomain")
+
 	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger
 	DouTokContext.AddLoggerToContext(ctx, logger)
