@@ -2,59 +2,64 @@ package service
 
 import (
 	"context"
-
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/dal/query"
 	"github.com/TremblingV5/DouTok/applications/favoriteDomain/misc"
+	"github.com/TremblingV5/DouTok/config/configStruct"
+	"github.com/TremblingV5/DouTok/pkg/configurator"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/kafka"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/safeMap"
 	"github.com/TremblingV5/DouTok/pkg/utils"
+	"go.uber.org/zap"
+)
+
+type Config struct {
+	configStruct.BaseConfig `envPrefix:"DOUTOK_FAVORITEDOMAIN_"`
+	Redis                   configStruct.Redis `envPrefix:"DOUTOK_FAVORITEDOMAIN_"`
+	MySQL                   configStruct.MySQL `envPrefix:"DOUTOK_FAVORITEDOMAIN_"`
+	HBase                   configStruct.HBase `envPrefix:"DOUTOK_FAVORITEDOMAIN_"`
+}
+
+var (
+	ViperConfig  *dtviper.Config
+	DomainConfig = &Config{}
 )
 
 func Init() {
-	misc.InitViperConfig()
 
-	if err := InitDb(
-		misc.GetConfig(misc.ConfigIndex_MySQLUsername),
-		misc.GetConfig(misc.ConfigIndex_MySQLPassword),
-		misc.GetConfig(misc.ConfigIndex_MySQLHost),
-		misc.GetConfig(misc.ConfigIndex_MySQLPort),
-		misc.GetConfig(misc.ConfigIndex_MySQLDb),
-	); err != nil {
+	v, err := configurator.Load(DomainConfig, "DOUTOK_FAVORITEDOMAIN", "favoriteDomain")
+	ViperConfig = v
+	if err != nil {
+		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", DomainConfig))
+	}
+
+	if err := InitDb(); err != nil {
 		panic(err)
 	}
 
 	redisMap := map[string]int{
-		misc.FavCache:         int(misc.GetConfigNum(misc.ConfigIndex_RedisFavCacheDbNum)),
-		misc.FavCntCache:      int(misc.GetConfigNum(misc.ConfigIndex_RedisFavCntCacheDbNum)),
-		misc.FavTotalCntCache: int(misc.GetConfigNum("Redis.FavTotalCountCache.Num")),
+		misc.FavCache:         ViperConfig.Viper.GetInt(misc.ConfigIndex_RedisFavCacheDbNum),
+		misc.FavCntCache:      ViperConfig.Viper.GetInt(misc.ConfigIndex_RedisFavCntCacheDbNum),
+		misc.FavTotalCntCache: ViperConfig.Viper.GetInt("Redis.FavTotalCountCache.Num"),
 	}
 
-	if err := InitRedis(
-		misc.GetConfig(misc.ConfigIndex_RedisDest),
-		misc.GetConfig(misc.ConfigIndex_RedisPassword),
-		redisMap,
-	); err != nil {
-		panic(err)
-	}
+	InitRedis(redisMap)
 
 	InitMemoryMap()
 
 	kafkaBrokers := []string{
-		misc.GetConfig("Kafka.Broker"),
+		ViperConfig.Viper.GetString("Kafka.Broker"),
 	}
 	InitKafka(kafkaBrokers)
 
 	utils.InitSnowFlake(
-		misc.GetConfigNum(misc.ConfigIndex_SnowFlake),
+		ViperConfig.Viper.GetInt64(misc.ConfigIndex_SnowFlake),
 	)
 }
 
-func InitDb(username string, password string, host string, port string, database string) error {
-	db, err := mysqlIniter.InitDb(
-		username, password, host, port, database,
-	)
+func InitDb() error {
+	db, err := DomainConfig.MySQL.InitDB()
 
 	if err != nil {
 		return err
@@ -73,14 +78,13 @@ func InitDb(username string, password string, host string, port string, database
 	return nil
 }
 
-func InitRedis(dest string, password string, dbs map[string]int) error {
-	redisCaches, _ := redishandle.InitRedis(
-		dest, password, dbs,
-	)
-
-	RedisClients = redisCaches
-
-	return nil
+func InitRedis(dbs map[string]int) {
+	RedisClients = make(map[string]*redishandle.RedisClient)
+	for k, v := range dbs {
+		RedisClients[k] = &redishandle.RedisClient{
+			Client: DomainConfig.Redis.InitRedisClient(v),
+		}
+	}
 }
 
 func InitMemoryMap() {

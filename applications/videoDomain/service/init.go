@@ -2,73 +2,76 @@ package service
 
 import (
 	"context"
-
 	"github.com/TremblingV5/DouTok/applications/videoDomain/dal/query"
-	"github.com/TremblingV5/DouTok/applications/videoDomain/misc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
+	"github.com/TremblingV5/DouTok/pkg/LogBuilder"
+	"github.com/TremblingV5/DouTok/pkg/configurator"
+	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/utils"
+	"github.com/bytedance/gopkg/util/logger"
+	"go.uber.org/zap"
+)
+
+type Config struct {
+	configStruct.BaseConfig `envPrefix:"DOUTOK_VIDEODOMAIN_"`
+	MySQL                   configStruct.MySQL `envPrefix:"DOUTOK_VIDEODOMAIN_"`
+	Redis                   configStruct.Redis `envPrefix:"DOUTOK_VIDEODOMAIN_"`
+	HBase                   configStruct.HBase `envPrefix:"DOUTOK_VIDEODOMAIN_"`
+}
+
+var (
+	ViperConfig  *dtviper.Config
+	DomainConfig Config
+	Logger       *LogBuilder.Logger
 )
 
 func Init() {
-	misc.InitViperConfig()
 
-	if err := InitDb(
-		misc.GetConfig("MySQL.Username"),
-		misc.GetConfig("MySQL.Password"),
-		misc.GetConfig("MySQL.Host"),
-		misc.GetConfig("MySQL.Port"),
-		misc.GetConfig("MySQL.Database"),
-	); err != nil {
+	Logger = LogBuilder.New("./tmp/videoDomain.log", 1024*1024, 3, 10)
+
+	v, err := configurator.Load(&DomainConfig, "DOUTOK_VIDEODOMAIN", "videoDomain")
+	ViperConfig = v
+	if err != nil {
+		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", DomainConfig))
+	}
+
+	if err := InitDb(); err != nil {
 		panic(err)
 	}
 
-	if err := InitHB(
-		misc.GetConfig("HBase.Host"),
-	); err != nil {
-		panic(err)
-	}
+	InitHB()
 
 	if err := InitMinio(
-		misc.GetConfig("Minio.Endpoint"),
-		misc.GetConfig("Minio.Key"),
-		misc.GetConfig("Minio.Secret"),
-		misc.GetConfig("Minio.Bucket"),
+		ViperConfig.Viper.GetString("Minio.Endpoint"),
+		ViperConfig.Viper.GetString("Minio.Key"),
+		ViperConfig.Viper.GetString("Minio.Secret"),
+		ViperConfig.Viper.GetString("Minio.Bucket"),
 	); err != nil {
 		panic(nil)
 	}
 
-	utils.InitSnowFlake(misc.GetConfigNum("Snowflake.Node"))
+	utils.InitSnowFlake(ViperConfig.Viper.GetInt64("Snowflake.Node"))
 	redisMap := map[string]int{
-		misc.SendBox:    int(misc.GetConfigNum("Redis.SendBox.Num")),
-		misc.MarkedTime: int(misc.GetConfigNum("Redis.MarkedTime.Num")),
+		"SendBox":    ViperConfig.Viper.GetInt("Redis.SendBox.Num"),
+		"MarkedTime": ViperConfig.Viper.GetInt("Redis.MarkedTime.Num"),
 	}
 
-	if err := InitRedis(
-		misc.GetConfig("Redis.Dest"),
-		misc.GetConfig("Redis.Password"),
-		redisMap,
-	); err != nil {
-		panic(err)
+	InitRedis(redisMap)
+}
+
+func InitRedis(dbs map[string]int) {
+	RedisClients = make(map[string]*redishandle.RedisClient)
+	for k, v := range dbs {
+		RedisClients[k] = &redishandle.RedisClient{
+			Client: DomainConfig.Redis.InitRedisClient(v),
+		}
 	}
 }
 
-func InitRedis(dest string, password string, dbs map[string]int) error {
-	redisCaches, _ := redishandle.InitRedis(
-		dest, password, dbs,
-	)
-
-	RedisClients = redisCaches
-
-	return nil
-}
-
-func InitDb(username string, password string, host string, port string, database string) error {
-	db, err := mysqlIniter.InitDb(
-		username, password, host, port, database,
-	)
+func InitDb() error {
+	db, err := DomainConfig.MySQL.InitDB()
 
 	if err != nil {
 		return err
@@ -86,11 +89,10 @@ func InitDb(username string, password string, host string, port string, database
 	return nil
 }
 
-func InitHB(host string) error {
-	client := hbaseHandle.InitHB(host)
-	HBClient = &client
-
-	return nil
+func InitHB() {
+	HBClient = &hbaseHandle.HBaseClient{
+		Client: *DomainConfig.HBase.InitHB(),
+	}
 }
 
 func InitOSS(endpoint string, key string, secret string, bucketName string) error {

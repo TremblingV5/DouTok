@@ -1,16 +1,24 @@
 package service
 
 import (
-	"fmt"
+	"github.com/TremblingV5/DouTok/config/configStruct"
+	"github.com/TremblingV5/DouTok/pkg/configurator"
+	"github.com/bytedance/gopkg/util/logger"
+	"go.uber.org/zap"
 
 	"github.com/Shopify/sarama"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/kafka"
-	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 	"github.com/go-redis/redis/v8"
 )
+
+type Config struct {
+	configStruct.BaseConfig `envPrefix:"DOUTOK_MESSAGE_"`
+	Redis                   configStruct.Redis `envPrefix:"DOUTOK_MESSAGE_"`
+	HBase                   configStruct.HBase `envPrefix:"DOUTOK_MESSAGE_"`
+}
 
 var (
 	HBClient      *hbaseHandle.HBaseClient
@@ -18,17 +26,19 @@ var (
 	SyncProducer  sarama.SyncProducer
 	ViperConfig   *dtviper.Config
 	ConsumerGroup sarama.ConsumerGroup
+	DomainConfig  = &Config{}
 )
 
 func InitViper() {
-	ViperConfig = dtviper.ConfigInit("DOUTOK_MESSAGE", "message")
+	v, err := configurator.Load(DomainConfig, "DOUTOK_MESSAGE", "message")
+	ViperConfig = v
+	if err != nil {
+		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", DomainConfig))
+	}
 }
 
 func InitHB() {
-
-	client := hbaseHandle.InitHB(ViperConfig.Viper.GetString("Hbase.Host"))
-
-	HBClient = &client
+	HBClient = &hbaseHandle.HBaseClient{Client: *DomainConfig.HBase.InitHB()}
 }
 
 func InitSyncProducer() {
@@ -42,16 +52,7 @@ func InitConsumerGroup() {
 }
 
 func InitRedisClient() {
-
-	Client, err := redishandle.InitRedisClient(
-		fmt.Sprintf("%s:%d", ViperConfig.Viper.GetString("Redis.Host"), ViperConfig.Viper.GetInt("Redis.Port")),
-		ViperConfig.Viper.GetString("Redis.Password"),
-		ViperConfig.Viper.GetInt("Redis.Databases.Default"),
-	)
-	if err != nil {
-		panic(err)
-	}
-	RedisClient = Client
+	RedisClient = DomainConfig.Redis.InitRedisClient(configStruct.DEFAULT_DATABASE)
 }
 
 func InitId() {

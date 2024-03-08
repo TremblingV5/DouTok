@@ -9,7 +9,7 @@ Etcd:
 Server:
   Name: "DouTokRelationDomainServer"
   Address: "127.0.0.1"
-  Port: 8094
+  Port: 8098
 
 Client:
   Echo: true
@@ -21,19 +21,15 @@ Client:
 Snowflake:
   Node: 30
 
-Hbase:
-  Table: "message"
-
 Redis:
   Host: "localhost"
   Port: 6379
   Password: "root"
-  DataBases:
-    Default: 6
+  DataBases: 6
 
 Kafka:
   Brokers:
-    - "150.158.237.39:50004"
+    - "localhost:9092"
   Topics:
     - "relation_1"
 #    - "relation_2"
@@ -46,11 +42,13 @@ Kafka:
 
 MySQL:
   Host: "localhost"
-  Port: "3306"
-  Database: "DouTok"
-  Username: "admin"
+  Port: 3306
+  Username: "root"
   Password: "root"
-
+  Database: "dbname"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
 Otel:
   Host: "82.156.171.8"
   Port: 4317

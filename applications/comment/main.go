@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-
 	"github.com/TremblingV5/DouTok/applications/comment/handler"
 	"github.com/TremblingV5/DouTok/applications/comment/rpc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
@@ -16,11 +15,9 @@ import (
 )
 
 type Config struct {
-	Base   configStruct.Base   `envPrefix:"DOUTOK_COMMENT_"`
-	Etcd   configStruct.Etcd   `envPrefix:"DOUTOK_COMMENT_"`
-	Jwt    configStruct.Jwt    `envPrefix:"DOUTOK_COMMENT_"`
-	Otel   configStruct.Otel   `envPrefix:"DOUTOK_COMMENT_"`
-	Logger configStruct.Logger `envPrefix:"DOUTOK_COMMENT_"`
+	configStruct.BaseConfig `envPrefix:"DOUTOK_COMMENT_"`
+	Jwt                     configStruct.Jwt    `envPrefix:"DOUTOK_COMMENT_"`
+	Logger                  configStruct.Logger `envPrefix:"DOUTOK_COMMENT_"`
 }
 
 var (
@@ -29,8 +26,9 @@ var (
 )
 
 func init() {
+
 	ctx := context.Background()
-	err := configurator.Load(ctx, config, "DOUTOK_COMMENT", "comment")
+	_, err := configurator.Load(config, "DOUTOK_COMMENT", "comment")
 	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger
 	DouTokContext.AddLoggerToContext(ctx, logger)
@@ -40,7 +38,7 @@ func init() {
 }
 
 func main() {
-	options, shutdown := services.InitRPCServerArgs(constants.COMMENT_SERVER_NAME, config.Base, config.Etcd, config.Otel)
+	options, shutdown := services.InitRPCServerArgs(constants.COMMENT_SERVER_NAME, config.BaseConfig)
 	defer shutdown()
 
 	svr := commentservice.NewServer(

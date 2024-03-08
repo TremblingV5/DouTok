@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/remote/trans/gonet"
@@ -12,8 +13,8 @@ import (
 	"time"
 )
 
-func InitRPCClientArgs(serviceName string, etcdCfg etcdConfig) []client.Option {
-	registry, err := etcd.NewEtcdResolver([]string{etcdCfg.GetAddr()})
+func InitRPCClientArgs(serviceName string, config configStruct.Etcd) []client.Option {
+	registry, err := etcd.NewEtcdResolver([]string{config.GetAddr()})
 	if err != nil {
 		panic(err)
 	}

@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/remote/trans/gonet"
@@ -14,23 +15,23 @@ import (
 	"runtime"
 )
 
-func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, otelCfg otelConfig) ([]server.Option, func()) {
-	etcdAddr := etcdCfg.GetAddr()
+func InitRPCServerArgs(name string, config configStruct.BaseConfig) ([]server.Option, func()) {
+	etcdAddr := config.Etcd.GetAddr()
 	registry, err := etcd.NewEtcdRegistry([]string{etcdAddr})
 	if err != nil {
 		panic(err)
 	}
 
-	serverAddr, err := net.ResolveTCPAddr("tcp", base.GetAddr())
+	serverAddr, err := net.ResolveTCPAddr("tcp", config.Base.GetAddr())
 	if err != nil {
 		panic(err)
 	}
 
 	var p provider.OtelProvider
-	if otelCfg.IsEnable() {
+	if config.Otel.Enable {
 		p = provider.NewOpenTelemetryProvider(
-			provider.WithServiceName(serviceName),
-			provider.WithExportEndpoint(otelCfg.GetAddr()),
+			provider.WithServiceName(name),
+			provider.WithExportEndpoint(config.Otel.GetAddr()),
 			provider.WithInsecure(),
 		)
 	}
@@ -42,7 +43,7 @@ func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, 
 		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}),
 		server.WithMuxTransport(),
 		server.WithSuite(tracing.NewServerSuite()),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: name}),
 	}
 	if runtime.GOOS == "windows" {
 		options = append(options,
@@ -50,7 +51,7 @@ func InitRPCServerArgs(serviceName string, base baseConfig, etcdCfg etcdConfig, 
 			server.WithTransHandlerFactory(gonet.NewSvrTransHandlerFactory()))
 	}
 	return options, func() {
-		if otelCfg.IsEnable() {
+		if config.Otel.Enable {
 			_ = p.Shutdown(context.Background())
 		}
 	}

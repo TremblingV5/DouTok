@@ -22,13 +22,10 @@ import (
 )
 
 type Config struct {
-	Base      configStruct.Base      `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Etcd      configStruct.Etcd      `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Jwt       configStruct.Jwt       `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	MySQL     configStruct.MySQL     `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Snowflake configStruct.Snowflake `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Otel      configStruct.Otel      `envPrefix:"DOUTOK_USER_DOMAIN_"`
-	Logger    configStruct.Logger    `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	configStruct.BaseConfig `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Jwt                     configStruct.Jwt    `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	MySQL                   configStruct.MySQL  `envPrefix:"DOUTOK_USER_DOMAIN_"`
+	Logger                  configStruct.Logger `envPrefix:"DOUTOK_USER_DOMAIN_"`
 }
 
 var (
@@ -39,7 +36,7 @@ var (
 func init() {
 	ctx := context.Background()
 
-	err := configurator.Load(ctx, config, "DOUTOK_USER_DOMAIN", "userDomain")
+	_, err := configurator.Load(config, "DOUTOK_USER_DOMAIN", "userDomain")
 	errs.Init(config.Base)
 	logger = DouTokLogger.InitLogger(config.Logger)
 	DouTokContext.DefaultLogger = logger
@@ -67,7 +64,7 @@ func loadFeature() *handler.Handler {
 }
 
 func main() {
-	options, shutdown := services.InitRPCServerArgs(constants.USER_DOMAIN_SERVER_NAME, config.Base, config.Etcd, config.Otel)
+	options, shutdown := services.InitRPCServerArgs(constants.USER_DOMAIN_SERVER_NAME, config.BaseConfig)
 	defer shutdown()
 
 	svr := userdomainservice.NewServer(

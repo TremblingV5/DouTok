@@ -9,7 +9,7 @@ Etcd:
 Server:
   Name: "DouTokMessageDomainServer"
   Address: "127.0.0.1"
-  Port: 8091
+  Port: 8095
 
 Client:
   Echo: true
@@ -30,12 +30,11 @@ Redis:
   Host: "localhost"
   Port: 6379
   Password: "root"
-  DataBases:
-    Default: 5
+  DataBases: 5
 
 Kafka:
   Brokers:
-    - "YOUR_OWN_IP:9092"
+    - "localhost:9092"
   Topics:
     - "message_1"
 #    - "message_2"
