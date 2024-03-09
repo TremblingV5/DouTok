@@ -58,9 +58,11 @@ func (s *Handler) CheckUser(ctx context.Context, req *userDomain.DoutokCheckUser
 }
 
 func (s *Handler) GetUserInfo(ctx context.Context, req *userDomain.DoutokGetUserInfoRequest) (resp *userDomain.DoutokGetUserInfoResponse, err error) {
-	userIdList := []uint64{}
-	for _, v := range req.UserId {
-		userIdList = append(userIdList, uint64(v))
+	userIdList := make([]uint64, 0)
+	if req != nil && req.UserId != nil {
+		for _, v := range req.UserId {
+			userIdList = append(userIdList, uint64(v))
+		}
 	}
 
 	userList, err := s.user.LoadUserListByIds(userIdList...)

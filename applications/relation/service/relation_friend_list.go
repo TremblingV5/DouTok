@@ -45,7 +45,7 @@ func (s *RelationFriendListService) RelationFriendList(req *relationDomain.Douto
 	if err != nil {
 		return err, nil
 	}
-	var fList []*entity.User
+	fList := make([]*entity.User, 0)
 	for _, v := range friendList {
 		// 0为当前请求用户接受的消息，1为当前请求用户发送的消息
 		// msgType := 0

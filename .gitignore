@@ -9,3 +9,4 @@ log
 zip
 
 __debug*
+applications/api/docs/swagger.yaml

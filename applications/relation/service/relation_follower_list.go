@@ -60,7 +60,7 @@ func (s *RelationFollowerListService) RelationFollowerList(req *relationDomain.D
 	// 	result = append(result, v)
 	// }
 
-	var result []*entity.User
+	result := make([]*entity.User, 0)
 	for _, v := range follower {
 		result = append(result, &entity.User{
 			Id: v,

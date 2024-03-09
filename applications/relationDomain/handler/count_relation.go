@@ -9,9 +9,9 @@ import (
 )
 
 func (s *RelationDomainServiceImpl) CountRelation(ctx context.Context, req *relationDomain.DoutokCountRelationRequest) (resp *relationDomain.DoutokCountRelationResponse, err error) {
-	resp = new(relationDomain.DoutokCountRelationResponse)
-
-	result := make(map[int64]int64)
+	resp = &relationDomain.DoutokCountRelationResponse{
+		Result: make(map[int64]int64),
+	}
 
 	/*
 		0 -> 关注数 1 -> 粉丝数
@@ -22,7 +22,7 @@ func (s *RelationDomainServiceImpl) CountRelation(ctx context.Context, req *rela
 			if err != nil {
 				continue
 			}
-			result[v] = follow
+			resp.Result[v] = follow
 		}
 	} else if req.ActionType == 1 {
 		for _, v := range req.UserId {
@@ -30,11 +30,9 @@ func (s *RelationDomainServiceImpl) CountRelation(ctx context.Context, req *rela
 			if err != nil {
 				continue
 			}
-			result[v] = follower
+			resp.Result[v] = follower
 		}
 	}
-
-	resp.Result = result
 
 	pack.BuildRelationCountResp(errno.Success, resp)
 	return resp, nil

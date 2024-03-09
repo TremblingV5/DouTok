@@ -62,7 +62,7 @@ func (s *RelationFollowListService) RelationFollowList(req *relationDomain.Douto
 	// for _, v := range resp.UserList {
 	// 	result = append(result, v)
 	// }
-	var result []*entity.User
+	result := make([]*entity.User, 0)
 	for _, v := range follow {
 		result = append(result, &entity.User{
 			Id: v,

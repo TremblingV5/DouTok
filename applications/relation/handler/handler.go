@@ -16,6 +16,12 @@ type Handler struct {
 	clients *rpc.Clients
 }
 
+func New(client *rpc.Clients) *Handler {
+	return &Handler{
+		clients: client,
+	}
+}
+
 func (s *Handler) RelationAction(ctx context.Context, req *relation.DouyinRelationActionRequest) (resp *relation.DouyinRelationActionResponse, err error) {
 	if req.ActionType == 0 {
 		result, err := s.clients.Relation.Client.AddRelation(ctx, &relationDomain.DoutokAddRelationRequest{
@@ -55,24 +61,28 @@ func (s *Handler) RelationFollowList(ctx context.Context, req *relation.DouyinRe
 		return nil, err
 	}
 
-	var userIdList []int64
-	for _, v := range result.UserList {
-		userIdList = append(userIdList, v.GetId())
+	userIdList := make([]int64, 0)
+	if result.UserList != nil {
+		for _, v := range result.UserList {
+			userIdList = append(userIdList, v.GetId())
+		}
 	}
 	userInfo, err := s.clients.User.Client.GetUserInfo(ctx, &userDomain.DoutokGetUserInfoRequest{
 		UserId: userIdList,
 	})
 
-	var resList []*entity.User
-	for _, v := range result.UserList {
-		if value, ok := userInfo.UserList[v.GetId()]; ok {
-			resList = append(resList, &entity.User{
-				Id:              value.GetId(),
-				Name:            value.GetName(),
-				Avatar:          value.GetAvatar(),
-				BackgroundImage: value.GetBackgroundImage(),
-				Signature:       value.GetSignature(),
-			})
+	resList := make([]*entity.User, 0)
+	if result.UserList != nil {
+		for _, v := range result.UserList {
+			if value, ok := userInfo.UserList[v.GetId()]; ok {
+				resList = append(resList, &entity.User{
+					Id:              value.GetId(),
+					Name:            value.GetName(),
+					Avatar:          value.GetAvatar(),
+					BackgroundImage: value.GetBackgroundImage(),
+					Signature:       value.GetSignature(),
+				})
+			}
 		}
 	}
 
@@ -92,24 +102,32 @@ func (s *Handler) RelationFollowerList(ctx context.Context, req *relation.Douyin
 		return nil, err
 	}
 
-	var userIdList []int64
-	for _, v := range result.UserList {
-		userIdList = append(userIdList, v.GetId())
+	userIdList := make([]int64, 0)
+	if result != nil && result.UserList != nil {
+		for _, v := range result.UserList {
+			userIdList = append(userIdList, v.GetId())
+		}
 	}
 	userInfo, err := s.clients.User.Client.GetUserInfo(ctx, &userDomain.DoutokGetUserInfoRequest{
 		UserId: userIdList,
 	})
 
-	var resList []*entity.User
-	for _, v := range result.UserList {
-		if value, ok := userInfo.UserList[v.GetId()]; ok {
-			resList = append(resList, &entity.User{
-				Id:              value.GetId(),
-				Name:            value.GetName(),
-				Avatar:          value.GetAvatar(),
-				BackgroundImage: value.GetBackgroundImage(),
-				Signature:       value.GetSignature(),
-			})
+	if err != nil {
+		return nil, err
+	}
+
+	resList := make([]*entity.User, 0)
+	if result != nil && result.UserList != nil && userInfo != nil && userInfo.UserList != nil {
+		for _, v := range result.UserList {
+			if value, ok := userInfo.UserList[v.GetId()]; ok {
+				resList = append(resList, &entity.User{
+					Id:              value.GetId(),
+					Name:            value.GetName(),
+					Avatar:          value.GetAvatar(),
+					BackgroundImage: value.GetBackgroundImage(),
+					Signature:       value.GetSignature(),
+				})
+			}
 		}
 	}
 
@@ -126,7 +144,7 @@ func (s *Handler) RelationFriendList(ctx context.Context, req *relation.DouyinRe
 		ActionType: 2,
 	})
 
-	var friendUserList []*entity.FriendUser
+	friendUserList := make([]*entity.FriendUser, 0)
 	for _, v := range result.UserList {
 		messageInfo, err := s.clients.Message.Client.ListMessage(ctx, &messageDomain.DoutokListMessageRequest{
 			UserId:   req.UserId,

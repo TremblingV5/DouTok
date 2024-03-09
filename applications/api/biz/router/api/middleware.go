@@ -3,7 +3,7 @@
 package Api
 
 import (
-	"github.com/TremblingV5/DouTok/applications/api/initialize"
+	middleware2 "github.com/TremblingV5/DouTok/applications/api/initialize"
 	"github.com/TremblingV5/DouTok/pkg/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 )
@@ -24,7 +24,7 @@ func _douyinMw() []app.HandlerFunc {
 func _getuserfeedMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		initialize.AuthMiddleware.MiddlewareFunc(),
+		middleware2.AuthMiddleware.MiddlewareFunc(),
 	}
 }
 
@@ -36,7 +36,7 @@ func _getuserbyidMw() []app.HandlerFunc {
 func _commentMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		initialize.AuthMiddleware.MiddlewareFunc(),
+		middleware2.AuthMiddleware.MiddlewareFunc(),
 	}
 }
 
@@ -53,7 +53,7 @@ func _commentlistMw() []app.HandlerFunc {
 func _favoriteMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		initialize.AuthMiddleware.MiddlewareFunc(),
+		middleware2.AuthMiddleware.MiddlewareFunc(),
 	}
 }
 
@@ -70,7 +70,7 @@ func _favoritelistMw() []app.HandlerFunc {
 func _messageMw() []app.HandlerFunc {
 	//your code...
 	return []app.HandlerFunc{
-		initialize.AuthMiddleware.MiddlewareFunc(),
+		middleware2.AuthMiddleware.MiddlewareFunc(),
 	}
 	return nil
 }
@@ -88,7 +88,7 @@ func _messagechatMw() []app.HandlerFunc {
 func _publishMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		initialize.AuthMiddleware.MiddlewareFunc(),
+		middleware2.AuthMiddleware.MiddlewareFunc(),
 	}
 }
 
@@ -105,7 +105,7 @@ func _publishlistMw() []app.HandlerFunc {
 func _relationMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		initialize.AuthMiddleware.MiddlewareFunc(),
+		middleware2.AuthMiddleware.MiddlewareFunc(),
 	}
 }
 

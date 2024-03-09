@@ -24,7 +24,7 @@ var (
 
 func init() {
 
-	_, err := configurator.Load(config, "DOUTOK_PUBLISH_", "publish")
+	_, err := configurator.Load(config, "DOUTOK_PUBLISH", "publish")
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
 	}

@@ -2,7 +2,6 @@ package hbaseHandle
 
 import (
 	"context"
-
 	"github.com/tsuna/gohbase/hrpc"
 )
 
@@ -18,6 +17,5 @@ func (c *HBaseClient) Put(table string, rowKey string, values map[string]map[str
 	if _, err := c.Client.Put(putReq); err != nil {
 		return err
 	}
-
 	return nil
 }

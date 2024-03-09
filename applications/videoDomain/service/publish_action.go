@@ -37,8 +37,6 @@ func (s *SavePublishService) SavePublish(user_id int64, title string, data []byt
 	hasher.Write([]byte(fmt.Sprint(user_id) + title))
 	filename := hex.EncodeToString(hasher.Sum(nil)) + ".mp4"
 
-	// if err := OSSClient.Put(
-	// 	"video", filename, bytes.NewReader(data),
 	if err := MinioClient.Put(
 		"video", filename, bytes.NewReader(data), len(data),
 	); err != nil {
@@ -48,7 +46,7 @@ func (s *SavePublishService) SavePublish(user_id int64, title string, data []byt
 		return err
 	}
 
-	play_url := "http://" + OssCfg.Endpoint + "/doutok/video/" + filename
+	play_url := "http://" + DomainConfig.MinIO.Endpoint + "/" + DomainConfig.MinIO.Bucket + "/doutok/video/" + filename
 	cover_url := play_url + "?x-oss-process=video/snapshot,t_30000,f_jpg,w_0,h_0,m_fast,ar_auto"
 
 	// 2. 写入数据到MySQl
@@ -63,12 +61,8 @@ func (s *SavePublishService) SavePublish(user_id int64, title string, data []byt
 	}
 
 	// 3. 写入数据到HBase，分别写入publish表和feed表
-
-	if err := SaveVideo2HB(id, uint64(user_id), title, play_url, cover_url, fmt.Sprint(timestamp)); err != nil {
-		log.SetLogType("error")
-		log.SetMessage("PSave video info to HBase failed")
-		log.Collect("errMsg", err.Error())
-	}
+	// TODO 写入HBase这部分太慢了，输出是连接有问题，这部分我不会，我开协程去处理这部分，避免响应速度过慢
+	go SaveVideo2HB(id, uint64(user_id), title, play_url, cover_url, fmt.Sprint(timestamp))
 
 	return nil
 }
@@ -94,7 +88,7 @@ func SaveVideo2DB(user_id uint64, title string, play_url string, cover_url strin
 	return uint64(newVideoId), nil
 }
 
-func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cover_url string, timestamp string) error {
+func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cover_url string, timestamp string) {
 	// newVideo := typedef.VideoInHB{
 	// 	Id:         int64(id),
 	// 	AuthorId:   int64(user_id),
@@ -121,17 +115,10 @@ func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cove
 		},
 	}
 
-	if err := HBClient.Put(
+	_ = HBClient.Put(
 		"publish", publish_rowkey, hbData,
-	); err != nil {
-		return nil
-	}
-
-	if err := HBClient.Put(
+	)
+	_ = HBClient.Put(
 		"feed", feed_rowkey, hbData,
-	); err != nil {
-		return nil
-	}
-
-	return nil
+	)
 }
