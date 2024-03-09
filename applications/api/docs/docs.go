@@ -532,7 +532,7 @@ const docTemplate = `{
         },
         "/douyin/user/login": {
             "post": {
-                "description": "添加一个用户到数据库中",
+                "description": "输入账号密码登录获取Token",
                 "tags": [
                     "User用户相关"
                 ],

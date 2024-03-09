@@ -84,7 +84,7 @@ func GetUserById(ctx context.Context, c *app.RequestContext) {
 //	@Tags			User用户相关
 //
 //	@Summary		用户登录
-//	@Description	添加一个用户到数据库中
+//	@Description	输入账号密码登录获取Token
 //	@Param			req		body		api.DouyinUserLoginRequest	true	"用户信息"
 //	@Success		200		{object}	user.DouyinUserResponse
 //	@Failure		default	{object}	api.DouyinUserLoginResponse
