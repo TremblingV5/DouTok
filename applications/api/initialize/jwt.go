@@ -115,7 +115,7 @@ func InitJwt() {
 			}
 			return userId, err
 		},
-		TokenLookup: "cookie: token",
+		TokenLookup: "query: token, form: token, param: token, cookie: token",
 		TimeFunc:    time.Now,
 	})
 }

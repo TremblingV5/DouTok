@@ -34,15 +34,35 @@ sidebar_position: 2
 - MinIO
 - Kafka-ui(可选)
 
-找到 `./env/dependencies.yml` 文件，我们将使用 `docker-compose` 来进行安装
+找到 `./env/dependencies.yaml` 文件，我们将使用 `docker-compose` 来进行安装
 
 ```
-docker-compose -f ./env/dependencies.yml up -d
+docker-compose -f ./env/dependencies.yaml up -d
 ```
 
 确认所需各项服务成功安装
 
 你也可以自行安装对应服务，但需在后续修改你的对应配置文件
+
+
+
+1. 确保你的主机中的 `Hosts` 文件下存在这样的映射关系
+
+   ```
+   localhost(你的HBase部署的IP) hb-master
+   ```
+
+   否则会无法找到HBase的主节点信息
+
+2.  进入你的 `HBase` 的 `Docker` 容器内内部，执行下面的命令
+
+   ```
+   $ hbase shell # 使用hbase命令行工具
+   $ create 'publish','data' # 创建表 publish , 列族为 data
+   $ create 'feed','data' # 创建表 feed , 列族为 data
+   ```
+
+   这将为你配置好 `HBase` 的初始表格
 
 
 
@@ -80,55 +100,55 @@ git clone https://github.com/TremblingV5/DouTok.git
 
 #### RPC服务
 
-##### Comment
+##### 逻辑层
+
+- Comment
 
 `./applications/comment/main.go`
 
-##### CommentDomain
-
-`./applications/commentDomain/cmd/server/main.go`
-
-##### Favorite
-
-`./applications/favorite/main.go`
-
-##### FavoriteDomain
-
-`./applications/favoriteDomain/main.go`
-
-##### Feed
+- Feed
 
 `./applications/feed/main.go`
 
-##### Message
+- Message
 
 `./applications/message/main.go`
 
-##### MessageDomain
-
-`./applications/messageDomain/main.go`
-
-##### Publish
+- Publish
 
 `./applications/publish/main.go`
 
-##### RelationDomain
-
-`./applications/relationDomain/main.go`
-
-##### Relation
+- Relation
 
 `./applications/relation/main.go`
 
-##### User
+- User
 
 `./applications/user/main.go`
 
-##### UserDomain
+##### 业务层
+
+- CommentDomain
+
+`./applications/commentDomain/cmd/server/main.go`
+
+- FavoriteDomain
+
+`./applications/favoriteDomain/main.go`
+
+- MessageDomain
+
+`./applications/messageDomain/main.go`
+
+- RelationDomain
+
+`./applications/relationDomain/main.go`
+
+- UserDomain
 
 `./applications/userDomain/main.go`
 
-##### VideoDomain
+- VideoDomain
 
 `./applications/videoDomain/main.go`
 
@@ -148,14 +168,7 @@ git clone https://github.com/TremblingV5/DouTok.git
 
 ### Swagger接口文档
 
-在 `API` 网关服务启动后，访问
-
-```
-http://localhost:8088/swagger/index.html
-```
-
-即可
-
+在 `API` 网关服务启动后，访问 <http://localhost:8088/swagger/index.html> 即可
 可以看到目前有的接口相关信息
 
 

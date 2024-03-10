@@ -61,9 +61,10 @@ func (s *SavePublishService) SavePublish(user_id int64, title string, data []byt
 	}
 
 	// 3. 写入数据到HBase，分别写入publish表和feed表
-	// TODO 写入HBase这部分太慢了，输出是连接有问题，这部分我不会，我开协程去处理这部分，避免响应速度过慢
-	go SaveVideo2HB(id, uint64(user_id), title, play_url, cover_url, fmt.Sprint(timestamp))
-
+	err = SaveVideo2HB(id, uint64(user_id), title, play_url, cover_url, fmt.Sprint(timestamp))
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -88,7 +89,8 @@ func SaveVideo2DB(user_id uint64, title string, play_url string, cover_url strin
 	return uint64(newVideoId), nil
 }
 
-func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cover_url string, timestamp string) {
+// SaveVideo2HB TODO 这里的错误error需要处理
+func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cover_url string, timestamp string) error {
 	// newVideo := typedef.VideoInHB{
 	// 	Id:         int64(id),
 	// 	AuthorId:   int64(user_id),
@@ -115,10 +117,17 @@ func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cove
 		},
 	}
 
-	_ = HBClient.Put(
+	err := HBClient.Put(
 		"publish", publish_rowkey, hbData,
 	)
-	_ = HBClient.Put(
+	if err != nil {
+		return nil
+	}
+	err = HBClient.Put(
 		"feed", feed_rowkey, hbData,
 	)
+	if err != nil {
+		return nil
+	}
+	return nil
 }
