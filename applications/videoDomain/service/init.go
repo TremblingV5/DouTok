@@ -19,6 +19,7 @@ type Config struct {
 	MySQL                   configStruct.MySQL `envPrefix:"DOUTOK_VIDEODOMAIN_"`
 	Redis                   configStruct.Redis `envPrefix:"DOUTOK_VIDEODOMAIN_"`
 	HBase                   configStruct.HBase `envPrefix:"DOUTOK_VIDEODOMAIN_"`
+	MinIO                   configStruct.MinIO `envPrefix:"DOUTOK_VIDEODOMAIN_"`
 }
 
 var (
@@ -43,13 +44,8 @@ func Init() {
 
 	InitHB()
 
-	if err := InitMinio(
-		ViperConfig.Viper.GetString("Minio.Endpoint"),
-		ViperConfig.Viper.GetString("Minio.Key"),
-		ViperConfig.Viper.GetString("Minio.Secret"),
-		ViperConfig.Viper.GetString("Minio.Bucket"),
-	); err != nil {
-		panic(nil)
+	if err := InitMinio(); err != nil {
+		panic(err.Error())
 	}
 
 	utils.InitSnowFlake(ViperConfig.Viper.GetInt64("Snowflake.Node"))
@@ -95,40 +91,13 @@ func InitHB() {
 	}
 }
 
-func InitOSS(endpoint string, key string, secret string, bucketName string) error {
-	if err := OSSClient.Init(
-		endpoint, key, secret, bucketName,
-	); err != nil {
+func InitMinio() error {
+	client, err := DomainConfig.MinIO.InitIO()
+	if err != nil {
 		return err
 	}
-
-	config := configStruct.OssConfig{
-		Endpoint:   endpoint,
-		Key:        key,
-		Secret:     secret,
-		BucketName: bucketName,
-		//Callback:   callback,
-	}
-
-	OssCfg = &config
-
-	return nil
-}
-
-func InitMinio(endpoint string, key string, secret string, bucketName string) error {
-	MinioClient.Init(
-		endpoint, key, secret, bucketName,
-	)
-
-	config := configStruct.OssConfig{
-		Endpoint:   endpoint,
-		Key:        key,
-		Secret:     secret,
-		BucketName: bucketName,
-		//Callback:   callback,
-	}
-
-	OssCfg = &config
+	MinioClient.Client = client
+	MinioClient.Bucket = DomainConfig.MinIO.Bucket
 
 	return nil
 }

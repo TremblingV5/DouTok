@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/TremblingV5/DouTok/applications/relation/handler"
+	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/applications/relation/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
 	"github.com/TremblingV5/DouTok/pkg/constants"
@@ -35,11 +36,13 @@ func main() {
 
 	klog.SetLogger(logger)
 
+	clients := rpc.New(services.InitRPCClientArgs(constants.USER_SERVER_NAME, service.DomainConfig.Etcd))
+
 	options, shutdown := services.InitRPCServerArgs(constants.RELATION_SERVER_NAME, service.DomainConfig.BaseConfig)
 	defer shutdown()
 
 	svr := relationservice.NewServer(
-		new(handler.Handler),
+		handler.New(clients),
 		options...,
 	)
 

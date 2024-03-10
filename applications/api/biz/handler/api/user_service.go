@@ -4,7 +4,6 @@ package api
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
 
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
@@ -78,4 +77,18 @@ func GetUserById(ctx context.Context, c *app.RequestContext) {
 	}
 	// TODO 此处直接返回了 rpc 的 resp
 	handler.SendResponse(c, resp)
+}
+
+// Login 确实有登录的接口，但是业务逻辑是在JWT中，写在这里是为了生成接口文档
+//
+//	@Tags			User用户相关
+//
+//	@Summary		用户登录
+//	@Description	输入账号密码登录获取Token
+//	@Param			req		body		api.DouyinUserLoginRequest	true	"用户信息"
+//	@Success		200		{object}	user.DouyinUserResponse
+//	@Failure		default	{object}	api.DouyinUserLoginResponse
+//	@router			/douyin/user/login [POST]
+func Login() {
+
 }

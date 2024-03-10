@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/protocol"
 	"strings"
 	"time"
 
@@ -17,6 +18,13 @@ import (
 )
 
 var AuthMiddleware *jwt.HertzJWTMiddleware
+
+type LoginResp struct {
+	StatusCode int    `json:"status_code"`
+	StatusMsg  string `json:"status_msg"`
+	UserId     int64  `json:"user_id,string"`
+	Token      string `json:"token"`
+}
 
 func InitJwt() {
 	AuthMiddleware, _ = jwt.New(&jwt.HertzJWTMiddleware{
@@ -41,12 +49,16 @@ func InitJwt() {
 		},
 		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, token string, expire time.Time) {
 			claims := jwt.ExtractClaims(ctx, c)
+			// Long 型数据在返回前端时会失真，需使用string类型
+			//userId := strconv.FormatInt(claims[constants.IdentityKey].(int64), 10)
+			c.SetCookie("token", token, 24*60*60, "/", "", protocol.CookieSameSiteDefaultMode, false, true)
+
 			userId := claims[constants.IdentityKey].(int64)
-			c.JSON(consts.StatusOK, map[string]interface{}{
-				"status_code": errno.SuccessCode,
-				"status_msg":  errno.Success.ErrMsg,
-				"user_id":     userId,
-				"token":       token,
+			c.JSON(consts.StatusOK, LoginResp{
+				StatusCode: errno.SuccessCode,
+				StatusMsg:  errno.Success.ErrMsg,
+				UserId:     userId,
+				Token:      token,
 			})
 		},
 		WithNext: func(ctx context.Context, c *app.RequestContext) bool {
@@ -103,7 +115,7 @@ func InitJwt() {
 			}
 			return userId, err
 		},
-		TokenLookup: "query: token, form: token, param: token",
+		TokenLookup: "query: token, form: token, param: token, cookie: token",
 		TimeFunc:    time.Now,
 	})
 }

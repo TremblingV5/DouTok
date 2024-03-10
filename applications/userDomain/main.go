@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"strconv"
-
 	"go.uber.org/zap"
 
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/query"
@@ -17,7 +15,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	"github.com/TremblingV5/DouTok/pkg/services"
 )
 
@@ -50,9 +47,7 @@ func init() {
 }
 
 func loadFeature() *handler.Handler {
-	db, err := mysqlIniter.InitDb(
-		config.MySQL.Username, config.MySQL.Password, config.MySQL.Host, strconv.Itoa(config.MySQL.Port), config.MySQL.Database,
-	)
+	db, err := config.MySQL.InitDB()
 	if err != nil {
 		panic(err)
 	}

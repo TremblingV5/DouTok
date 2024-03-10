@@ -29,6 +29,7 @@ import (
 //
 // 初始化 Hertz API 及 Router
 func main() {
+
 	logger := dlog.InitHertzLog(3)
 	defer logger.Sync()
 
