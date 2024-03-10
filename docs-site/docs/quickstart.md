@@ -34,10 +34,10 @@ sidebar_position: 2
 - MinIO
 - Kafka-ui(可选)
 
-找到 `./env/dependencies.yaml` 文件，我们将使用 `docker-compose` 来进行安装
+找到 `./env/dependencies.yml` 文件，我们将使用 `docker-compose` 来进行安装
 
-```
-docker-compose -f ./env/dependencies.yaml up -d
+```yaml
+docker-compose -f ./env/dependencies.yml up -d
 ```
 
 确认所需各项服务成功安装
