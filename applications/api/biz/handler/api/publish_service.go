@@ -5,10 +5,10 @@ package api
 import (
 	"bytes"
 	"context"
-	"fmt"
-	"github.com/TremblingV5/DouTok/pkg/constants"
+	"github.com/TremblingV5/DouTok/applications/api/biz/model/api_pack"
 	"io"
 	"log"
+	"strconv"
 
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
@@ -17,7 +17,6 @@ import (
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/hertz-contrib/jwt"
 )
 
 // PublishAction .
@@ -40,7 +39,6 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	// 	return
 	// }
 
-	req.Token = string(c.Cookie("token")) // c.PostForm("token")
 	req.Title = c.PostForm("title")
 	fs, _ := c.FormFile("data")
 	f, _ := fs.Open()
@@ -51,11 +49,18 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	}
 	req.Data = buff.Bytes()
 
+	userId, err := strconv.ParseInt(c.Keys["user_id"].(string), 10, 64)
+
+	if err != nil {
+		handler.SendResponse(c, handler.BuildPublishActionResp(errno.ConvertErr(err)))
+		return
+	}
+
 	// TODO 这个绑定是否能够实现二进制文件的绑定（待测试）
 	resp, err := rpc.PublishAction(ctx, rpc.PublishClient, &publish.DouyinPublishActionRequest{
 		Title:  req.Title,
 		Data:   req.Data,
-		UserId: int64(c.Keys["user_id"].(float64)),
+		UserId: userId,
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildPublishActionResp(errno.ConvertErr(err)))
@@ -71,34 +76,37 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary	获取用户已发布视频的列表
 //	@Description
-//	@Param		req		query		api.DouyinPublishListRequest	true	"获取某个用户发布的视频列表的参数"
 //	@Success	200		{object}	publish.DouyinPublishListResponse
 //	@Failure	default	{object}	api.DouyinPublishListResponse
 //	@router		/douyin/publish/list [GET]
 func PublishList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req api.DouyinPublishListRequest
-	err = c.BindAndValidate(&req)
-	payload, ok := c.Get("JWT_PAYLOAD")
-	if !ok {
-		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
-		return
-	}
-	claims := payload.(jwt.MapClaims)
-	fmt.Println(claims[constants.IdentityKey])
 
+	userId, err := strconv.ParseInt(c.Keys["user_id"].(string), 10, 64)
 	if err != nil {
 		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
 		return
 	}
 
 	resp, err := rpc.PublishList(ctx, rpc.PublishClient, &publish.DouyinPublishListRequest{
-		UserId: req.UserId,
+		UserId: userId,
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildPublishListResp(errno.ConvertErr(err)))
 		return
 	}
+
+	videos := make([]*api.Video, 0, len(resp.VideoList))
+	for _, v := range resp.VideoList {
+		video := api_pack.Video(v)
+		videos = append(videos, video)
+	}
+	apiResp := &api.DouyinPublishListResponse{
+		StatusCode: resp.StatusCode,
+		StatusMsg:  resp.StatusMsg,
+		VideoList:  videos,
+	}
+
 	// TODO 此处直接返回了 rpc 的 resp
-	handler.SendResponse(c, resp)
+	handler.SendResponse(c, apiResp)
 }

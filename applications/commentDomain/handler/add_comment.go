@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/misc"
+	"github.com/TremblingV5/DouTok/applications/commentDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/commentDomain"
-	"github.com/TremblingV5/DouTok/pkg/utils"
 )
 
 func (s *CommentDomainHandler) AddComment(ctx context.Context, req *commentDomain.DoutokAddCommentReq) (resp *commentDomain.DoutokAddCommentResp, err error) {
@@ -16,7 +16,7 @@ func (s *CommentDomainHandler) AddComment(ctx context.Context, req *commentDomai
 		}, ParametersError
 	}
 
-	result, err := s.service.AddComment(ctx, req.VideoId, req.UserId, utils.GetSnowFlakeId().Int64(), 0, 0, req.CommentText)
+	result, err := service.DomainUtil.AddComment(ctx, req.VideoId, req.UserId, service.DomainUtil.SnowflakeHandle.GetId().Int64(), 0, 0, req.CommentText)
 	if err != nil {
 		return &commentDomain.DoutokAddCommentResp{
 			StatusCode: 1,

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/hbModel"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 )
 
@@ -14,13 +13,6 @@ var (
 )
 
 type CommentDomainHandler struct {
-	service CommentDomainService
-}
-
-func NewCommentDomainHandler(service CommentDomainService) *CommentDomainHandler {
-	return &CommentDomainHandler{
-		service: service,
-	}
 }
 
 //go:generate mockgen -source=typedef.go -destination=./mocks/service_mock.go -package HandlerServiceMocks
@@ -30,7 +22,3 @@ type CommentDomainService interface {
 	ListComment(ctx context.Context, videoId int64) ([]*hbModel.CommentInHB, error)
 	RemoveComment(ctx context.Context, userId, commentId int64) error
 }
-
-var (
-	_ CommentDomainService = (*service.CommentDomainService)(nil)
-)

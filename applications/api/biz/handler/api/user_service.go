@@ -4,6 +4,7 @@ package api
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/applications/api/initialize"
 	"github.com/cloudwego/hertz/pkg/app"
 
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
@@ -89,6 +90,6 @@ func GetUserById(ctx context.Context, c *app.RequestContext) {
 //	@Success		200		{object}	user.DouyinUserResponse
 //	@Failure		default	{object}	api.DouyinUserLoginResponse
 //	@router			/douyin/user/login [POST]
-func Login() {
-
+func Login(ctx context.Context, c *app.RequestContext) {
+	initialize.AuthMiddleware.LoginHandler(ctx, c)
 }

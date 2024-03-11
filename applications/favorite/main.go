@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-
+	"github.com/TremblingV5/DouTok/applications/favorite/errs"
 	"github.com/TremblingV5/DouTok/applications/favorite/handler"
 	"github.com/TremblingV5/DouTok/applications/favorite/rpc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
@@ -35,6 +35,8 @@ func init() {
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
 	}
+
+	errs.Init(&errs.Config{})
 }
 
 func main() {

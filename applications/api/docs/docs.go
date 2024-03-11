@@ -65,12 +65,6 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "用户鉴权token",
-                        "name": "token",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
                         "description": "视频id",
                         "name": "video_id",
                         "in": "query"
@@ -132,12 +126,6 @@ const docTemplate = `{
                 ],
                 "summary": "返回点赞视频列表",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户鉴权token",
-                        "name": "token",
-                        "in": "query"
-                    },
                     {
                         "type": "integer",
                         "description": "用户id",
@@ -316,20 +304,6 @@ const docTemplate = `{
                     "Publish视频投稿相关"
                 ],
                 "summary": "获取用户已发布视频的列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户鉴权token",
-                        "name": "token",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "用户id",
-                        "name": "user_id",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -388,14 +362,15 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "用户鉴权token",
-                        "name": "token",
+                        "example": "0",
+                        "description": "用户id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
-                        "type": "integer",
-                        "description": "用户id",
-                        "name": "user_id",
+                        "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
                         "in": "query"
                     }
                 ],
@@ -628,16 +603,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "description": "视频评论id",
-                    "type": "integer"
-                },
-                "like_count": {
-                    "description": "该评论点赞数",
-                    "type": "integer"
-                },
-                "tease_count": {
                     "description": "该评论diss数",
-                    "type": "integer"
+                    "type": "string",
+                    "example": "0"
                 },
                 "user": {
                     "description": "评论用户信息",
@@ -662,10 +630,6 @@ const docTemplate = `{
                 },
                 "comment_text": {
                     "description": "用户填写的评论内容，在action_type=1的时候使用",
-                    "type": "string"
-                },
-                "token": {
-                    "description": "用户鉴权token",
                     "type": "string"
                 },
                 "video_id": {
@@ -721,10 +685,6 @@ const docTemplate = `{
                 "action_type": {
                     "description": "1-点赞，2-取消点赞",
                     "type": "integer"
-                },
-                "token": {
-                    "description": "用户鉴权token",
-                    "type": "string"
                 },
                 "video_id": {
                     "description": "视频id",
@@ -962,6 +922,11 @@ const docTemplate = `{
         "api.DouyinUserLoginResponse": {
             "type": "object",
             "properties": {
+                "id": {
+                    "description": "用户id",
+                    "type": "string",
+                    "example": "0"
+                },
                 "status_code": {
                     "description": "状态码，0-成功，其他值-失败",
                     "type": "integer"
@@ -973,10 +938,6 @@ const docTemplate = `{
                 "token": {
                     "description": "用户鉴权token",
                     "type": "string"
-                },
-                "user_id": {
-                    "description": "用户id",
-                    "type": "integer"
                 }
             }
         },
@@ -996,6 +957,11 @@ const docTemplate = `{
         "api.DouyinUserRegisterResponse": {
             "type": "object",
             "properties": {
+                "id": {
+                    "description": "用户id",
+                    "type": "string",
+                    "example": "0"
+                },
                 "status_code": {
                     "description": "状态码，0-成功，其他值-失败",
                     "type": "integer"
@@ -1007,10 +973,6 @@ const docTemplate = `{
                 "token": {
                     "description": "用户鉴权token",
                     "type": "string"
-                },
-                "user_id": {
-                    "description": "用户id",
-                    "type": "integer"
                 }
             }
         },
@@ -1046,17 +1008,10 @@ const docTemplate = `{
                     "description": "消息创建时间",
                     "type": "string"
                 },
-                "from_user_id": {
-                    "description": "该消息发送者的id",
-                    "type": "integer"
-                },
                 "id": {
-                    "description": "消息id",
-                    "type": "integer"
-                },
-                "to_user_id": {
-                    "description": "该消息接收者的id",
-                    "type": "integer"
+                    "description": "该消息发送者的id",
+                    "type": "string",
+                    "example": "0"
                 }
             }
         },
@@ -1085,7 +1040,8 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "用户id",
-                    "type": "integer"
+                    "type": "string",
+                    "example": "0"
                 },
                 "is_follow": {
                     "description": "true-已关注，false-未关注",
@@ -1134,7 +1090,8 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "视频唯一标识",
-                    "type": "integer"
+                    "type": "string",
+                    "example": "0"
                 },
                 "is_favorite": {
                     "description": "true-已点赞，false-未点赞",

@@ -1,6 +1,6 @@
 module github.com/TremblingV5/DouTok
 
-go 1.20
+go 1.21
 
 require (
 	github.com/Shopify/sarama v1.38.1

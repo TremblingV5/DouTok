@@ -19,3 +19,14 @@ func Init(config response.Config) {
 		response.Message(bindingError), response.Code(bindingErrorCode),
 	)
 }
+
+type Config struct {
+}
+
+func (c *Config) GetNodeCode() int32 {
+	return 200
+}
+
+func (c *Config) GetNameCode() int32 {
+	return 200
+}

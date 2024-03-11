@@ -3,6 +3,7 @@ package initialize
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/protocol"
+	"strconv"
 	"strings"
 	"time"
 
@@ -22,7 +23,7 @@ var AuthMiddleware *jwt.HertzJWTMiddleware
 type LoginResp struct {
 	StatusCode int    `json:"status_code"`
 	StatusMsg  string `json:"status_msg"`
-	UserId     int64  `json:"user_id,string"`
+	UserId     string `json:"user_id"`
 	Token      string `json:"token"`
 }
 
@@ -32,7 +33,7 @@ func InitJwt() {
 		Timeout:    12 * time.Hour,
 		MaxRefresh: time.Hour,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
-			if v, ok := data.(int64); ok {
+			if v, ok := data.(string); ok {
 				return jwt.MapClaims{
 					constants.IdentityKey: v,
 				}
@@ -53,7 +54,7 @@ func InitJwt() {
 			//userId := strconv.FormatInt(claims[constants.IdentityKey].(int64), 10)
 			c.SetCookie("token", token, 24*60*60, "/", "", protocol.CookieSameSiteDefaultMode, false, true)
 
-			userId := claims[constants.IdentityKey].(int64)
+			userId := claims[constants.IdentityKey].(string)
 			c.JSON(consts.StatusOK, LoginResp{
 				StatusCode: errno.SuccessCode,
 				StatusMsg:  errno.Success.ErrMsg,
@@ -90,7 +91,7 @@ func InitJwt() {
 		IdentityKey: constants.IdentityKey,
 		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {
 			claims := jwt.ExtractClaims(ctx, c)
-			return claims[constants.IdentityKey].(float64)
+			return claims[constants.IdentityKey].(string)
 		},
 		Unauthorized: func(ctx context.Context, c *app.RequestContext, code int, message string) {
 			c.JSON(code, map[string]interface{}{
@@ -108,12 +109,13 @@ func InitJwt() {
 				return "", jwt.ErrMissingLoginValues
 			}
 			userId, err := rpc.Login(context.Background(), rpc.UserClient, &user.DouyinUserLoginRequest{Username: loginVar.Username, Password: loginVar.Password})
+			userIdString := strconv.FormatInt(userId, 10)
 			if err == nil && userId != 0 {
 				c.Set("JWT_PAYLOAD", jwt.MapClaims{
-					constants.IdentityKey: userId,
+					constants.IdentityKey: userIdString,
 				})
 			}
-			return userId, err
+			return userIdString, err
 		},
 		TokenLookup: "cookie: token, query: token, form: token, param: token",
 		TimeFunc:    time.Now,

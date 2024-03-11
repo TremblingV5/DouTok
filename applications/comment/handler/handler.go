@@ -18,12 +18,6 @@ func New(clients *rpc.Clients) *Handler {
 }
 
 func (h *Handler) CommentAction(ctx context.Context, req *comment.DouyinCommentActionRequest) (resp *comment.DouyinCommentActionResponse, err error) {
-	if req.CommentText != "" {
-		return &comment.DouyinCommentActionResponse{
-			StatusCode: errs.ParamsErr.Code(),
-			StatusMsg:  errs.ParamsErr.Message(),
-		}, nil
-	}
 
 	// add comments
 	if req.ActionType == 1 {

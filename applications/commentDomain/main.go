@@ -30,7 +30,6 @@ type Config struct {
 
 var (
 	logger *zap.Logger
-	handle = &handler.CommentDomainHandler{}
 	config = &Config{}
 )
 
@@ -61,20 +60,20 @@ func init() {
 		Client: config.Redis.InitRedisClient(1),
 	}
 	commentTotalCountRedisClient := commentTotalCountRedis.NewClient(&redisClient)
-	commentDomainService := service.NewCommentDomainService(
+	service.DomainUtil = service.NewCommentDomainUtil(
 		db, &hb, commentTotalCountRedisClient, config.Snowflake.Node,
 	)
 
-	handle = handler.NewCommentDomainHandler(commentDomainService)
 }
 
+// TODO 整个 CommentDomain 需要重构，代码结构和其他服务相比很不协调
 func main() {
 
 	options, shutdown := services.InitRPCServerArgs(constants.COMMENT_DOMAIN_SERVER_NAME, config.BaseConfig)
 	defer shutdown()
 
 	svr := commentdomainservice.NewServer(
-		handle, options...,
+		new(handler.CommentDomainHandler), options...,
 	)
 	if err := svr.Run(); err != nil {
 		logger.Fatal("start server defeat", zap.Error(err))

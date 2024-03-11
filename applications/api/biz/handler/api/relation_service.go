@@ -5,11 +5,10 @@ package api
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
-	"github.com/TremblingV5/DouTok/applications/api/initialize"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation"
 	"github.com/TremblingV5/DouTok/pkg/errno"
-	"github.com/hertz-contrib/jwt"
+	"strconv"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -34,7 +33,11 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	userId := int64(jwt.ExtractClaims(ctx, c)[initialize.AuthMiddleware.IdentityKey].(float64))
+	userId, err := strconv.ParseInt(c.Keys["user_id"].(string), 10, 64)
+	if err != nil {
+		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
+		return
+	}
 
 	rpcReq := relation.DouyinRelationActionRequest{
 		UserId:     userId,
