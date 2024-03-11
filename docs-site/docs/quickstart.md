@@ -168,7 +168,7 @@ git clone https://github.com/TremblingV5/DouTok.git
 
 ### Swagger接口文档
 
-在 `API` 网关服务启动后，访问 <http://localhost:8088/swagger/index.html> 即可
+在 `API` 网关服务启动后，访问 [http://localhost:8088/swagger/index.html](http://localhost:8088/swagger/index.html) 即可
 可以看到目前有的接口相关信息
 
 
