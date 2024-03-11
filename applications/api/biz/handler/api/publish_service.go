@@ -5,6 +5,8 @@ package api
 import (
 	"bytes"
 	"context"
+	"fmt"
+	"github.com/TremblingV5/DouTok/pkg/constants"
 	"io"
 	"log"
 
@@ -15,6 +17,7 @@ import (
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/hertz-contrib/jwt"
 )
 
 // PublishAction .
@@ -23,7 +26,6 @@ import (
 //
 //	@Summary	发布视频操作
 //	@Description
-//	@Param		token	formData	string	true	"用户鉴权token"
 //	@Param		title	formData	string	true	"视频标题"
 //	@Param		data	formData	file	true	"视频数据"
 //	@Success	200		{object}	publish.DouyinPublishActionResponse
@@ -38,7 +40,7 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	// 	return
 	// }
 
-	req.Token = c.PostForm("token")
+	req.Token = string(c.Cookie("token")) // c.PostForm("token")
 	req.Title = c.PostForm("title")
 	fs, _ := c.FormFile("data")
 	f, _ := fs.Open()
@@ -77,6 +79,14 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DouyinPublishListRequest
 	err = c.BindAndValidate(&req)
+	payload, ok := c.Get("JWT_PAYLOAD")
+	if !ok {
+		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
+		return
+	}
+	claims := payload.(jwt.MapClaims)
+	fmt.Println(claims[constants.IdentityKey])
+
 	if err != nil {
 		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
 		return

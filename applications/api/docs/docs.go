@@ -281,13 +281,6 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "用户鉴权token",
-                        "name": "token",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "视频标题",
                         "name": "title",
                         "in": "formData",
