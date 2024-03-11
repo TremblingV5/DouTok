@@ -62,6 +62,7 @@ func (s *RelationCountService) GetFollowerCount(userId int64) (int64, error) {
 	return follower, nil
 }
 
+// hot todo: xban RelationCountService 这个方法是否可以移除了？
 func (s *RelationCountService) RelationCount(userId int64) (error, int64, int64) {
 
 	// 读 cache 获取关注数

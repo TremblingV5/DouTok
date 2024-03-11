@@ -17,13 +17,19 @@ func init() {
 	service.Init()
 }
 
+func loadFeature() *handler.RelationDomainHandler {
+	// TODO xban 加载 repo 等其他对象
+	relationService := service.NewRelationDomainService()
+	return handler.NewRelationDomainHandler(relationService)
+}
+
 func main() {
 
 	options, shutdown := services.InitRPCServerArgs(constants.RELATION_DOMAIN_SERVER_NAME, service.DomainConfig.BaseConfig)
 	defer shutdown()
 
 	svr := relationdomainservice.NewServer(
-		new(handler.RelationDomainServiceImpl),
+		loadFeature(),
 		options...,
 	)
 
