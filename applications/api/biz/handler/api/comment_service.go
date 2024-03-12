@@ -7,6 +7,7 @@ import (
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment"
+	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/errno"
 	"strconv"
 
@@ -33,11 +34,8 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	userId, err := strconv.ParseInt(c.Keys["user_id"].(string), 10, 64)
-	if err != nil {
-		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
-		return
-	}
+	userId := c.Keys[constants.IdentityKey].(int64)
+
 	rpcReq := comment.DouyinCommentActionRequest{
 		VideoId:     req.VideoId,
 		ActionType:  req.ActionType,

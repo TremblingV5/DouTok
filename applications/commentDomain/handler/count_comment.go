@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/commentDomain"
 )
 
@@ -15,7 +14,7 @@ func (s *CommentDomainHandler) CountComment(ctx context.Context, req *commentDom
 		}, ParametersError
 	}
 
-	result, err := service.DomainUtil.CountComments(ctx, req.VideoIdList...)
+	result, err := s.service.CountComments(ctx, req.VideoIdList...)
 	if err != nil {
 		return &commentDomain.DoutokCountCommentResp{
 			StatusCode:   1,

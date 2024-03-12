@@ -15,7 +15,7 @@ message DouyinUserRegisterRequest {
 message DouyinUserRegisterResponse {
   int32 status_code = 1; // 状态码，0-成功，其他值-失败
   string status_msg = 2; // 返回状态描述
-  int64 user_id = 3 [(api.body) = "id,string"]; // 用户id
+  int64 user_id = 3 [(api.body) = "user_id,string"]; // 用户id
   string token = 4; // 用户鉴权token
 }
 
@@ -27,7 +27,7 @@ message DouyinUserLoginRequest {
 message DouyinUserLoginResponse {
   int32 status_code = 1; // 状态码，0-成功，其他值-失败
   string status_msg = 2; // 返回状态描述
-  int64 user_id = 3 [(api.body) = "id,string"]; // 用户id
+  int64 user_id = 3 [(api.body) = "user_id,string"]; // 用户id
   string token = 4; // 用户鉴权token
 }
 
@@ -81,7 +81,7 @@ message DouyinRelationActionResponse {
 }
 
 message DouyinRelationFollowListRequest {
-  int64 user_id = 1 [(api.body) = "id,string"]; // 用户id
+  int64 user_id = 1 [(api.body) = "user_id,string"]; // 用户id
   string token = 2; // 用户鉴权token
 }
 
@@ -169,7 +169,7 @@ service FeedService{
 
 // publish
 message DouyinPublishActionRequest {
-//  string token = 1; // 用户鉴权token
+  string token = 1; // 用户鉴权token
   bytes data = 2; // 视频数据
   string title = 3; // 视频标题
 }
@@ -181,7 +181,7 @@ message DouyinPublishActionResponse {
 
 message DouyinPublishListRequest {
 //  int64 user_id = 1 [(api.body) = "id,string"]; // 用户id
-//  string token = 2; // 用户鉴权token
+  string token = 1; // 用户鉴权token
 }
 
 message DouyinPublishListResponse {
@@ -214,8 +214,8 @@ message DouyinMessageChatResponse {
 
 message Message {
   int64 id = 1 [(api.body) = "id,string"]; // 消息id
-  int64 to_user_id = 2 [(api.body) = "id,string"]; // 该消息接收者的id
-  int64 from_user_id =3 [(api.body) = "id,string"]; // 该消息发送者的id
+  int64 to_user_id = 2 [(api.body) = "to_user_id,string"]; // 该消息接收者的id
+  int64 from_user_id =3 [(api.body) = "from_user_id,string"]; // 该消息发送者的id
   string content = 4; // 消息内容
   string create_time = 5; // 消息创建时间
 }
@@ -300,8 +300,8 @@ message Comment {
   User user =2; // 评论用户信息
   string content = 3; // 评论内容
   string create_date = 4; // 评论发布日期，格式 mm-dd
-  int64 like_count = 5 [(api.body) = "id,string"]; // 该评论点赞数
-  int64 tease_count = 6 [(api.body) = "id,string"]; // 该评论diss数
+  int64 like_count = 5 [(api.body) = "like_count,string"]; // 该评论点赞数
+  int64 tease_count = 6 [(api.body) = "tease_count,string"]; // 该评论diss数
 }
 
 service CommentService{

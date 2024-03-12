@@ -13,6 +13,13 @@ var (
 )
 
 type CommentDomainHandler struct {
+	service CommentDomainService
+}
+
+func NewCommentDomainHandler(service CommentDomainService) *CommentDomainHandler {
+	return &CommentDomainHandler{
+		service: service,
+	}
 }
 
 //go:generate mockgen -source=typedef.go -destination=./mocks/service_mock.go -package HandlerServiceMocks

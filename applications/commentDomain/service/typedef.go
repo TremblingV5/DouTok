@@ -54,14 +54,14 @@ type CommentTotalCountRedis interface {
 	Delete(ctx context.Context, videoId ...int64) error
 }
 
-type CommentDomainUtil struct {
-	CommentRepository      commentRepository
-	CommentCntRepository   commentCntRepository
-	CommentHBaseRepository commentHBaseRepository
-	CommentTotalCountRedis CommentTotalCountRedis
-	CommentCountCache      CommentCntCache        // key: video id, value: modification if count of comments for a video
-	CommentTotalCountCache CommentTotalCountCache // key: video id, value: count of comments for a video
-	SnowflakeHandle        *utils.SnowflakeHandle
+type CommentDomainService struct {
+	commentRepository      commentRepository
+	commentCntRepository   commentCntRepository
+	commentHBaseRepository commentHBaseRepository
+	commentTotalCountRedis CommentTotalCountRedis
+	commentCountCache      CommentCntCache        // key: video id, value: modification if count of comments for a video
+	commentTotalCountCache CommentTotalCountCache // key: video id, value: count of comments for a video
+	snowflakeHandle        *utils.SnowflakeHandle
 }
 
 //go:generate mockgen -source=typedef.go -destinDBation=./mocks/service_mock.go -package CommentServiceMocks
@@ -72,20 +72,20 @@ type IService interface {
 	RemoveComment(ctx context.Context, userId, commentId int64) error
 }
 
-func NewCommentDomainUtil(
+func NewCommentDomainService(
 	db *gorm.DB,
 	hb *hbaseHandle.HBaseClient,
 	commentTotalCountRedis *commentTotalCountRedis.Client,
 	snowflakeNode int64,
-) *CommentDomainUtil {
+) *CommentDomainService {
 	query.SetDefault(db)
-	return &CommentDomainUtil{
-		CommentRepository:      comment.NewRepository(db),
-		CommentCntRepository:   commentcnt.NewRepository(db),
-		CommentHBaseRepository: commentHBaseRepo.NewRepository(hb),
-		CommentTotalCountRedis: commentTotalCountRedis,
-		CommentCountCache:      commentCntCache.NewCache(),
-		CommentTotalCountCache: commentTotalCountCache.NewCache(),
-		SnowflakeHandle:        utils.NewSnowflakeHandle(snowflakeNode),
+	return &CommentDomainService{
+		commentRepository:      comment.NewRepository(db),
+		commentCntRepository:   commentcnt.NewRepository(db),
+		commentHBaseRepository: commentHBaseRepo.NewRepository(hb),
+		commentTotalCountRedis: commentTotalCountRedis,
+		commentCountCache:      commentCntCache.NewCache(),
+		commentTotalCountCache: commentTotalCountCache.NewCache(),
+		snowflakeHandle:        utils.NewSnowflakeHandle(snowflakeNode),
 	}
 }

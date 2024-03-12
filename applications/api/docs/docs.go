@@ -362,15 +362,15 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "example": "0",
-                        "description": "用户id",
-                        "name": "id",
+                        "description": "用户鉴权token",
+                        "name": "token",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "用户鉴权token",
-                        "name": "token",
+                        "example": "0",
+                        "description": "用户id",
+                        "name": "user_id",
                         "in": "query"
                     }
                 ],
@@ -603,6 +603,16 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "description": "视频评论id",
+                    "type": "string",
+                    "example": "0"
+                },
+                "like_count": {
+                    "description": "该评论点赞数",
+                    "type": "string",
+                    "example": "0"
+                },
+                "tease_count": {
                     "description": "该评论diss数",
                     "type": "string",
                     "example": "0"
@@ -922,11 +932,6 @@ const docTemplate = `{
         "api.DouyinUserLoginResponse": {
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "用户id",
-                    "type": "string",
-                    "example": "0"
-                },
                 "status_code": {
                     "description": "状态码，0-成功，其他值-失败",
                     "type": "integer"
@@ -938,6 +943,11 @@ const docTemplate = `{
                 "token": {
                     "description": "用户鉴权token",
                     "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "string",
+                    "example": "0"
                 }
             }
         },
@@ -957,11 +967,6 @@ const docTemplate = `{
         "api.DouyinUserRegisterResponse": {
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "用户id",
-                    "type": "string",
-                    "example": "0"
-                },
                 "status_code": {
                     "description": "状态码，0-成功，其他值-失败",
                     "type": "integer"
@@ -973,6 +978,11 @@ const docTemplate = `{
                 "token": {
                     "description": "用户鉴权token",
                     "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "string",
+                    "example": "0"
                 }
             }
         },
@@ -1008,8 +1018,18 @@ const docTemplate = `{
                     "description": "消息创建时间",
                     "type": "string"
                 },
-                "id": {
+                "from_user_id": {
                     "description": "该消息发送者的id",
+                    "type": "string",
+                    "example": "0"
+                },
+                "id": {
+                    "description": "消息id",
+                    "type": "string",
+                    "example": "0"
+                },
+                "to_user_id": {
+                    "description": "该消息接收者的id",
                     "type": "string",
                     "example": "0"
                 }

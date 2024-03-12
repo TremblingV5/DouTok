@@ -37,6 +37,7 @@ func _commentMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware2.AuthMiddleware.MiddlewareFunc(),
+		middleware2.SetUserId(),
 	}
 }
 
@@ -54,6 +55,7 @@ func _favoriteMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware2.AuthMiddleware.MiddlewareFunc(),
+		middleware2.SetUserId(),
 	}
 }
 
@@ -71,6 +73,7 @@ func _messageMw() []app.HandlerFunc {
 	//your code...
 	return []app.HandlerFunc{
 		middleware2.AuthMiddleware.MiddlewareFunc(),
+		middleware2.SetUserId(),
 	}
 	return nil
 }
@@ -89,6 +92,7 @@ func _publishMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware2.AuthMiddleware.MiddlewareFunc(),
+		middleware2.SetUserId(),
 	}
 }
 
@@ -106,6 +110,7 @@ func _relationMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware2.AuthMiddleware.MiddlewareFunc(),
+		middleware2.SetUserId(),
 	}
 }
 

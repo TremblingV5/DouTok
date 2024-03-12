@@ -121,3 +121,17 @@ func InitJwt() {
 		TimeFunc:    time.Now,
 	})
 }
+
+func SetUserId() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		str := c.Keys[constants.IdentityKey].(string)
+		if str != "" {
+			userId, err := strconv.ParseInt(str, 10, 64)
+			if err != nil {
+				userId = 0
+			}
+			c.Set(constants.IdentityKey, userId)
+		}
+		c.Next(ctx)
+	}
+}

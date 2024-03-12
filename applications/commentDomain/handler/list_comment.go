@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/commentDomain/misc"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/commentDomain"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 )
@@ -17,7 +16,7 @@ func (s *CommentDomainHandler) ListComment(ctx context.Context, req *commentDoma
 		}, ParametersError
 	}
 
-	list, err := service.DomainUtil.ListComment(ctx, req.VideoId)
+	list, err := s.service.ListComment(ctx, req.VideoId)
 	if err != nil {
 		return &commentDomain.DoutokListCommentResp{
 			StatusCode:  1,

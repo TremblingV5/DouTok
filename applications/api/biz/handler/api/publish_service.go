@@ -5,15 +5,14 @@ package api
 import (
 	"bytes"
 	"context"
-	"github.com/TremblingV5/DouTok/applications/api/biz/model/api_pack"
-	"io"
-	"log"
-	"strconv"
-
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/biz/model/api_pack"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/publish"
+	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/errno"
+	"io"
+	"log"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -49,12 +48,7 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	}
 	req.Data = buff.Bytes()
 
-	userId, err := strconv.ParseInt(c.Keys["user_id"].(string), 10, 64)
-
-	if err != nil {
-		handler.SendResponse(c, handler.BuildPublishActionResp(errno.ConvertErr(err)))
-		return
-	}
+	userId := c.Keys[constants.IdentityKey].(int64)
 
 	// TODO 这个绑定是否能够实现二进制文件的绑定（待测试）
 	resp, err := rpc.PublishAction(ctx, rpc.PublishClient, &publish.DouyinPublishActionRequest{
@@ -82,11 +76,7 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 func PublishList(ctx context.Context, c *app.RequestContext) {
 	var err error
 
-	userId, err := strconv.ParseInt(c.Keys["user_id"].(string), 10, 64)
-	if err != nil {
-		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
-		return
-	}
+	userId := c.Keys[constants.IdentityKey].(int64)
 
 	resp, err := rpc.PublishList(ctx, rpc.PublishClient, &publish.DouyinPublishListRequest{
 		UserId: userId,
