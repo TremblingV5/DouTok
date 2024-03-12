@@ -65,6 +65,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "用户鉴权token",
+                        "name": "token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "description": "视频id",
                         "name": "video_id",
                         "in": "query"
@@ -640,6 +646,10 @@ const docTemplate = `{
                 },
                 "comment_text": {
                     "description": "用户填写的评论内容，在action_type=1的时候使用",
+                    "type": "string"
+                },
+                "token": {
+                    "description": "用户鉴权token",
                     "type": "string"
                 },
                 "video_id": {

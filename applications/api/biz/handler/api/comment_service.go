@@ -5,13 +5,11 @@ package api
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/errno"
-	"strconv"
-
-	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -71,12 +69,9 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 		handler.SendResponse(c, handler.BuildCommendListResp(errno.ErrBind))
 		return
 	}
-	videoId, err := strconv.ParseInt(req.VideoId, 10, 64)
-	if err != nil {
-		videoId = 0
-	}
+
 	resp, err := rpc.CommentList(ctx, rpc.CommentClient, &comment.DouyinCommentListRequest{
-		VideoId: videoId,
+		VideoId: req.VideoId,
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildCommendListResp(errno.ConvertErr(err)))

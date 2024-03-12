@@ -180,8 +180,8 @@ message DouyinPublishActionResponse {
 }
 
 message DouyinPublishListRequest {
-//  int64 user_id = 1 [(api.body) = "id,string"]; // 用户id
-  string token = 1; // 用户鉴权token
+  int64 user_id = 1 [(api.body) = "user_id,string"]; // 用户id
+  string token = 2; // 用户鉴权token
 }
 
 message DouyinPublishListResponse {
@@ -273,10 +273,11 @@ service FavoriteService{
 
 // comment
 message DouyinCommentActionRequest {
-  int64 video_id = 1; // 视频id
-  int32 action_type = 2; // 1-发布评论，2-删除评论
-  string comment_text = 3; // 用户填写的评论内容，在action_type=1的时候使用
-  int64 comment_id = 4; // 要删除的评论id，在action_type=2的时候使用
+  string token = 1; // 用户鉴权token
+  int64 video_id = 2; // 视频id
+  int32 action_type = 3; // 1-发布评论，2-删除评论
+  string comment_text = 4; // 用户填写的评论内容，在action_type=1的时候使用
+  int64 comment_id = 5; // 要删除的评论id，在action_type=2的时候使用
 }
 
 message DouyinCommentActionResponse {
@@ -286,7 +287,8 @@ message DouyinCommentActionResponse {
 }
 
 message DouyinCommentListRequest {
-  string video_id = 1; // 视频id
+  string token = 1; // 用户鉴权token
+  int64 video_id = 2; // 视频id
 }
 
 message DouyinCommentListResponse {

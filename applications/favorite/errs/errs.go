@@ -20,6 +20,7 @@ func Init(config response.Config) {
 	)
 }
 
+// Config TODO 这个是用于初始化 errs 但是写法不够好，看怎么优化
 type Config struct {
 }
 
