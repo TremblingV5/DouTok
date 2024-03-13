@@ -29,19 +29,13 @@ var (
 )
 
 func init() {
-
 	ctx := context.Background()
-	commentConfig = Config{}
-	logcfg = LoggerConfig{}
-	ViperConfig = dtviper.ConfigInit("DOUTOK_COMMENT", "comment")
-	ViperConfig.UnmarshalStructTags(reflect.TypeOf(commentConfig), "")
-	ViperConfig.UnmarshalStruct(&commentConfig)
 
-	logcfg, err := configStruct.Load[*LoggerConfig](ctx, &logcfg)
-
-	logger = DouTokLogger.InitLogger(logcfg.Logger)
+	_, err := configurator.Load(config, "DOUTOK_COMMENT", "comment")
+	logger = DouTokLogger.InitLogger(config.Logger)
 	dtx.DefaultLogger = logger
 	dtx.AddLoggerToContext(ctx, logger)
+
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
 	}

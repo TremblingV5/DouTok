@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/bytedance/gopkg/util/logger"
+	"go.uber.org/zap"
+
 	"github.com/TremblingV5/DouTok/applications/feed/handler"
 	"github.com/TremblingV5/DouTok/applications/feed/rpc"
 	"github.com/TremblingV5/DouTok/config/configStruct"
@@ -9,8 +12,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/services"
-	"github.com/bytedance/gopkg/util/logger"
-	"go.uber.org/zap"
 )
 
 type Config struct {
@@ -23,7 +24,6 @@ var (
 )
 
 func init() {
-
 	_, err := configurator.Load(config, "DOUTOK_FEED", "feed")
 	if err != nil {
 		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
@@ -32,7 +32,6 @@ func init() {
 }
 
 func main() {
-
 	options, shutdown := services.InitRPCServerArgs(constants.FEED_SERVER_NAME, config.BaseConfig)
 	defer shutdown()
 

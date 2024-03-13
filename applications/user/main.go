@@ -29,15 +29,9 @@ var (
 
 func init() {
 	ctx := context.Background()
-	userConfig = Config{}
-	logcfg = LoggerConfig{}
-	viperConfig = dtviper.ConfigInit("DOUTOK_USER", "user")
-	viperConfig.UnmarshalStructTags(reflect.TypeOf(userConfig), "")
-	viperConfig.UnmarshalStruct(&userConfig)
-
-	logcfg, err := configStruct.Load[*LoggerConfig](ctx, &logcfg)
-
-	logger = DouTokLogger.InitLogger(logcfg.Logger)
+	
+	_, err := configurator.Load(config, "DOUTOK_USER", "user")
+	logger = DouTokLogger.InitLogger(config.Logger)
 	dtx.DefaultLogger = logger
 	dtx.AddLoggerToContext(ctx, logger)
 	if err != nil {

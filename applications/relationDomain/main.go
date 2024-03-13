@@ -18,7 +18,6 @@ func init() {
 }
 
 func main() {
-
 	options, shutdown := services.InitRPCServerArgs(constants.RELATION_DOMAIN_SERVER_NAME, service.DomainConfig.BaseConfig)
 	defer shutdown()
 

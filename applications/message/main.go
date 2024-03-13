@@ -1,16 +1,16 @@
 package main
 
 import (
+	"go.uber.org/zap"
+	"github.com/cloudwego/kitex/pkg/klog"
+
 	"github.com/TremblingV5/DouTok/applications/message/rpc"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/services"
-	"go.uber.org/zap"
-
 	"github.com/TremblingV5/DouTok/applications/message/handler"
 	"github.com/TremblingV5/DouTok/applications/message/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/message/messageservice"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
-	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 func init() {
@@ -24,7 +24,6 @@ func init() {
 }
 
 func main() {
-
 	defer func() {
 		_ = service.SyncProducer.Close()
 	}()
