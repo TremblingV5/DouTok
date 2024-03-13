@@ -4,9 +4,6 @@ import (
 	"github.com/TremblingV5/DouTok/applications/relationDomain/service"
 )
 
-type RelationDomainServiceImpl struct {
-}
-
 type Handler struct {
 	service *service.Service
 }
