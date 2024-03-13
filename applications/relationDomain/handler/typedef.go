@@ -7,12 +7,12 @@ import (
 type RelationDomainServiceImpl struct {
 }
 
-type RelationDomainHandler struct {
-	service *service.RelationDomainService
+type Handler struct {
+	service *service.Service
 }
 
-func NewRelationDomainHandler(service *service.RelationDomainService) *RelationDomainHandler {
-	return &RelationDomainHandler{
+func New(service *service.Service) *Handler {
+	return &Handler{
 		service: service,
 	}
 }

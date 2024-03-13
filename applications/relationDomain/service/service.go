@@ -11,7 +11,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 
-func (s *RelationDomainService) AddRelation(ctx context.Context, userId, toUserId int64) error {
+func (s *Service) AddRelation(ctx context.Context, userId, toUserId int64) error {
 
 	err, followList := ReadFollowListFromCache(fmt.Sprint(userId))
 	if err != nil {
@@ -98,7 +98,7 @@ func (s *RelationDomainService) AddRelation(ctx context.Context, userId, toUserI
 	return nil
 }
 
-func (s *RelationDomainService) RmRelation(ctx context.Context, userId, toUserId int64) error {
+func (s *Service) RmRelation(ctx context.Context, userId, toUserId int64) error {
 	// 从 SafeMap 中更新局部关注数和粉丝数
 	followKey := fmt.Sprintf("%s%d", constants.FollowCount, userId)
 	followerKey := fmt.Sprintf("%s%d", constants.FollowerCount, toUserId)
@@ -159,7 +159,7 @@ func (s *RelationDomainService) RmRelation(ctx context.Context, userId, toUserId
 	return nil
 }
 
-func (s *RelationDomainService) ListFollowList(ctx context.Context, userId int64) ([]*entity.User, error) {
+func (s *Service) ListFollowList(ctx context.Context, userId int64) ([]*entity.User, error) {
 	// 从 cache 读
 	err, follow := ReadFollowListFromCache(fmt.Sprintf("%d", userId))
 	if err != nil || follow == nil {
@@ -206,7 +206,7 @@ func (s *RelationDomainService) ListFollowList(ctx context.Context, userId int64
 	return result, nil
 }
 
-func (s *RelationDomainService) ListFollowerList(ctx context.Context, userId int64) ([]*entity.User, error) {
+func (s *Service) ListFollowerList(ctx context.Context, userId int64) ([]*entity.User, error) {
 	// 从 cache 读
 	err, follower := ReadFollowerListFromCache(fmt.Sprintf("%d", userId))
 	if err != nil || follower == nil {
@@ -253,7 +253,7 @@ func (s *RelationDomainService) ListFollowerList(ctx context.Context, userId int
 	return result, nil
 }
 
-func (s *RelationDomainService) ListFriendList(ctx context.Context, userId int64) ([]*entity.User, error) {
+func (s *Service) ListFriendList(ctx context.Context, userId int64) ([]*entity.User, error) {
 	// 从 cache 读
 	err, friendList := GetFriendList(userId)
 	if err != nil {
@@ -310,7 +310,7 @@ func (s *RelationDomainService) ListFriendList(ctx context.Context, userId int64
 	return fList, nil
 }
 
-func (s *RelationDomainService) GetFollowCount(ctx context.Context, userId int64) (int64, error) {
+func (s *Service) GetFollowCount(ctx context.Context, userId int64) (int64, error) {
 	err, follow := ReadFollowCountFromCache(fmt.Sprintf("%d", userId))
 	if err != nil || follow == 0 {
 		// 记录日志
@@ -332,7 +332,7 @@ func (s *RelationDomainService) GetFollowCount(ctx context.Context, userId int64
 	return follow, nil
 }
 
-func (s *RelationDomainService) GetFollowerCount(ctx context.Context, userId int64) (int64, error) {
+func (s *Service) GetFollowerCount(ctx context.Context, userId int64) (int64, error) {
 	err, follower := ReadFollowerCountFromCache(fmt.Sprintf("%d", userId))
 	if err != nil || follower == 0 {
 		// 记录日志
@@ -354,7 +354,7 @@ func (s *RelationDomainService) GetFollowerCount(ctx context.Context, userId int
 	return follower, nil
 }
 
-func (s *RelationDomainService) GetFriendCount(ctx context.Context, userId int64) (int64, error) {
+func (s *Service) GetFriendCount(ctx context.Context, userId int64) (int64, error) {
 	//TODO implement me
 	panic("implement me")
 }

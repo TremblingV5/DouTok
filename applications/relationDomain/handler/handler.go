@@ -7,7 +7,7 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/errno"
 )
 
-func (h *RelationDomainHandler) AddRelation(ctx context.Context, req *relationDomain.DoutokAddRelationRequest) (resp *relationDomain.DoutokAddRelationResponse, err error) {
+func (h *Handler) AddRelation(ctx context.Context, req *relationDomain.DoutokAddRelationRequest) (resp *relationDomain.DoutokAddRelationResponse, err error) {
 	resp = new(relationDomain.DoutokAddRelationResponse)
 
 	err = h.service.AddRelation(ctx, req.UserId, req.ToUserId)
@@ -19,7 +19,7 @@ func (h *RelationDomainHandler) AddRelation(ctx context.Context, req *relationDo
 	return resp, nil
 }
 
-func (h *RelationDomainHandler) RmRelation(ctx context.Context, req *relationDomain.DoutokRmRelationRequest) (resp *relationDomain.DoutokRmRelationResponse, err error) {
+func (h *Handler) RmRelation(ctx context.Context, req *relationDomain.DoutokRmRelationRequest) (resp *relationDomain.DoutokRmRelationResponse, err error) {
 	resp = new(relationDomain.DoutokRmRelationResponse)
 
 	err = h.service.RmRelation(ctx, req.UserId, req.ToUserId)
@@ -31,7 +31,7 @@ func (h *RelationDomainHandler) RmRelation(ctx context.Context, req *relationDom
 	return resp, nil
 }
 
-func (h *RelationDomainHandler) ListRelation(ctx context.Context, req *relationDomain.DoutokListRelationRequest) (resp *relationDomain.DoutokListRelationResponse, err error) {
+func (h *Handler) ListRelation(ctx context.Context, req *relationDomain.DoutokListRelationRequest) (resp *relationDomain.DoutokListRelationResponse, err error) {
 
 	resp = new(relationDomain.DoutokListRelationResponse)
 	if req.ActionType == 0 {
@@ -70,7 +70,7 @@ func (h *RelationDomainHandler) ListRelation(ctx context.Context, req *relationD
 	return resp, nil
 }
 
-func (h *RelationDomainHandler) CountRelation(ctx context.Context, req *relationDomain.DoutokCountRelationRequest) (resp *relationDomain.DoutokCountRelationResponse, err error) {
+func (h *Handler) CountRelation(ctx context.Context, req *relationDomain.DoutokCountRelationRequest) (resp *relationDomain.DoutokCountRelationResponse, err error) {
 	resp = &relationDomain.DoutokCountRelationResponse{
 		Result: make(map[int64]int64),
 	}

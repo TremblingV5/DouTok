@@ -5,11 +5,11 @@ import (
 	entity "github.com/TremblingV5/DouTok/kitex_gen/entity"
 )
 
-type RelationDomainService struct {
+type Service struct {
 }
 
-func NewRelationDomainService() *RelationDomainService {
-	return &RelationDomainService{}
+func New() *Service {
+	return &Service{}
 }
 
 type IService interface {

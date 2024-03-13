@@ -17,10 +17,10 @@ func init() {
 	service.Init()
 }
 
-func loadFeature() *handler.RelationDomainHandler {
+func loadFeature() *handler.Handler {
 	// TODO xban 加载 repo 等其他对象
-	relationService := service.NewRelationDomainService()
-	return handler.NewRelationDomainHandler(relationService)
+	relationService := service.New()
+	return handler.New(relationService)
 }
 
 func main() {

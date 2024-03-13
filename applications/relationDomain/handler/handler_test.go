@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func NewTestHandler() *RelationDomainHandler {
+func NewTestHandler() *Handler {
 	service.Init()
-	return NewRelationDomainHandler(service.NewRelationDomainService())
+	return New(service.New())
 }
 
 func TestRelationDomainHandler_ListRelation(t *testing.T) {
