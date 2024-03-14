@@ -12,7 +12,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/dtx"
 	"github.com/TremblingV5/DouTok/pkg/services"
 )

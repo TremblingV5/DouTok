@@ -13,7 +13,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/dtx"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
@@ -42,7 +41,7 @@ func init() {
 
 	_, err := configurator.Load(config, "DOUTOK_COMMENT_DOMAIN", "commentDomain")
 
-	logger = DouTokLogger.InitLogger(logcfg.Logger)
+	logger = DouTokLogger.InitLogger(config.Logger)
 	dtx.DefaultLogger = logger
 	ctx = dtx.AddLoggerToContext(ctx, logger)
 	if err != nil {

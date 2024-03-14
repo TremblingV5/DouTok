@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/model"
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/query"
 	"github.com/TremblingV5/DouTok/pkg/dtdb"
@@ -15,9 +16,7 @@ type Repository interface {
 	IsUserNameExisted(ctx context.Context, username string) (bool, error)
 }
 
-type PersistRepository struct {
-	user query.IUserDo
-}
+type PersistRepository struct {}
 
 func New() *PersistRepository {
 	return &PersistRepository{}

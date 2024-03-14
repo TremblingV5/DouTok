@@ -12,7 +12,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/dtx"
 	"github.com/TremblingV5/DouTok/pkg/services"
 )
@@ -31,7 +30,6 @@ var (
 func init() {
 	ctx := context.Background()
 
-	favoriteConfig = Config{}
 	_, err := configurator.Load(config, "DOUTOK_FAVORITE", "favorite")
 	logger = DouTokLogger.InitLogger(config.Logger)
 	dtx.DefaultLogger = logger

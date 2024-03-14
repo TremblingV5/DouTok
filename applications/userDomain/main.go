@@ -3,24 +3,17 @@ package main
 import (
 	"context"
 	"reflect"
-	"strconv"
 
 	"go.uber.org/zap"
 
-	"github.com/TremblingV5/DouTok/applications/userDomain/errs"
-	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
-	"github.com/TremblingV5/DouTok/pkg/dtx"
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/query"
 	"github.com/TremblingV5/DouTok/applications/userDomain/dal/repository/user"
-	"github.com/TremblingV5/DouTok/applications/userDomain/errs"
 	"github.com/TremblingV5/DouTok/applications/userDomain/handler"
 	"github.com/TremblingV5/DouTok/applications/userDomain/service"
-	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/kitex_gen/userDomain/userdomainservice"
-	"github.com/TremblingV5/DouTok/pkg/DouTokContext"
-	"github.com/TremblingV5/DouTok/pkg/DouTokLogger"
+	"github.com/TremblingV5/DouTok/pkg/dtx"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/services"
@@ -41,17 +34,11 @@ var (
 func init() {
 	ctx := context.Background()
 
-	userDomainConfig = Config{}
-	logcfg = LoggerConfig{}
-	viperConfig = dtviper.ConfigInit("DOUTOK_USER_DOMAIN", "userDomain")
-	viperConfig.UnmarshalStructTags(reflect.TypeOf(userDomainConfig), "")
-	viperConfig.UnmarshalStruct(&userDomainConfig)
+	_, err := configurator.Load(config, "DOUTOK_USER_DOMAIN", "userDomain")
 
-	logcfg, err := configStruct.Load[*LoggerConfig](ctx, &logcfg)
+	errs.Init(config.Server)
 
-	errs.Init(userDomainConfig.Server)
-
-	logger = DouTokLogger.InitLogger(logcfg.Logger)
+	logger = DouTokLogger.InitLogger(config.Logger)
 	dtx.DefaultLogger = logger
 	dtx.AddLoggerToContext(ctx, logger)
 
