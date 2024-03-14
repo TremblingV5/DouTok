@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/cloudwego/kitex/pkg/klog"
+
 	"github.com/TremblingV5/DouTok/applications/relation/handler"
 	"github.com/TremblingV5/DouTok/applications/relation/rpc"
 	"github.com/TremblingV5/DouTok/applications/relation/service"
@@ -8,7 +10,6 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/services"
-	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 func init() {
@@ -23,7 +24,6 @@ func init() {
 }
 
 func main() {
-
 	defer func() {
 		_ = service.SyncProducer.Close()
 	}()
