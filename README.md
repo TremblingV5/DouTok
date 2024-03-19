@@ -151,7 +151,7 @@ We can download `.apk` file from `./ui` of this repo. Now the client is only sup
 │   ├── hbaseHandle    // HBase操作包
 │   ├── initHelper    // 初始化服务助手
 │   ├── kafka    // Kafka操作包
-│   ├── middleware    // 中间建
+│   ├── middleware    // 中间件
 │   ├── misc    // 一些零散逻辑
 │   ├── mock    // Mock测试包
 │   │   ├── comment
