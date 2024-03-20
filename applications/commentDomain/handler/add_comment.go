@@ -17,6 +17,7 @@ func (s *CommentDomainHandler) AddComment(ctx context.Context, req *commentDomai
 	}
 
 	result, err := s.service.AddComment(ctx, req.VideoId, req.UserId, utils.GetSnowFlakeId().Int64(), 0, 0, req.CommentText)
+
 	if err != nil {
 		return &commentDomain.DoutokAddCommentResp{
 			StatusCode: 1,

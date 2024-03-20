@@ -89,5 +89,3 @@ func NewCommentDomainService(
 		snowflakeHandle:        utils.NewSnowflakeHandle(snowflakeNode),
 	}
 }
-
-var _ IService = (*CommentDomainService)(nil)

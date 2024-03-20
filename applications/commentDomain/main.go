@@ -14,6 +14,7 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/services"
+	"github.com/TremblingV5/DouTok/pkg/utils"
 	"go.uber.org/zap"
 )
 
@@ -30,8 +31,8 @@ type Config struct {
 
 var (
 	logger *zap.Logger
-	handle = &handler.CommentDomainHandler{}
 	config = &Config{}
+	handle = &handler.CommentDomainHandler{}
 )
 
 func init() {
@@ -61,9 +62,12 @@ func init() {
 		Client: config.Redis.InitRedisClient(1),
 	}
 	commentTotalCountRedisClient := commentTotalCountRedis.NewClient(&redisClient)
+
 	commentDomainService := service.NewCommentDomainService(
 		db, &hb, commentTotalCountRedisClient, config.Snowflake.Node,
 	)
+
+	utils.InitSnowFlake(config.Snowflake.Node)
 
 	handle = handler.NewCommentDomainHandler(commentDomainService)
 }

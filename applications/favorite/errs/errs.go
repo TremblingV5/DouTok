@@ -19,3 +19,15 @@ func Init(config response.Config) {
 		response.Message(bindingError), response.Code(bindingErrorCode),
 	)
 }
+
+// Config TODO 这个是用于初始化 errs 但是写法不够好，看怎么优化
+type Config struct {
+}
+
+func (c *Config) GetNodeCode() int32 {
+	return 200
+}
+
+func (c *Config) GetNameCode() int32 {
+	return 200
+}

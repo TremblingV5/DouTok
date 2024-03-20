@@ -60,6 +60,7 @@ docker-compose -f ./env/dependencies.yml up -d
    $ hbase shell # 使用hbase命令行工具
    $ create 'publish','data' # 创建表 publish , 列族为 data
    $ create 'feed','data' # 创建表 feed , 列族为 data
+   $ create 'comment','data' # 创建表 comment , 列族为 data
    ```
 
    这将为你配置好 `HBase` 的初始表格
@@ -130,7 +131,7 @@ git clone https://github.com/TremblingV5/DouTok.git
 
 - CommentDomain
 
-`./applications/commentDomain/cmd/server/main.go`
+`./applications/commentDomain/main.go`
 
 - FavoriteDomain
 

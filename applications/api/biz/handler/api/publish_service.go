@@ -5,13 +5,14 @@ package api
 import (
 	"bytes"
 	"context"
-	"io"
-	"log"
-
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
+	"github.com/TremblingV5/DouTok/applications/api/biz/model/api_pack"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/publish"
+	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/errno"
+	"io"
+	"log"
 
 	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -23,7 +24,6 @@ import (
 //
 //	@Summary	发布视频操作
 //	@Description
-//	@Param		token	formData	string	true	"用户鉴权token"
 //	@Param		title	formData	string	true	"视频标题"
 //	@Param		data	formData	file	true	"视频数据"
 //	@Success	200		{object}	publish.DouyinPublishActionResponse
@@ -38,7 +38,6 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	// 	return
 	// }
 
-	req.Token = c.PostForm("token")
 	req.Title = c.PostForm("title")
 	fs, _ := c.FormFile("data")
 	f, _ := fs.Open()
@@ -49,11 +48,13 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	}
 	req.Data = buff.Bytes()
 
+	userId := c.Keys[constants.IdentityKey].(int64)
+
 	// TODO 这个绑定是否能够实现二进制文件的绑定（待测试）
 	resp, err := rpc.PublishAction(ctx, rpc.PublishClient, &publish.DouyinPublishActionRequest{
 		Title:  req.Title,
 		Data:   req.Data,
-		UserId: int64(c.Keys["user_id"].(float64)),
+		UserId: userId,
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildPublishActionResp(errno.ConvertErr(err)))
@@ -69,26 +70,33 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary	获取用户已发布视频的列表
 //	@Description
-//	@Param		req		query		api.DouyinPublishListRequest	true	"获取某个用户发布的视频列表的参数"
 //	@Success	200		{object}	publish.DouyinPublishListResponse
 //	@Failure	default	{object}	api.DouyinPublishListResponse
 //	@router		/douyin/publish/list [GET]
 func PublishList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req api.DouyinPublishListRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		handler.SendResponse(c, handler.BuildPublishListResp(errno.ErrBind))
-		return
-	}
+
+	userId := c.Keys[constants.IdentityKey].(int64)
 
 	resp, err := rpc.PublishList(ctx, rpc.PublishClient, &publish.DouyinPublishListRequest{
-		UserId: req.UserId,
+		UserId: userId,
 	})
 	if err != nil {
 		handler.SendResponse(c, handler.BuildPublishListResp(errno.ConvertErr(err)))
 		return
 	}
+
+	videos := make([]*api.Video, 0, len(resp.VideoList))
+	for _, v := range resp.VideoList {
+		video := api_pack.Video(v)
+		videos = append(videos, video)
+	}
+	apiResp := &api.DouyinPublishListResponse{
+		StatusCode: resp.StatusCode,
+		StatusMsg:  resp.StatusMsg,
+		VideoList:  videos,
+	}
+
 	// TODO 此处直接返回了 rpc 的 resp
-	handler.SendResponse(c, resp)
+	handler.SendResponse(c, apiResp)
 }

@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/applications/comment/errs"
+	"github.com/TremblingV5/DouTok/applications/favorite/errs"
 	"github.com/TremblingV5/DouTok/applications/favorite/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/TremblingV5/DouTok/kitex_gen/favorite"

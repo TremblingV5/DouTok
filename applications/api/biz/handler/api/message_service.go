@@ -5,13 +5,11 @@ package api
 import (
 	"context"
 	"github.com/TremblingV5/DouTok/applications/api/biz/handler"
-	"github.com/TremblingV5/DouTok/applications/api/initialize"
+	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/TremblingV5/DouTok/applications/api/initialize/rpc"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
+	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/errno"
-	"github.com/hertz-contrib/jwt"
-
-	api "github.com/TremblingV5/DouTok/applications/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -34,7 +32,7 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	userId := int64(jwt.ExtractClaims(ctx, c)[initialize.AuthMiddleware.IdentityKey].(float64))
+	userId := c.Keys[constants.IdentityKey].(int64)
 
 	resp, err := rpc.MessageChat(ctx, rpc.MessageClient, &message.DouyinMessageChatRequest{
 		UserId:     userId,
@@ -68,7 +66,7 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	userId := int64(jwt.ExtractClaims(ctx, c)[initialize.AuthMiddleware.IdentityKey].(float64))
+	userId := c.Keys[constants.IdentityKey].(int64)
 
 	resp, err := rpc.MessageAction(ctx, rpc.MessageClient, &message.DouyinMessageActionRequest{
 		UserId:     userId,
