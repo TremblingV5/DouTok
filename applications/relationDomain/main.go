@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/query"
+	relationRepo "github.com/TremblingV5/DouTok/applications/relationDomain/dal/repository/relation"
 	"github.com/TremblingV5/DouTok/applications/relationDomain/handler"
 	"github.com/TremblingV5/DouTok/applications/relationDomain/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain/relationdomainservice"
@@ -18,8 +20,14 @@ func init() {
 }
 
 func loadFeature() *handler.Handler {
-	// TODO xban 加载 repo 等其他对象
-	relationService := service.New()
+	db, err := service.DomainConfig.MySQL.InitDB()
+	if err != nil {
+		panic(err)
+	}
+	query.SetDefault(db)
+
+	repo := relationRepo.New(db)
+	relationService := service.New(repo)
 	return handler.New(relationService)
 }
 

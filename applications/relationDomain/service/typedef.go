@@ -2,14 +2,72 @@ package service
 
 import (
 	"context"
+	"github.com/TremblingV5/DouTok/applications/relation/service"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/model"
+	relationRepo "github.com/TremblingV5/DouTok/applications/relationDomain/dal/repository/relation"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/pack"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/redis/followCountRedis"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/redis/followListRedis"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/redis/followerCountRedis"
+	"github.com/TremblingV5/DouTok/applications/relationDomain/redis/followerListRedis"
 	entity "github.com/TremblingV5/DouTok/kitex_gen/entity"
+	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 )
 
 type Service struct {
+	followListRedis    FollowListRedis
+	followerListRedis  FollowerListRedis
+	followCountRedis   FollowCountRedis
+	followerCountRedis FollowerCountRedis
+	relationRepo       RelationRepo
 }
 
-func New() *Service {
-	return &Service{}
+func New(repo *relationRepo.PersistRepository) *Service {
+	redisClient := redishandle.RedisClient{
+		Client: service.RedisClient,
+	}
+
+	return &Service{
+		followListRedis:    followListRedis.NewClient(&redisClient),
+		followerListRedis:  followerListRedis.NewClient(&redisClient),
+		followCountRedis:   followCountRedis.NewClient(&redisClient),
+		followerCountRedis: followerCountRedis.NewClient(&redisClient),
+		relationRepo:       repo,
+	}
+}
+
+type FollowListRedis interface {
+	Get(ctx context.Context, userId int64) ([]int64, error)
+	Set(ctx context.Context, userId int64, relations []*model.Relation) error
+}
+
+type FollowerListRedis interface {
+	Get(ctx context.Context, userId int64) ([]int64, error)
+	Set(ctx context.Context, userId int64, relations []*model.Relation) error
+}
+
+type FollowCountRedis interface {
+	Get(ctx context.Context, userId int64) (int64, error)
+	Set(ctx context.Context, userId int64, count int64) error
+	Del(ctx context.Context, userId int64) error
+}
+
+type FollowerCountRedis interface {
+	Get(ctx context.Context, userId int64) (int64, error)
+	Set(ctx context.Context, userId int64, count int64) error
+	Del(ctx context.Context, userId int64) error
+}
+
+type RelationRepo interface {
+	Save(relation *pack.Relation) error
+	SaveList(relationList []*pack.Relation) error
+
+	//LoadOneByUserId(userId int64) (*pack.Relation, error)
+	//LoadOneByToUserId(toUserId int64) (*pack.Relation, error)
+	//LoadListByUserId(userId int64) ([]*pack.Relation, error)
+	//LoadListByToUserId(toUserId int64) ([]*pack.Relation, error)
+	//LoadCountByUserId(userId int64) (int64, error)
+	//LoadCountByToUserId(toUserId int64) (int64, error)
 }
 
 type IService interface {

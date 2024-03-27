@@ -13,7 +13,7 @@ import (
 
 func (s *Service) AddRelation(ctx context.Context, userId, toUserId int64) error {
 
-	err, followList := ReadFollowListFromCache(fmt.Sprint(userId))
+	followList, err := s.followListRedis.Get(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -161,7 +161,7 @@ func (s *Service) RmRelation(ctx context.Context, userId, toUserId int64) error 
 
 func (s *Service) ListFollowList(ctx context.Context, userId int64) ([]*entity.User, error) {
 	// 从 cache 读
-	err, follow := ReadFollowListFromCache(fmt.Sprintf("%d", userId))
+	follow, err := s.followListRedis.Get(ctx, userId)
 	if err != nil || follow == nil {
 		klog.Errorf("read follow list from cache error, err = %s", err)
 		// 从 db 读
@@ -208,7 +208,7 @@ func (s *Service) ListFollowList(ctx context.Context, userId int64) ([]*entity.U
 
 func (s *Service) ListFollowerList(ctx context.Context, userId int64) ([]*entity.User, error) {
 	// 从 cache 读
-	err, follower := ReadFollowerListFromCache(fmt.Sprintf("%d", userId))
+	follower, err := s.followerListRedis.Get(ctx, userId)
 	if err != nil || follower == nil {
 		klog.Errorf("read follower list from cache error, err = %s", err)
 		// 从 db 读
@@ -218,7 +218,7 @@ func (s *Service) ListFollowerList(ctx context.Context, userId int64) ([]*entity
 			return nil, err
 		} else {
 			// 添加 cache
-			err := WriteFollowerListToCache(fmt.Sprintf("%d", userId), relationList)
+			err := s.followerListRedis.Set(ctx, userId, relationList)
 			if err != nil {
 				klog.Errorf("update follower list to cache error, err = %s", err)
 			}
@@ -311,7 +311,7 @@ func (s *Service) ListFriendList(ctx context.Context, userId int64) ([]*entity.U
 }
 
 func (s *Service) GetFollowCount(ctx context.Context, userId int64) (int64, error) {
-	err, follow := ReadFollowCountFromCache(fmt.Sprintf("%d", userId))
+	follow, err := s.followCountRedis.Get(ctx, userId)
 	if err != nil || follow == 0 {
 		// 记录日志
 		klog.Errorf("read follow count from cache error, err = %s", err)
@@ -323,7 +323,7 @@ func (s *Service) GetFollowCount(ctx context.Context, userId int64) (int64, erro
 			follow = 0
 		}
 		// 新增 cache 关注数
-		err = WriteFollowCountToCache(fmt.Sprintf("%d", userId), follow)
+		err = s.followCountRedis.Set(ctx, userId, follow)
 		if err != nil {
 			// 记录日志
 			klog.Errorf("update follow count to cache error, err = %s", err)
@@ -333,7 +333,7 @@ func (s *Service) GetFollowCount(ctx context.Context, userId int64) (int64, erro
 }
 
 func (s *Service) GetFollowerCount(ctx context.Context, userId int64) (int64, error) {
-	err, follower := ReadFollowerCountFromCache(fmt.Sprintf("%d", userId))
+	follower, err := s.followerCountRedis.Get(ctx, userId)
 	if err != nil || follower == 0 {
 		// 记录日志
 		klog.Errorf("read follower count from cache error, err = %s", err)
@@ -345,7 +345,7 @@ func (s *Service) GetFollowerCount(ctx context.Context, userId int64) (int64, er
 			follower = 0
 		}
 		// 新增 cache 粉丝数
-		err = WriteFollowerCountToCache(fmt.Sprintf("%d", userId), follower)
+		err = s.followerCountRedis.Set(ctx, userId, follower)
 		if err != nil {
 			// 记录日志
 			klog.Errorf("update follower count to cache error, err = %s", err)

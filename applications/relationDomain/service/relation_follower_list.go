@@ -5,70 +5,11 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain"
-
 	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/model"
 	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/query"
-	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/TremblingV5/DouTok/pkg/constants"
-	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/go-redis/redis/v8"
 )
-
-type RelationFollowerListService struct {
-	ctx context.Context
-}
-
-func NewRelationFollowerListService(ctx context.Context) *RelationFollowerListService {
-	return &RelationFollowerListService{ctx: ctx}
-}
-
-func (s *RelationFollowerListService) RelationFollowerList(req *relationDomain.DoutokListRelationRequest) (error, []*entity.User) {
-	// 从 cache 读
-	err, follower := ReadFollowerListFromCache(fmt.Sprintf("%d", req.UserId))
-	if err != nil || follower == nil {
-		klog.Errorf("read follower list from cache error, err = %s", err)
-		// 从 db 读
-		err, relationList := ReadFollowerListFromDB(req.UserId)
-		if err != nil {
-			klog.Errorf("read follower list from db error, err = %s", err)
-			return err, nil
-		} else {
-			// 添加 cache
-			err := WriteFollowerListToCache(fmt.Sprintf("%d", req.UserId), relationList)
-			if err != nil {
-				klog.Errorf("update follower list to cache error, err = %s", err)
-			}
-			// 为 follower 赋值
-			list := make([]int64, len(relationList))
-			for _, v := range relationList {
-				list = append(list, v.UserId)
-			}
-			follower = list
-		}
-	}
-	// 去用户服务查询 follow list 的 user 信息
-	// request := new(userDomain.DoutokGetUserInfoRequest)
-	// request.UserId = follower
-	// resp, err := rpc.UserDomainRPCClient.GetUserInfo(context.Background(), request)
-	// if err != nil {
-	// 	return err, nil
-	// }
-
-	// var result []*entity.User
-	// for _, v := range resp.UserList {
-	// 	result = append(result, v)
-	// }
-
-	result := make([]*entity.User, 0)
-	for _, v := range follower {
-		result = append(result, &entity.User{
-			Id: v,
-		})
-	}
-
-	return nil, result
-}
 
 // 查缓存
 func ReadFollowerListFromCache(user_id string) (error, []int64) {
