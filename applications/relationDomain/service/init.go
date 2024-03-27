@@ -8,7 +8,6 @@ import (
 	"sync"
 
 	"github.com/Shopify/sarama"
-	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/query"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/kafka"
 	"github.com/TremblingV5/DouTok/pkg/safeMap"
@@ -38,7 +37,6 @@ func Init() {
 	InitSyncProducer()
 	InitConsumerGroup()
 	InitId()
-	InitDB()
 	InitSafeMap()
 	InitMutex()
 
@@ -74,14 +72,6 @@ func InitRedisClient() {
 func InitId() {
 	node := ViperConfig.Viper.GetInt64("Snowflake.Node")
 	utils.InitSnowFlake(node)
-}
-
-func InitDB() {
-	db, err := DomainConfig.MySQL.InitDB()
-	if err != nil {
-		panic(err)
-	}
-	query.SetDefault(db)
 }
 
 func InitSafeMap() {

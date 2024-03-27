@@ -24,6 +24,10 @@ func (c *RedisClient) SetObj(ctx context.Context, key string, value any, expire 
 	return nil
 }
 
+func (c *RedisClient) HDel(ctx context.Context, key string, hKey string) (int64, error) {
+	return c.Client.HDel(ctx, key, hKey).Result()
+}
+
 func (c *RedisClient) HSet(ctx context.Context, key string, hKey string, hValue string) error {
 	return c.Client.HSet(ctx, key, hKey, hValue).Err()
 }
