@@ -59,15 +59,8 @@ type FollowerCountRedis interface {
 }
 
 type RelationRepo interface {
-	Save(relation *pack.Relation) error
-	SaveList(relationList []*pack.Relation) error
-
-	//LoadOneByUserId(userId int64) (*pack.Relation, error)
-	//LoadOneByToUserId(toUserId int64) (*pack.Relation, error)
-	//LoadListByUserId(userId int64) ([]*pack.Relation, error)
-	//LoadListByToUserId(toUserId int64) ([]*pack.Relation, error)
-	//LoadCountByUserId(userId int64) (int64, error)
-	//LoadCountByToUserId(toUserId int64) (int64, error)
+	CreateOrUpdate(relation *pack.Relation) error
+	CreateList(relationList []*pack.Relation) error
 }
 
 type IService interface {

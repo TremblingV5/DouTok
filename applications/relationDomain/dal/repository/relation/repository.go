@@ -9,15 +9,8 @@ import (
 )
 
 type Repository interface {
-	Save(relation *pack.Relation) error
-	SaveList(relationList []*pack.Relation) error
-
-	//LoadOneByUserId(userId int64) (*pack.Relation, error)
-	//LoadOneByToUserId(toUserId int64) (*pack.Relation, error)
-	//LoadListByUserId(userId int64) ([]*pack.Relation, error)
-	//LoadListByToUserId(toUserId int64) ([]*pack.Relation, error)
-	//LoadCountByUserId(userId int64) (int64, error)
-	//LoadCountByToUserId(toUserId int64) (int64, error)
+	CreateOrUpdate(relation *pack.Relation) error
+	CreateList(relationList []*pack.Relation) error
 }
 
 type PersistRepository struct {
@@ -30,7 +23,15 @@ func New(db *gorm.DB) *PersistRepository {
 	}
 }
 
-func (p *PersistRepository) Save(rel *pack.Relation) error {
+func packToModel(rel *pack.Relation) *model.Relation {
+	return &model.Relation{
+		UserId:   rel.UserId,
+		ToUserId: rel.ToUserId,
+		Status:   int(rel.ActionType),
+	}
+}
+
+func (p *PersistRepository) CreateOrUpdate(rel *pack.Relation) error {
 	res, err := p.relation.Where(
 		query.Relation.UserId.Eq(rel.UserId),
 		query.Relation.ToUserId.Eq(rel.ToUserId),
@@ -67,12 +68,14 @@ func (p *PersistRepository) Save(rel *pack.Relation) error {
 	return nil
 }
 
-func (p *PersistRepository) SaveList(relations []*pack.Relation) error {
-	for _, rel := range relations {
-		err := p.Save(rel)
-		if err != nil {
-			return err
-		}
+func (p *PersistRepository) CreateList(relations []*pack.Relation) error {
+	models := make([]*model.Relation, 0, len(relations))
+	for _, relation := range relations {
+		models = append(models, packToModel(relation))
+	}
+	err := p.relation.CreateInBatches(models, len(models))
+	if err != nil {
+		return err
 	}
 	return nil
 }
