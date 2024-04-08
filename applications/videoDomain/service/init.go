@@ -32,6 +32,7 @@ func Init() {
 
 	Logger = LogBuilder.New("./tmp/videoDomain.log", 1024*1024, 3, 10)
 
+	// TODO 参数和行为不太一致，这个函数做了两件事：初始化DomainConfig，但是返回了ViperConfig
 	v, err := configurator.Load(&DomainConfig, "DOUTOK_VIDEODOMAIN", "videoDomain")
 	ViperConfig = v
 	if err != nil {

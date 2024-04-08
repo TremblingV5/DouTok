@@ -9,7 +9,7 @@ import (
 )
 
 func VideoList2String(list []typedef.VideoInHB) []string {
-	res := []string{}
+	var res []string
 
 	for _, v := range list {
 		r, err := json.Marshal(v)
@@ -23,7 +23,7 @@ func VideoList2String(list []typedef.VideoInHB) []string {
 }
 
 func String2VideoList(list []string) []typedef.VideoInHB {
-	res := []typedef.VideoInHB{}
+	var res []typedef.VideoInHB
 
 	for _, v := range list {
 		temp := typedef.VideoInHB{}
