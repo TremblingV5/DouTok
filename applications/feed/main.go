@@ -2,38 +2,30 @@ package main
 
 import (
 	"github.com/TremblingV5/DouTok/applications/feed/handler"
+	"github.com/TremblingV5/DouTok/applications/feed/misc"
 	"github.com/TremblingV5/DouTok/applications/feed/rpc"
-	"github.com/TremblingV5/DouTok/config/configStruct"
+	"github.com/TremblingV5/DouTok/applications/feed/service"
 	"github.com/TremblingV5/DouTok/kitex_gen/feed/feedservice"
-	"github.com/TremblingV5/DouTok/pkg/configurator"
-	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
-	"github.com/TremblingV5/DouTok/pkg/services"
-	"github.com/bytedance/gopkg/util/logger"
-	"go.uber.org/zap"
+	"github.com/TremblingV5/DouTok/pkg/initHelper"
 )
-
-type Config struct {
-	configStruct.BaseConfig `envPrefix:"DOUTOK_FEED_"`
-}
 
 var (
 	Logger = dlog.InitLog(3)
-	config = &Config{}
 )
 
-func init() {
+func Init() {
+	misc.InitViperConfig()
 
-	_, err := configurator.Load(config, "DOUTOK_FEED", "feed")
-	if err != nil {
-		logger.Fatal("could not load env variables", zap.Error(err), zap.Any("config", config))
-	}
-	rpc.Init()
+	service.Init()
+
+	rpc.InitPRCClient()
 }
 
 func main() {
+	Init()
 
-	options, shutdown := services.InitRPCServerArgs(constants.FEED_SERVER_NAME, config.BaseConfig)
+	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
 	defer shutdown()
 
 	svr := feedservice.NewServer(

@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain"
-
-	"github.com/TremblingV5/DouTok/kitex_gen/entity"
+	"github.com/TremblingV5/DouTok/applications/relation/rpc"
+	"github.com/TremblingV5/DouTok/kitex_gen/message"
+	"github.com/TremblingV5/DouTok/kitex_gen/relation"
+	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 
@@ -18,57 +19,51 @@ func NewRelationFriendListService(ctx context.Context) *RelationFriendListServic
 	return &RelationFriendListService{ctx: ctx}
 }
 
-func (s *RelationFriendListService) RelationFriendList(req *relationDomain.DoutokListRelationRequest) (error, []*entity.User) {
+func (s *RelationFriendListService) RelationFriendList(req *relation.DouyinRelationFriendListRequest) (error, []*relation.FriendUser) {
 	// 从 cache 读
 	err, friendList := GetFriendList(req.UserId)
 	if err != nil {
 		return err, nil
 	}
 	// 去用户服务查询 friendList 的 user 信息
-	// reqUser := new(userDomain.DoutokGetUserInfoRequest)
-	// reqUser.UserId = friendList
-	// respUser, err := rpc.UserDomainRPCClient.GetUserInfo(context.Background(), reqUser)
-	// if err != nil {
-	// 	return err, nil
-	// }
+	reqUser := new(user.DouyinUserListRequest)
+	reqUser.UserList = friendList
+	respUser, err := rpc.GetUserListByIds(context.Background(), reqUser)
+	if err != nil {
+		return err, nil
+	}
 	// 去 message 服务查询对应好友列表的最新消息 返回一个 map
-	reqMsg := new(relationDomain.DoutokListRelationRequest)
+	reqMsg := new(message.DouyinFriendListMessageRequest)
 	reqMsg.UserId = req.UserId
-	reqMsg.ActionType = 2
-	// reqMsg.FriendIdList = friendList
-	// _, err = rpc.RelationDomainRPCClient.ListRelation(context.Background(), reqMsg)
+	reqMsg.FriendIdList = friendList
+	respMsg, err := rpc.GetFriendList(context.Background(), reqMsg)
 
-	// for k, v := range respMsg.UserList {
-	// 	klog.Infof("res key = %d, msg = %s\n", k, v.Content)
-	// }
+	for k, v := range respMsg.Result {
+		klog.Infof("res key = %d, msg = %s\n", k, v.Content)
+	}
 
 	if err != nil {
 		return err, nil
 	}
-	fList := make([]*entity.User, 0)
-	for _, v := range friendList {
+	fList := make([]*relation.FriendUser, 0, len(reqUser.GetUserList()))
+	for _, v := range respUser.GetUserList() {
 		// 0为当前请求用户接受的消息，1为当前请求用户发送的消息
-		// msgType := 0
-		// if respMsg.UserList[v.Id].FromUserId == req.UserId {
-		// 	msgType = 1
-		// }
+		msgType := 0
+		if respMsg.Result[v.Id].FromUserId == req.UserId {
+			msgType = 1
+		}
 
-		// klog.Infof("user_id = %s, msgType = %d\n", respMsg.UserList[v.Id].Content, int64(msgType))
+		klog.Infof("user_id = %s, msgType = %d\n", respMsg.Result[v.Id].Content, int64(msgType))
 
-		//friend := &entity.FriendUser{
-		//	User: &entity.User{
-		//		Id:            v.Id,
-		//		Name:          v.Name,
-		//		FollowCount:   v.FollowCount,
-		//		FollowerCount: v.FollowerCount,
-		//		IsFollow:      v.IsFollow,
-		//		Avatar:        v.Avatar,
-		//	},
-		//	Message: respMsg.Result[v.Id].Content,
-		//	MsgType: int64(msgType),
-		//}
-		friend := &entity.User{
-			Id: v,
+		friend := &relation.FriendUser{
+			Id:            v.Id,
+			Name:          v.Name,
+			FollowCount:   v.FollowCount,
+			FollowerCount: v.FollowerCount,
+			IsFollow:      v.IsFollow,
+			Avatar:        v.Avatar,
+			Message:       respMsg.Result[v.Id].Content,
+			MsgType:       int64(msgType),
 		}
 		fList = append(fList, friend)
 	}
@@ -130,7 +125,7 @@ func GetFriendList(user_id int64) (error, []int64) {
 	}
 	friendList := make([]int64, 0)
 	for _, v := range follower {
-		if followMap[v] {
+		if followMap[v] == true {
 			friendList = append(friendList, v)
 		}
 	}

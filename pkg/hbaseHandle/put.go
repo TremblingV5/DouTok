@@ -2,6 +2,7 @@ package hbaseHandle
 
 import (
 	"context"
+
 	"github.com/tsuna/gohbase/hrpc"
 )
 

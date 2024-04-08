@@ -4,14 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/Shopify/sarama"
+	"github.com/TremblingV5/DouTok/applications/relation/pack"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/Shopify/sarama"
-	"github.com/cloudwego/kitex/pkg/klog"
-
-	"github.com/TremblingV5/DouTok/applications/relationDomain/pack"
 )
 
 type msgConsumerGroup struct{}
@@ -23,9 +21,7 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 		klog.Infof("Message topic:%q partition:%d offset:%d  value:%s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Value))
 
 		relation := pack.Relation{}
-		if err := json.Unmarshal(msg.Value, &relation); err != nil {
-			return err
-		}
+		json.Unmarshal(msg.Value, &relation)
 		userId := fmt.Sprintf("%d", relation.UserId)
 		toUserId := fmt.Sprintf("%d", relation.ToUserId)
 		actionType := fmt.Sprintf("%d", relation.ActionType)
@@ -69,14 +65,13 @@ func ConsumeMsg() {
 	_ = ConsumerGroup.Close()
 }
 
-/*
-*
+/**
 1. 从 SafeMap 中获取关注数和粉丝数，累加入 MySQL
 2. 删除 Redis 中对应的缓存 follow/follower 数量
 */
 func Flush() {
 	for {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 1)
 		klog.Infof("start iter\n")
 		ConcurrentMap.Iter(iter)
 		// 需要清空
@@ -101,30 +96,16 @@ func iter(key string, v interface{}) {
 			klog.Infof("关注更新 %d\n", value)
 			// follow_
 			// 更新关注数 db
-			err = UpdateFollowCountFromDB(userId, value)
-			if err != nil {
-				klog.Errorf("update follow count defeat, err = %s", err)
-			}
-
+			UpdateFollowCountFromDB(userId, value)
 			// 删除关注数 cache
 			err = DeleteFollowCountCache(pair[1])
-			if err != nil {
-				klog.Errorf("delete follow count defeat, err = %s", err)
-			}
 		} else {
 			klog.Infof("粉丝更新 %d\n", value)
 			// follower_
 			// 更新粉丝数 db
-			err = UpdateFollowerCountFromDB(userId, value)
-			if err != nil {
-				klog.Errorf("update follow count defeat, err = %s", err)
-			}
-
+			UpdateFollowerCountFromDB(userId, value)
 			// 删除粉丝数 cache
 			err = DeleteFollowerCountCache(pair[1])
-			if err != nil {
-				klog.Errorf("delete follow count defeat, err = %s", err)
-			}
 		}
 	}
 }

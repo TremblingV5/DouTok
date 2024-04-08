@@ -15,7 +15,7 @@ type MessageClient struct {
 
 func InitMessageRPCClient() *MessageClient {
 	config := dtviper.ConfigInit("DOUTOK_MESSAGE", "message")
-	c, err := messageservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
+	c, err := messageservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(&config)...)
 	if err != nil {
 		panic(err)
 	}

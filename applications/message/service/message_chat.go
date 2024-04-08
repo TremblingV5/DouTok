@@ -7,7 +7,6 @@ import (
 	"sort"
 
 	"github.com/TremblingV5/DouTok/applications/message/pack"
-	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/TremblingV5/DouTok/pkg/misc"
 	"github.com/TremblingV5/DouTok/pkg/utils"
@@ -21,9 +20,9 @@ func NewMessageChatService(ctx context.Context) *MessageChatService {
 	return &MessageChatService{ctx: ctx}
 }
 
-func (s *MessageChatService) MessageChat(req *message.DouyinMessageChatRequest) (error, []*entity.Message) {
+func (s *MessageChatService) MessageChat(req *message.DouyinMessageChatRequest) (error, []*message.Message) {
 	// 从 hbase 获取聊天记录
-	messageList := make([]*entity.Message, 0)
+	messageList := make([]*message.Message, 0)
 	sessionId := utils.GenerateSessionId(req.UserId, req.ToUserId)
 	start := fmt.Sprintf("%s%d", sessionId, req.PreMsgTime)
 	end := fmt.Sprintf("%s%d", sessionId, math.MaxInt)
@@ -38,7 +37,7 @@ func (s *MessageChatService) MessageChat(req *message.DouyinMessageChatRequest) 
 			continue
 		}
 		packMsg := pack.HBMsg2Msg(&hbMsg)
-		message := entity.Message{
+		message := message.Message{
 			Id:         packMsg.Id,
 			ToUserId:   packMsg.ToUserId,
 			FromUserId: packMsg.FromUserId,

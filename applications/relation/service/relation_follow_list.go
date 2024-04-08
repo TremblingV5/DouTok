@@ -3,18 +3,17 @@ package service
 import (
 	"context"
 	"fmt"
-	"strconv"
-
-	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/go-redis/redis/v8"
-
-	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/model"
-	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/query"
-	"github.com/TremblingV5/DouTok/applications/relationDomain/pack"
-	"github.com/TremblingV5/DouTok/kitex_gen/entity"
-	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/model"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/query"
+	"github.com/TremblingV5/DouTok/applications/relation/pack"
+	"github.com/TremblingV5/DouTok/applications/relation/rpc"
+	"github.com/TremblingV5/DouTok/kitex_gen/relation"
+	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/TremblingV5/DouTok/pkg/utils"
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/go-redis/redis/v8"
+	"strconv"
 )
 
 type RelationFollowListService struct {
@@ -25,7 +24,7 @@ func NewRelationFollowListService(ctx context.Context) *RelationFollowListServic
 	return &RelationFollowListService{ctx: ctx}
 }
 
-func (s *RelationFollowListService) RelationFollowList(req *relationDomain.DoutokListRelationRequest) (error, []*entity.User) {
+func (s *RelationFollowListService) RelationFollowList(req *relation.DouyinRelationFollowListRequest) (error, []*user.User) {
 	// 从 cache 读
 	err, follow := ReadFollowListFromCache(fmt.Sprintf("%d", req.UserId))
 	if err != nil || follow == nil {
@@ -49,27 +48,14 @@ func (s *RelationFollowListService) RelationFollowList(req *relationDomain.Douto
 			follow = list
 		}
 	}
-
 	// 去用户服务查询 follow list 的 user 信息
-	// request := new(userDomain.DoutokGetUserInfoRequest)
-	// request.UserId = follow
-	// resp, err := rpc.UserDomainRPCClient.GetUserInfo(context.Background(), request)
-	// if err != nil {
-	// 	return err, nil
-	// }
-
-	// var result []*entity.User
-	// for _, v := range resp.UserList {
-	// 	result = append(result, v)
-	// }
-	result := make([]*entity.User, 0)
-	for _, v := range follow {
-		result = append(result, &entity.User{
-			Id: v,
-		})
+	request := new(user.DouyinUserListRequest)
+	request.UserList = follow
+	resp, err := rpc.GetUserListByIds(context.Background(), request)
+	if err != nil {
+		return err, nil
 	}
-
-	return nil, result
+	return nil, resp.GetUserList()
 }
 
 // 查缓存
@@ -100,23 +86,6 @@ func ReadFollowListFromDB(user_id int64) (error, []*model.Relation) {
 		return err, nil
 	}
 	return nil, res
-}
-
-func ReadIsFollowFromDB(userId int64, toUserId int64) (bool, error) {
-	res, err := query.Relation.Where(
-		query.Relation.UserId.Eq(userId),
-		query.Relation.ToUserId.Eq(toUserId),
-	).First()
-
-	if err != nil {
-		return false, err
-	}
-
-	if res.Status == 1 {
-		return false, nil
-	} else {
-		return true, nil
-	}
 }
 
 // 写入缓存

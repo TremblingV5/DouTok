@@ -2,81 +2,42 @@ package pack
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/kitex_gen/favoriteDomain"
-	"github.com/TremblingV5/DouTok/kitex_gen/userDomain"
-	"github.com/TremblingV5/DouTok/kitex_gen/videoDomain"
-
 	"github.com/TremblingV5/DouTok/applications/publish/rpc"
-	"github.com/TremblingV5/DouTok/kitex_gen/entity"
+	"github.com/TremblingV5/DouTok/applications/publish/typedef"
+	"github.com/TremblingV5/DouTok/kitex_gen/feed"
 	"github.com/TremblingV5/DouTok/kitex_gen/publish"
+	"github.com/TremblingV5/DouTok/kitex_gen/user"
 )
 
-func PackagePublishListResponse(ctx context.Context, result *videoDomain.DoutokListPublishResponse, err error) (*publish.DouyinPublishListResponse, error) {
-	if err != nil {
-		return nil, err
+func PackPublishListRes(list []typedef.VideoInHB, code int32, msg string, req *publish.DouyinPublishListRequest) (*publish.DouyinPublishListResponse, error) {
+	res := publish.DouyinPublishListResponse{
+		StatusCode: code,
+		StatusMsg:  msg,
 	}
 
-	if len(result.VideoList) <= 0 {
-		return &publish.DouyinPublishListResponse{
-			StatusCode: result.StatusCode,
-			StatusMsg:  result.StatusMsg,
-			VideoList:  []*entity.Video{},
-		}, nil
+	newReq := user.DouyinUserRequest{
+		UserId: req.UserId,
+		// Token:  req.Token,
 	}
 
-	var userIdList []int64
-	var videoIdList []int64
-	for _, v := range result.VideoList {
-		userIdList = append(userIdList, v.Author.GetId())
-		videoIdList = append(videoIdList, v.GetId())
+	resp, _ := rpc.GetUserById(
+		context.Background(), &newReq,
+	)
+
+	var video_list []*feed.Video
+
+	for _, v := range list {
+		var temp feed.Video
+
+		temp.Title = v.GetTitle()
+		temp.PlayUrl = v.GetVideoUrl()
+		temp.CoverUrl = v.GetCoverUrl()
+
+		temp.Author = resp.User
+		video_list = append(video_list, &temp)
 	}
 
-	userInfo, err := rpc.UserDomainClient.GetUserInfo(ctx, &userDomain.DoutokGetUserInfoRequest{
-		UserId: userIdList,
-	})
-	if err != nil {
-		return nil, err
-	}
+	res.VideoList = video_list
 
-	favCount, err := rpc.FavoriteDomainClient.CountFavorite(ctx, &favoriteDomain.DoutokCountFavRequest{
-		UserIdList: videoIdList,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	var videoList []*entity.Video
-	for _, v := range result.VideoList {
-		temp := &entity.Video{
-			Id:       v.GetId(),
-			PlayUrl:  v.GetPlayUrl(),
-			CoverUrl: v.GetCoverUrl(),
-		}
-
-		if u, ok := userInfo.UserList[v.Author.GetId()]; ok {
-			temp.Author = &entity.User{
-				Id:              u.Id,
-				Name:            u.Name,
-				Avatar:          u.Avatar,
-				BackgroundImage: u.BackgroundImage,
-				Signature:       u.Signature,
-			}
-		} else {
-			temp.Author = &entity.User{
-				Id: u.GetId(),
-			}
-		}
-
-		if favCnt, ok := favCount.CountFav[v.Id]; ok {
-			temp.FavoriteCount = favCnt
-		}
-
-		videoList = append(videoList, temp)
-	}
-
-	return &publish.DouyinPublishListResponse{
-		StatusCode: result.StatusCode,
-		StatusMsg:  result.StatusMsg,
-		VideoList:  videoList,
-	}, nil
+	return &res, nil
 }
