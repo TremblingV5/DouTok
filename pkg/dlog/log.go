@@ -101,7 +101,7 @@ func loggerBuild(callerSkip int) (zapcore.Encoder, zapcore.WriteSyncer, zap.Atom
 	return enc, sink, cfg.Level, opts, nil
 }
 
-// Init Logger config
+// InitLog Init Logger config
 func InitLog(callerSkip int) *kitexzap.Logger {
 	enc, sink, lvl, opts, err := loggerBuild(callerSkip)
 	if err != nil {
@@ -112,7 +112,7 @@ func InitLog(callerSkip int) *kitexzap.Logger {
 	return logger
 }
 
-// Init Hertz Logger config
+// InitHertzLog Init Hertz Logger config
 func InitHertzLog(callerSkip int) *hertzzap.Logger {
 	enc, sink, lvl, opts, err := loggerBuild(callerSkip)
 	if err != nil {

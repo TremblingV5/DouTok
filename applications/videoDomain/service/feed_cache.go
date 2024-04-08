@@ -9,10 +9,10 @@ import (
 )
 
 /*
-	从Redis中获取缓存的feed列表，通过Redis事务执行若干次feed操作，从而获得足够的feed list
+从Redis中获取缓存的feed列表，通过Redis事务执行若干次feed操作，从而获得足够的feed list
 */
-func GetFeedCache(ctx context.Context, user_id string, num int64) ([]typedef.VideoInHB, bool) {
-	res, err := RedisClients[constants.FeedSendBox].LPops(ctx, user_id, int(num))
+func GetFeedCache(ctx context.Context, userId string, num int64) ([]typedef.VideoInHB, bool) {
+	res, err := RedisClients[constants.FeedSendBox].LPops(ctx, userId, int(num))
 	if err != nil {
 		return []typedef.VideoInHB{}, false
 	}
@@ -27,7 +27,7 @@ func GetFeedCache(ctx context.Context, user_id string, num int64) ([]typedef.Vid
 }
 
 /*
-	将新的feed列表存储到Redis中，method参数只允许l或r，代表选择不同的方法Push到Redis
+将新的feed列表存储到Redis中，method参数只允许l或r，代表选择不同的方法Push到Redis
 */
 func SetFeedCache(ctx context.Context, method string, userId string, values ...typedef.VideoInHB) error {
 	videoList := VideoList2String(values)
@@ -42,15 +42,15 @@ func SetFeedCache(ctx context.Context, method string, userId string, values ...t
 }
 
 /*
-	获取某个user_id在系统中的marked_time
+获取某个user_id在系统中的marked_time
 */
-func GetMarkedTime(ctx context.Context, user_id string) (string, error) {
-	return RedisClients[constants.TimeCache].Get(ctx, user_id)
+func GetMarkedTime(ctx context.Context, userId string) (string, error) {
+	return RedisClients[constants.TimeCache].Get(ctx, userId)
 }
 
 /*
-	为某个user_id设置新的marked_time
+为某个user_id设置新的marked_time
 */
-func SetMarkedTime(ctx context.Context, user_id string, marked_time string) error {
-	return RedisClients[constants.TimeCache].Set(ctx, user_id, marked_time, 24*time.Hour)
+func SetMarkedTime(ctx context.Context, userId string, markedTime string) error {
+	return RedisClients[constants.TimeCache].Set(ctx, userId, markedTime, 24*time.Hour)
 }

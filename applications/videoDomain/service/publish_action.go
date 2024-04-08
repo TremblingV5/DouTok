@@ -25,16 +25,16 @@ func NewSavePublishService(ctx context.Context) *SavePublishService {
 	}
 }
 
-func (s *SavePublishService) SavePublish(user_id int64, title string, data []byte) error {
+func (s *SavePublishService) SavePublish(userId int64, title string, data []byte) error {
 	log := LogBuilder.InitLogBuilder()
 	defer log.Write(Logger)
-	log.Collect("user_id", strconv.FormatInt(user_id, 10))
+	log.Collect("user_id", strconv.FormatInt(userId, 10))
 
 	timestamp := time.Now().Unix()
 
 	// 1. 上传封面和视频到OSS
 	hasher := md5.New()
-	hasher.Write([]byte(fmt.Sprint(user_id) + title))
+	hasher.Write([]byte(fmt.Sprint(userId) + title))
 	filename := hex.EncodeToString(hasher.Sum(nil)) + ".mp4"
 
 	if err := MinioClient.Put(
@@ -46,12 +46,12 @@ func (s *SavePublishService) SavePublish(user_id int64, title string, data []byt
 		return err
 	}
 
-	play_url := "http://" + DomainConfig.MinIO.Endpoint + "/" + DomainConfig.MinIO.Bucket + "/doutok/video/" + filename
-	cover_url := play_url + "?x-oss-process=video/snapshot,t_30000,f_jpg,w_0,h_0,m_fast,ar_auto"
+	playUrl := "http://" + DomainConfig.MinIO.Endpoint + "/" + DomainConfig.MinIO.Bucket + "/doutok/video/" + filename
+	coverUrl := playUrl + "?x-oss-process=video/snapshot,t_30000,f_jpg,w_0,h_0,m_fast,ar_auto"
 
 	// 2. 写入数据到MySQl
 	id, err := SaveVideo2DB(
-		uint64(user_id), title, play_url, cover_url,
+		uint64(userId), title, playUrl, coverUrl,
 	)
 	if err != nil {
 		log.SetLogType("error")
@@ -61,21 +61,21 @@ func (s *SavePublishService) SavePublish(user_id int64, title string, data []byt
 	}
 
 	// 3. 写入数据到HBase，分别写入publish表和feed表
-	err = SaveVideo2HB(id, uint64(user_id), title, play_url, cover_url, fmt.Sprint(timestamp))
+	err = SaveVideo2HB(id, uint64(userId), title, playUrl, coverUrl, fmt.Sprint(timestamp))
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func SaveVideo2DB(user_id uint64, title string, play_url string, cover_url string) (uint64, error) {
+func SaveVideo2DB(userId uint64, title string, playUrl string, coverUrl string) (uint64, error) {
 	newVideoId := utils.GetSnowFlakeId()
 	newVideo := model.Video{
 		ID:       uint64(newVideoId),
-		AuthorID: user_id,
+		AuthorID: userId,
 		Title:    title,
-		VideoUrl: play_url,
-		CoverUrl: cover_url,
+		VideoUrl: playUrl,
+		CoverUrl: coverUrl,
 		FavCount: 0,
 		ComCount: 0,
 	}
@@ -90,7 +90,7 @@ func SaveVideo2DB(user_id uint64, title string, play_url string, cover_url strin
 }
 
 // SaveVideo2HB TODO 这里的错误error需要处理
-func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cover_url string, timestamp string) error {
+func SaveVideo2HB(id uint64, userId uint64, title string, playUrl string, coverUrl string, timestamp string) error {
 	// newVideo := typedef.VideoInHB{
 	// 	Id:         int64(id),
 	// 	AuthorId:   int64(user_id),
@@ -101,30 +101,30 @@ func SaveVideo2HB(id uint64, user_id uint64, title string, play_url string, cove
 	// 	Timestamp:  timestamp,
 	// }
 
-	timestamp_int, _ := strconv.Atoi(timestamp)
-	publish_rowkey := misc.FillUserId(fmt.Sprint(user_id)) + misc.GetTimeRebound(int64(timestamp_int))
-	feed_rowkey := misc.GetTimeRebound(int64(timestamp_int)) + misc.FillUserId(fmt.Sprint(user_id))
+	timestampInt, _ := strconv.Atoi(timestamp)
+	publishRowkey := misc.FillUserId(fmt.Sprint(userId)) + misc.GetTimeRebound(int64(timestampInt))
+	feedRowkey := misc.GetTimeRebound(int64(timestampInt)) + misc.FillUserId(fmt.Sprint(userId))
 
 	hbData := map[string]map[string][]byte{
 		"data": {
 			"id":          []byte(fmt.Sprint(id)),
-			"author_id":   []byte(fmt.Sprint(user_id)),
+			"author_id":   []byte(fmt.Sprint(userId)),
 			"author_name": []byte(""),
 			"title":       []byte(title),
-			"video_url":   []byte(play_url),
-			"cover_url":   []byte(cover_url),
+			"video_url":   []byte(playUrl),
+			"cover_url":   []byte(coverUrl),
 			"timestamp":   []byte(timestamp),
 		},
 	}
 
 	err := HBClient.Put(
-		"publish", publish_rowkey, hbData,
+		"publish", publishRowkey, hbData,
 	)
 	if err != nil {
 		return nil
 	}
 	err = HBClient.Put(
-		"feed", feed_rowkey, hbData,
+		"feed", feedRowkey, hbData,
 	)
 	if err != nil {
 		return nil
