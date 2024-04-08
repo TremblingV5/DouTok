@@ -1,13 +1,11 @@
 package misc
 
-import (
-	"github.com/TremblingV5/DouTok/kitex_gen/commentDomain"
-)
+import "github.com/TremblingV5/DouTok/kitex_gen/comment"
 
-func CheckCommentActionArgs(req *commentDomain.DoutokAddCommentReq) bool {
+func CheckCommentActionArgs(req *comment.DouyinCommentActionRequest) bool {
 	return req.CommentText != ""
 }
 
-func CheckCommentListArgs(req *commentDomain.DoutokListCommentReq) bool {
+func CheckCommentListArgs(req *comment.DouyinCommentListRequest) bool {
 	return req.VideoId >= 0
 }

@@ -14,6 +14,7 @@ type Client interface {
 	Register(ctx context.Context, Req *user.DouyinUserRegisterRequest, callOptions ...callopt.Option) (r *user.DouyinUserRegisterResponse, err error)
 	Login(ctx context.Context, Req *user.DouyinUserLoginRequest, callOptions ...callopt.Option) (r *user.DouyinUserLoginResponse, err error)
 	GetUserById(ctx context.Context, Req *user.DouyinUserRequest, callOptions ...callopt.Option) (r *user.DouyinUserResponse, err error)
+	GetUserListByIds(ctx context.Context, Req *user.DouyinUserListRequest, callOptions ...callopt.Option) (r *user.DouyinUserListResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -58,4 +59,9 @@ func (p *kUserServiceClient) Login(ctx context.Context, Req *user.DouyinUserLogi
 func (p *kUserServiceClient) GetUserById(ctx context.Context, Req *user.DouyinUserRequest, callOptions ...callopt.Option) (r *user.DouyinUserResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetUserById(ctx, Req)
+}
+
+func (p *kUserServiceClient) GetUserListByIds(ctx context.Context, Req *user.DouyinUserListRequest, callOptions ...callopt.Option) (r *user.DouyinUserListResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetUserListByIds(ctx, Req)
 }

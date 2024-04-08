@@ -3,54 +3,54 @@ package entity;
 option go_package = "entity";
 
 message BaseResponse {
-    int32 status_code = 1;
-    string status_msg = 2;
+  int32 status_code = 1;
+  string status_msg = 2;
 }
 
 message Comment {
-    int64 id = 1; // 视频评论id
-    User user =2; // 评论用户信息
-    string content = 3; // 评论内容
-    string create_date = 4; // 评论发布日期，格式 mm-dd
-    int64 like_count = 5; // 该评论的点赞数
-    int64 tease_count = 6; // 该评论diss数量
+  int64 id = 1; // 视频评论id
+  User user =2; // 评论用户信息
+  string content = 3; // 评论内容
+  string create_date = 4; // 评论发布日期，格式 mm-dd
+  int64 like_count = 5; // 该评论的点赞数
+  int64 tease_count = 6; // 该评论diss数量
 }
 
 message FriendUser {
-    User user = 1;
-    string message = 2; // 和该好友的最新聊天消息
-    int64 msgType = 3; // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息（用于聊天框显示一条信息）
+  User user = 1;
+  string message = 2; // 和该好友的最新聊天消息
+  int64 msgType = 3; // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息（用于聊天框显示一条信息）
 }
 
 message Message {
-    int64 id = 1; // 消息id
-    int64 to_user_id = 2; // 该消息接收者的id
-    int64 from_user_id =3; // 该消息发送者的id
-    string content = 4; // 消息内容
-    int64 create_time = 5; // 消息创建时间
+  int64 id = 1; // 消息id
+  int64 to_user_id = 2; // 该消息接收者的id
+  int64 from_user_id =3; // 该消息发送者的id
+  string content = 4; // 消息内容
+  int64 create_time = 5; // 消息创建时间
 }
 
 message User {
-    int64 id = 1; // 用户id
-    string name = 2; // 用户名称
-    int64 follow_count = 3; // 关注总数
-    int64 follower_count = 4; // 粉丝总数
-    bool is_follow = 5; // true-已关注，false-未关注
-    string avatar = 6; // 用户头像Url
-    string background_image = 7; // 用户个人页顶部大图
-    string signature = 8; // 个人简介
-    int64 total_favorited = 9; // 获赞数量
-    int64 work_count = 10; // 作品数量
-    int64 favorite_count = 11; // 点赞数量
+  int64 id = 1; // 用户id
+  string name = 2; // 用户名称
+  int64 follow_count = 3; // 关注总数
+  int64 follower_count = 4; // 粉丝总数
+  bool is_follow = 5; // true-已关注，false-未关注
+  string avatar = 6; // 用户头像Url
+  string background_image = 7; // 用户个人页顶部大图
+  string signature = 8; // 个人简介
+  int64 total_favorited = 9; // 获赞数量
+  int64 work_count = 10; // 作品数量
+  int64 favorite_count = 11; // 点赞数量
 }
 
 message Video {
-    int64 id = 1; // 视频唯一标识
-    User author = 2; // 视频作者信息
-    string play_url = 3; // 视频播放地址
-    string cover_url = 4; // 视频封面地址
-    int64 favorite_count = 5; // 视频的点赞总数
-    int64 comment_count = 6; // 视频的评论总数
-    bool is_favorite = 7; // true-已点赞，false-未点赞
-    string title = 8; // 视频标题
+  int64 id = 1; // 视频唯一标识
+  User author = 2; // 视频作者信息
+  string play_url = 3; // 视频播放地址
+  string cover_url = 4; // 视频封面地址
+  int64 favorite_count = 5; // 视频的点赞总数
+  int64 comment_count = 6; // 视频的评论总数
+  bool is_favorite = 7; // true-已点赞，false-未点赞
+  string title = 8; // 视频标题
 }

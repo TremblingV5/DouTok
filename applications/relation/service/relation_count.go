@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 	"fmt"
-
-	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/model"
-	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/query"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/model"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/query"
+	"github.com/TremblingV5/DouTok/kitex_gen/relation"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
@@ -18,85 +18,41 @@ func NewRelationCountService(ctx context.Context) *RelationCountService {
 	return &RelationCountService{ctx: ctx}
 }
 
-func (s *RelationCountService) GetFollowCount(userId int64) (int64, error) {
-	err, follow := ReadFollowCountFromCache(fmt.Sprintf("%d", userId))
-	if err != nil || follow == 0 {
-		// 记录日志
-		klog.Errorf("read follow count from cache error, err = %s", err)
-		// 读 db 获取关注数
-		err, follow = ReadFollowCountFromDB(userId)
-		if err != nil {
-			// 记录日志
-			klog.Errorf("read follow count from db error, err = %s", err)
-			follow = 0
-		}
-		// 新增 cache 关注数
-		err = WriteFollowCountToCache(fmt.Sprintf("%d", userId), follow)
-		if err != nil {
-			// 记录日志
-			klog.Errorf("update follow count to cache error, err = %s", err)
-		}
-	}
-	return follow, nil
-}
-
-func (s *RelationCountService) GetFollowerCount(userId int64) (int64, error) {
-	err, follower := ReadFollowerCountFromCache(fmt.Sprintf("%d", userId))
-	if err != nil || follower == 0 {
-		// 记录日志
-		klog.Errorf("read follower count from cache error, err = %s", err)
-		// 读 db 获取粉丝数
-		err, follower = ReadFollowerCountFromDB(userId)
-		if err != nil {
-			// 记录日志
-			klog.Errorf("read follower count from db error, err = %s", err)
-			follower = 0
-		}
-		// 新增 cache 粉丝数
-		err = WriteFollowerCountToCache(fmt.Sprintf("%d", userId), follower)
-		if err != nil {
-			// 记录日志
-			klog.Errorf("update follower count to cache error, err = %s", err)
-		}
-	}
-	return follower, nil
-}
-
-func (s *RelationCountService) RelationCount(userId int64) (error, int64, int64) {
+func (s *RelationCountService) RelationCount(req *relation.DouyinRelationCountRequest) (error, int64, int64) {
 
 	// 读 cache 获取关注数
-	err, follow := ReadFollowCountFromCache(fmt.Sprintf("%d", userId))
+	err, follow := ReadFollowCountFromCache(fmt.Sprintf("%d", req.UserId))
 	if err != nil || follow == 0 {
 		// 记录日志
 		klog.Errorf("read follow count from cache error, err = %s", err)
 		// 读 db 获取关注数
-		err, follow = ReadFollowCountFromDB(userId)
+		err, follow = ReadFollowCountFromDB(req.UserId)
 		if err != nil {
 			// 记录日志
 			klog.Errorf("read follow count from db error, err = %s", err)
 			follow = 0
 		}
 		// 新增 cache 关注数
-		err = WriteFollowCountToCache(fmt.Sprintf("%d", userId), follow)
+		err = WriteFollowCountToCache(fmt.Sprintf("%d", req.UserId), follow)
 		if err != nil {
 			// 记录日志
 			klog.Errorf("update follow count to cache error, err = %s", err)
 		}
 	}
 	// 读 cache 获取粉丝数
-	err, follower := ReadFollowerCountFromCache(fmt.Sprintf("%d", userId))
+	err, follower := ReadFollowerCountFromCache(fmt.Sprintf("%d", req.UserId))
 	if err != nil || follower == 0 {
 		// 记录日志
 		klog.Errorf("read follower count from cache error, err = %s", err)
 		// 读 db 获取粉丝数
-		err, follower = ReadFollowerCountFromDB(userId)
+		err, follower = ReadFollowerCountFromDB(req.UserId)
 		if err != nil {
 			// 记录日志
 			klog.Errorf("read follower count from db error, err = %s", err)
 			follower = 0
 		}
 		// 新增 cache 粉丝数
-		err = WriteFollowerCountToCache(fmt.Sprintf("%d", userId), follower)
+		err = WriteFollowerCountToCache(fmt.Sprintf("%d", req.UserId), follower)
 		if err != nil {
 			// 记录日志
 			klog.Errorf("update follower count to cache error, err = %s", err)

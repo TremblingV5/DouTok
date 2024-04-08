@@ -3,16 +3,15 @@ package service
 import (
 	"context"
 	"fmt"
-	"strconv"
-
-	"github.com/TremblingV5/DouTok/kitex_gen/relationDomain"
-
-	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/model"
-	"github.com/TremblingV5/DouTok/applications/relationDomain/dal/query"
-	"github.com/TremblingV5/DouTok/kitex_gen/entity"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/model"
+	"github.com/TremblingV5/DouTok/applications/relation/dal/query"
+	"github.com/TremblingV5/DouTok/applications/relation/rpc"
+	"github.com/TremblingV5/DouTok/kitex_gen/relation"
+	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/pkg/constants"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/go-redis/redis/v8"
+	"strconv"
 )
 
 type RelationFollowerListService struct {
@@ -23,7 +22,7 @@ func NewRelationFollowerListService(ctx context.Context) *RelationFollowerListSe
 	return &RelationFollowerListService{ctx: ctx}
 }
 
-func (s *RelationFollowerListService) RelationFollowerList(req *relationDomain.DoutokListRelationRequest) (error, []*entity.User) {
+func (s *RelationFollowerListService) RelationFollowerList(req *relation.DouyinRelationFollowerListRequest) (error, []*user.User) {
 	// 从 cache 读
 	err, follower := ReadFollowerListFromCache(fmt.Sprintf("%d", req.UserId))
 	if err != nil || follower == nil {
@@ -48,26 +47,13 @@ func (s *RelationFollowerListService) RelationFollowerList(req *relationDomain.D
 		}
 	}
 	// 去用户服务查询 follow list 的 user 信息
-	// request := new(userDomain.DoutokGetUserInfoRequest)
-	// request.UserId = follower
-	// resp, err := rpc.UserDomainRPCClient.GetUserInfo(context.Background(), request)
-	// if err != nil {
-	// 	return err, nil
-	// }
-
-	// var result []*entity.User
-	// for _, v := range resp.UserList {
-	// 	result = append(result, v)
-	// }
-
-	result := make([]*entity.User, 0)
-	for _, v := range follower {
-		result = append(result, &entity.User{
-			Id: v,
-		})
+	request := new(user.DouyinUserListRequest)
+	request.UserList = follower
+	resp, err := rpc.GetUserListByIds(context.Background(), request)
+	if err != nil {
+		return err, nil
 	}
-
-	return nil, result
+	return nil, resp.GetUserList()
 }
 
 // 查缓存
