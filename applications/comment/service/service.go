@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/hbModel"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/hbModel"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"github.com/go-redis/redis/v8"
 	"golang.org/x/exp/maps"
@@ -16,7 +16,7 @@ var (
 	CommentNotBelongToUser = errors.New("comment not belong to user")
 )
 
-func (s *CommentDomainService) AddComment(
+func (s *commentService) AddComment(
 	ctx context.Context,
 	videoId, userId, conversationId, lastId, toUserId int64,
 	content string,
@@ -43,7 +43,7 @@ func (s *CommentDomainService) AddComment(
 	return &result, nil
 }
 
-func (s *CommentDomainService) CountComments(ctx context.Context, videoId ...int64) (map[int64]int64, error) {
+func (s *commentService) CountComments(ctx context.Context, videoId ...int64) (map[int64]int64, error) {
 	resultMap := make(map[int64]int64)
 
 	// Query comments count from cache
@@ -81,11 +81,11 @@ func (s *CommentDomainService) CountComments(ctx context.Context, videoId ...int
 	return resultMap, nil
 }
 
-func (s *CommentDomainService) ListComment(ctx context.Context, videoId int64) ([]*hbModel.CommentInHB, error) {
+func (s *commentService) ListComment(ctx context.Context, videoId int64) ([]*hbModel.CommentInHB, error) {
 	return s.commentHBaseRepository.List(ctx, videoId)
 }
 
-func (s *CommentDomainService) RemoveComment(ctx context.Context, userId, commentId int64) error {
+func (s *commentService) RemoveComment(ctx context.Context, userId, commentId int64) error {
 	comment, ok := s.commentRepository.IsCommentFromUser(ctx, userId, commentId)
 	if !ok {
 		return CommentNotBelongToUser

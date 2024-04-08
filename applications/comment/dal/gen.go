@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/model"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/model"
 	"github.com/TremblingV5/DouTok/config/configStruct"
 	"github.com/TremblingV5/DouTok/pkg/configurator"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"

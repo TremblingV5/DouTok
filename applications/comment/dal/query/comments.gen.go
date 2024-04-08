@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/model"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/model"
 )
 
 func newComment(db *gorm.DB, opts ...gen.DOOption) comment {

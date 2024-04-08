@@ -41,5 +41,5 @@ message douyin_comment_count_response {
 service CommentService{
     rpc CommentAction(douyin_comment_action_request) returns (douyin_comment_action_response); //评论操作
     rpc CommentList(douyin_comment_list_request) returns (douyin_comment_list_response); //返回评论列表
-    // rpc CommentCount(douyin_comment_count_request) returns (douyin_comment_count_response); // 返回一个视频列表中各自的评论数量
+    rpc CommentCount(douyin_comment_count_request) returns (douyin_comment_count_response); // 返回一个视频列表中各自的评论数量
 }

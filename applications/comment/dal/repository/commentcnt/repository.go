@@ -2,7 +2,7 @@ package commentcnt
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/query"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/query"
 	"gorm.io/gorm"
 )
 

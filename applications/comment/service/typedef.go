@@ -2,18 +2,18 @@ package service
 
 import (
 	"context"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/hbModel"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/model"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/repository/comment"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/repository/commentcnt"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/hb/commentHBaseRepo"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/redis/commentTotalCountRedis"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/hbModel"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/model"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/repository/comment"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/repository/commentcnt"
+	"github.com/TremblingV5/DouTok/applications/comment/hb/commentHBaseRepo"
+	"github.com/TremblingV5/DouTok/applications/comment/redis/commentTotalCountRedis"
 	"github.com/TremblingV5/DouTok/kitex_gen/entity"
 	"gorm.io/gorm"
 
-	"github.com/TremblingV5/DouTok/applications/commentDomain/cache/commentCntCache"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/cache/commentTotalCountCache"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/query"
+	"github.com/TremblingV5/DouTok/applications/comment/cache/commentCntCache"
+	"github.com/TremblingV5/DouTok/applications/comment/cache/commentTotalCountCache"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/query"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/utils"
 )
@@ -54,7 +54,7 @@ type CommentTotalCountRedis interface {
 	Delete(ctx context.Context, videoId ...int64) error
 }
 
-type CommentDomainService struct {
+type commentService struct {
 	commentRepository      commentRepository
 	commentCntRepository   commentCntRepository
 	commentHBaseRepository commentHBaseRepository
@@ -72,14 +72,14 @@ type IService interface {
 	RemoveComment(ctx context.Context, userId, commentId int64) error
 }
 
-func NewCommentDomainService(
+func NewcommentService(
 	db *gorm.DB,
 	hb *hbaseHandle.HBaseClient,
 	commentTotalCountRedis *commentTotalCountRedis.Client,
 	snowflakeNode int64,
-) *CommentDomainService {
+) *commentService {
 	query.SetDefault(db)
-	return &CommentDomainService{
+	return &commentService{
 		commentRepository:      comment.NewRepository(db),
 		commentCntRepository:   commentcnt.NewRepository(db),
 		commentHBaseRepository: commentHBaseRepo.NewRepository(hb),
@@ -89,5 +89,3 @@ func NewCommentDomainService(
 		snowflakeHandle:        utils.NewSnowflakeHandle(snowflakeNode),
 	}
 }
-
-var _ IService = (*CommentDomainService)(nil)

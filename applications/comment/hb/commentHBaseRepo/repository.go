@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/hbModel"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/hbModel"
 
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	tools "github.com/TremblingV5/DouTok/pkg/misc"

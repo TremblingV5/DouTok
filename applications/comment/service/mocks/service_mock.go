@@ -6,10 +6,10 @@ package CommentServiceMocks
 
 import (
 	context "context"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/hbModel"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/hbModel"
 	reflect "reflect"
 
-	model "github.com/TremblingV5/DouTok/applications/commentDomain/dal/model"
+	model "github.com/TremblingV5/DouTok/applications/comment/dal/model"
 	entity "github.com/TremblingV5/DouTok/kitex_gen/entity"
 	gomock "github.com/golang/mock/gomock"
 )

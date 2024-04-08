@@ -4,8 +4,8 @@ import (
 	"context"
 	"gorm.io/gorm"
 
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/model"
-	"github.com/TremblingV5/DouTok/applications/commentDomain/dal/query"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/model"
+	"github.com/TremblingV5/DouTok/applications/comment/dal/query"
 )
 
 type Repository struct {
