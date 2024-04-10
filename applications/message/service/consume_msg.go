@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-
 	"github.com/Shopify/sarama"
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/pkg/misc"
@@ -21,9 +20,7 @@ func (m msgConsumerGroup) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 		fmt.Printf("Message topic:%q partition:%d offset:%d  value:%s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Value))
 
 		message := pack.Message{}
-		if err := json.Unmarshal(msg.Value, &message); err != nil {
-			return err
-		}
+		json.Unmarshal(msg.Value, &message)
 		mp, err := misc.Struct2Map(message)
 		if err != nil {
 			return err

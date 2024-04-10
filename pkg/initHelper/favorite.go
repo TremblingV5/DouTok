@@ -15,7 +15,7 @@ type FavoriteClient struct {
 
 func InitFavoriteRPCClient() *FavoriteClient {
 	config := dtviper.ConfigInit("DOUTOK_FAVORITE", "favorite")
-	c, err := favoriteservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
+	c, err := favoriteservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(&config)...)
 	if err != nil {
 		panic(err)
 	}

@@ -139,7 +139,7 @@ func (v *Config) ZapLogConfig() []byte {
 }
 
 // ConfigInit initializes the configuration
-func ConfigInit(envPrefix string, cfgName string, searchPaths ...string) *Config {
+func ConfigInit(envPrefix string, cfgName string) Config {
 	pflag.Parse()
 
 	v := viper.New()
@@ -149,9 +149,7 @@ func ConfigInit(envPrefix string, cfgName string, searchPaths ...string) *Config
 		viper.BindPFlags 自动绑定了所有命令行参数，如果只需要其中一部分，可以用viper.BingPflag选择性绑定，如
 		viper.BindPFlag("global.source", pflag.Lookup("global.source"))
 	*/
-	if err := viper.BindPFlags(pflag.CommandLine); err != nil {
-		panic(err)
-	}
+	viper.BindPFlags(pflag.CommandLine)
 	config.SetDefaultValue()
 
 	// read from env
@@ -181,23 +179,20 @@ func ConfigInit(envPrefix string, cfgName string, searchPaths ...string) *Config
 	} else {
 		/*
 			尝试搜索若干默认路径，先后顺序如下:
-			- /etc/doutok/config/userConfig.<ext>
-			- ~/.doutok/userConfig.<ext>
+			- /etc/tiktok/config/userConfig.<ext>
+			- ~/.tiktok/userConfig.<ext>
 			- ./userConfig.<ext>
 
 			其中<ext> 是 viper所支持的文件类型，如yml，json等
 		*/
 
 		viper.SetConfigName(cfgName) // name of config file (without extension)
-		viper.AddConfigPath("/etc/doutok/config")
-		viper.AddConfigPath("$HOME/.doutok/")
+		viper.AddConfigPath("/etc/tiktok/config")
+		viper.AddConfigPath("$HOME/.tiktok/")
 		viper.AddConfigPath("./config")
 		viper.AddConfigPath("../../config")
 		viper.AddConfigPath("../../../config")
 		viper.AddConfigPath("../../../../config")
-		for _, searchPath := range searchPaths {
-			viper.AddConfigPath(filepath.Clean(searchPath))
-		}
 	}
 
 	if isRemoteConfig {
@@ -206,10 +201,7 @@ func ConfigInit(envPrefix string, cfgName string, searchPaths ...string) *Config
 		}
 		klog.Infof("Using Remote Config: '%s'", configVar)
 
-		if err := viper.WatchRemoteConfig(); err != nil {
-			klog.Errorf("unable to read remote config: %v", err)
-		}
-
+		viper.WatchRemoteConfig()
 		// 另启动一个协程来监测远程配置文件
 		go config.WatchRemoteConf()
 
@@ -217,7 +209,6 @@ func ConfigInit(envPrefix string, cfgName string, searchPaths ...string) *Config
 		if err := viper.ReadInConfig(); err != nil {
 			klog.Fatalf("error reading config: %s", err)
 		}
-
 		klog.Infof("Using configuration file '%s'", viper.ConfigFileUsed())
 
 		viper.WatchConfig()
@@ -229,5 +220,5 @@ func ConfigInit(envPrefix string, cfgName string, searchPaths ...string) *Config
 
 	}
 
-	return &config
+	return config
 }

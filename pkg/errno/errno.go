@@ -19,21 +19,16 @@ const (
 )
 
 type ErrNo struct {
-	ErrCode  int
-	ErrMsg   string
-	NameCode int
-	NodeCode int
+	ErrCode int
+	ErrMsg  string
 }
 
 func (e ErrNo) Error() string {
 	return fmt.Sprintf("err_code=%d, err_msg=%s", e.ErrCode, e.ErrMsg)
 }
 
-func New(code int, msg string) ErrNo {
-	return ErrNo{
-		ErrCode: code,
-		ErrMsg:  msg,
-	}
+func NewErrNo(code int, msg string) ErrNo {
+	return ErrNo{code, msg}
 }
 
 func (e ErrNo) WithMessage(msg string) ErrNo {
@@ -42,16 +37,16 @@ func (e ErrNo) WithMessage(msg string) ErrNo {
 }
 
 var (
-	Success                = New(SuccessCode, "Success")
-	ServiceErr             = New(ServiceErrCode, "Service is unable to start successfully")
-	ParamErr               = New(ParamErrCode, "Wrong Parameter has been given")
-	UserAlreadyExistErr    = New(UserAlreadyExistErrCode, "User already exists")
-	AuthorizationFailedErr = New(AuthorizationFailedErrCode, "Authorization failed")
-	BadRequest             = New(BadRequestErrCode, "Request Failed")
-	ErrBind                = New(ErrBindErrCode, "Error occurred while binding the request body to the struct")
-	InternalErr            = New(InternalErrCode, "Internal server error")
-	RedisSetErr            = New(RedisSetErrorCode, "Set data to redis error")
-	RedisGetErr            = New(RedisGetErrorCode, "Get data from redis error")
+	Success                = NewErrNo(SuccessCode, "Success")
+	ServiceErr             = NewErrNo(ServiceErrCode, "Service is unable to start successfully")
+	ParamErr               = NewErrNo(ParamErrCode, "Wrong Parameter has been given")
+	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
+	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
+	BadRequest             = NewErrNo(BadRequestErrCode, "Request Failed")
+	ErrBind                = NewErrNo(ErrBindErrCode, "Error occurred while binding the request body to the struct")
+	InternalErr            = NewErrNo(InternalErrCode, "Internal server error")
+	RedisSetErr            = NewErrNo(RedisSetErrorCode, "Set data to redis error")
+	RedisGetErr            = NewErrNo(RedisGetErrorCode, "Get data from redis error")
 )
 
 // ConvertErr convert error to Errno
