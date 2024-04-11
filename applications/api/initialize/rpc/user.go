@@ -3,6 +3,9 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"runtime"
+	"time"
+
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/kitex_gen/user/userservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
@@ -14,8 +17,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"runtime"
-	"time"
 )
 
 var UserClient userservice.Client
@@ -68,7 +69,7 @@ func Register(ctx context.Context, userClient userservice.Client, req *user.Douy
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
@@ -80,7 +81,7 @@ func Login(ctx context.Context, userClient userservice.Client, req *user.DouyinU
 		return 0, err
 	}
 	if resp.StatusCode != 0 {
-		return 0, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return 0, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp.UserId, nil
 }
@@ -92,7 +93,7 @@ func GetUserById(ctx context.Context, userClient userservice.Client, req *user.D
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }

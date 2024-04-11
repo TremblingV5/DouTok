@@ -139,7 +139,7 @@ func (v *Config) ZapLogConfig() []byte {
 }
 
 // ConfigInit initializes the configuration
-func ConfigInit(envPrefix string, cfgName string) Config {
+func ConfigInit(envPrefix string, cfgName string) *Config {
 	pflag.Parse()
 
 	v := viper.New()
@@ -220,5 +220,5 @@ func ConfigInit(envPrefix string, cfgName string) Config {
 
 	}
 
-	return config
+	return &config
 }

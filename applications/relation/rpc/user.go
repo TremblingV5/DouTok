@@ -3,6 +3,8 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/kitex_gen/user/userservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
@@ -13,7 +15,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"time"
 )
 
 var userClient userservice.Client
