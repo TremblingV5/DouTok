@@ -15,7 +15,7 @@ var (
 	HBClient      *hbaseHandle.HBaseClient
 	RedisClient   *redis.Client
 	SyncProducer  sarama.SyncProducer
-	ViperConfig   dtviper.Config
+	ViperConfig   *dtviper.Config
 	ConsumerGroup sarama.ConsumerGroup
 )
 

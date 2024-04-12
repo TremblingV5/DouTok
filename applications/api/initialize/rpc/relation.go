@@ -3,6 +3,9 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"runtime"
+	"time"
+
 	"github.com/TremblingV5/DouTok/kitex_gen/relation"
 	"github.com/TremblingV5/DouTok/kitex_gen/relation/relationservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
@@ -14,8 +17,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"runtime"
-	"time"
 )
 
 var RelationClient relationservice.Client
@@ -68,7 +69,7 @@ func RelationAction(ctx context.Context, relationClient relationservice.Client, 
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
@@ -80,7 +81,7 @@ func RelationFollowList(ctx context.Context, relationClient relationservice.Clie
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
@@ -92,7 +93,7 @@ func RelationFollowerList(ctx context.Context, relationClient relationservice.Cl
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
@@ -104,7 +105,7 @@ func RelationFriendList(ctx context.Context, relationClient relationservice.Clie
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }

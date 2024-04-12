@@ -3,6 +3,9 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"runtime"
+	"time"
+
 	"github.com/TremblingV5/DouTok/kitex_gen/comment"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment/commentservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
@@ -14,8 +17,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	"runtime"
-	"time"
 )
 
 var CommentClient commentservice.Client
@@ -68,7 +69,7 @@ func CommentAction(ctx context.Context, commentClient commentservice.Client, req
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }
@@ -80,7 +81,7 @@ func CommentList(ctx context.Context, commentClient commentservice.Client, req *
 		return nil, err
 	}
 	if resp.StatusCode != 0 {
-		return nil, errno.New(int(resp.StatusCode), resp.StatusMsg)
+		return nil, errno.NewErrNo(int(resp.StatusCode), resp.StatusMsg)
 	}
 	return resp, nil
 }

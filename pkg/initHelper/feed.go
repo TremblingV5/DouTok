@@ -16,7 +16,7 @@ type FeedClient struct {
 
 func InitFeedRPCClient() *FeedClient {
 	config := dtviper.ConfigInit("DOUTOK_FEED", "feed")
-	c, err := feedservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(&config)...)
+	c, err := feedservice.NewClient(config.Viper.GetString("Server.Name"), InitRPCClientArgs(config)...)
 	if err != nil {
 		panic(err)
 	}

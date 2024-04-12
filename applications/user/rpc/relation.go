@@ -16,7 +16,7 @@ func InitRelationRpc() {
 
 	c, err := relationservice.NewClient(
 		config.Viper.GetString("Server.Name"),
-		initHelper.InitRPCClientArgs(&config)...,
+		initHelper.InitRPCClientArgs(config)...,
 	)
 
 	if err != nil {

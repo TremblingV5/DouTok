@@ -17,7 +17,7 @@ import (
 var (
 	RedisClient   *redis.Client
 	SyncProducer  sarama.SyncProducer
-	ViperConfig   dtviper.Config
+	ViperConfig   *dtviper.Config
 	ConsumerGroup sarama.ConsumerGroup
 	ConcurrentMap *safeMap.SafeMap
 	mu            *sync.Mutex

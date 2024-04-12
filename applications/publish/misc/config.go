@@ -6,7 +6,7 @@ var Config *dtviper.Config
 
 func InitViperConfig() {
 	config := dtviper.ConfigInit(ViperConfigEnvPrefix, ViperConfigEnvFilename)
-	Config = &config
+	Config = config
 }
 
 func GetConfig(key string) string {
