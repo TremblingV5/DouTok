@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/TremblingV5/DouTok/applications/favorite/misc"
 	"github.com/TremblingV5/DouTok/pkg/errno"
 )

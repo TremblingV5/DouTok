@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run DouTok Comment",
+            "name": "Run DouTok Entity",
             "type": "go",
             "request": "launch",
             "mode": "auto",
@@ -31,7 +31,7 @@
             }
         },
         {
-            "name": "Run DouTok Comment Domain",
+            "name": "Run DouTok Entity Domain",
             "type": "go",
             "request": "launch",
             "mode": "auto",

@@ -115,7 +115,7 @@ func InitHertz() (*server.Hertz, func()) {
 			hlog.Fatal(err)
 		}
 		opts = append(opts, server.WithRegistry(r, &registry.Info{
-			ServiceName: constants.API_SERVER_NAME,
+			ServiceName: constants.ApiServerName,
 			Addr:        utils.NewNetAddr("tcp", ServiceAddr),
 			Weight:      10,
 			Tags:        nil,
@@ -126,7 +126,7 @@ func InitHertz() (*server.Hertz, func()) {
 	if ViperConfig.Viper.GetBool("Otel.Enable") {
 		//链路追踪
 		p = provider.NewOpenTelemetryProvider(
-			provider.WithServiceName(constants.API_SERVER_NAME),
+			provider.WithServiceName(constants.ApiServerName),
 			provider.WithExportEndpoint(fmt.Sprintf("%s:%s", ViperConfig.Viper.GetString("Otel.Host"), ViperConfig.Viper.GetString("Otel.Port"))),
 			provider.WithInsecure(),
 		)

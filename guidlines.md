@@ -37,7 +37,7 @@ Run `docker-compose -f ./env/dependencies.yml up -d` to deploy all dependencies.
 
 ## How to build backend
 
-For `User`, `UserDomain`, `Comment`, `CommentDomain`, `Favorite`:
+For `User`, `UserDomain`, `Entity`, `CommentDomain`, `Favorite`:
 
 If you are using vscode:
 1. Copy `./config/vscode_launch.jsonc` to `./vscode`

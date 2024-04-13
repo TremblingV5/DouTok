@@ -76,7 +76,7 @@
 
 ## 已有模块的新功能
 
-### Comment&CommentDomain模块
+### Entity&CommentDomain模块
 
 - 添加子评论的功能
 - 查看某一评论的所有子评论列表

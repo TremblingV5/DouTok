@@ -24,3 +24,10 @@ Client:
 Otel:
   Host: "82.156.171.8"
   Port: 4317
+
+MySQL:
+  host: "127.0.0.1"
+  port: 3306
+  database: "DBName"
+  username: "USER"
+  password: "PWD"

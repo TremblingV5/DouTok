@@ -3,7 +3,7 @@ package mq
 import (
 	"sync"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 )
 
 type KafkaConfig struct {
