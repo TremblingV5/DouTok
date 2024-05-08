@@ -2,6 +2,7 @@ package comment_service
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -16,7 +17,6 @@ import (
 	"github.com/TremblingV5/DouTok/applications/comment/infra/repository/comment_repo"
 	"github.com/TremblingV5/DouTok/pkg/cache"
 	"github.com/TremblingV5/DouTok/pkg/errno"
-	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/go-redis/redis/v8"
 
 	"github.com/TremblingV5/DouTok/pkg/utils"
@@ -26,8 +26,8 @@ type Service struct {
 	commentCountCache      *cache.CountMapCache
 	commentTotalCountCache *cache.CountMapCache
 	commentHBRepository    comment_hb_repo.Repository
-	commentCountRedis      *redishandle.RedisClient
-	commentTotalCountRedis *redishandle.RedisClient
+	commentCountRedis      *redis.Client
+	commentTotalCountRedis *redis.Client
 	commentRepository      comment_repo.Repository
 	commentCountRepository comment_count_repo.Repository
 }
@@ -36,8 +36,8 @@ func New(
 	commentCountCache *cache.CountMapCache,
 	commentTotalCountCache *cache.CountMapCache,
 	commentHBRepository comment_hb_repo.Repository,
-	commentCountRedis *redishandle.RedisClient,
-	commentTotalCountRedis *redishandle.RedisClient,
+	commentCountRedis *redis.Client,
+	commentTotalCountRedis *redis.Client,
 ) *Service {
 	return &Service{
 		commentCountCache:      commentCountCache,
@@ -154,8 +154,8 @@ func (s *Service) readComTotalCount(videoId int64) (int64, bool) {
 }
 
 func (s *Service) readComTotalCountFromCache(videoId string) (int64, bool, error) {
-	data, err := s.commentTotalCountRedis.Get(context.Background(), videoId)
-	if err == redis.Nil {
+	data, err := s.commentTotalCountRedis.Get(context.Background(), videoId).Result()
+	if errors.Is(err, redis.Nil) {
 		return 0, false, nil
 	} else if err != nil {
 		return 0, false, err

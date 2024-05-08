@@ -59,7 +59,7 @@ func (s *Service) UpdateComTotalCntMap() {
 		})
 
 		for _, v := range keyList {
-			res, err := s.commentTotalCountRedis.Get(context.Background(), v)
+			res, err := s.commentTotalCountRedis.Get(context.Background(), v).Result()
 			if err != nil {
 				continue
 			}
@@ -97,5 +97,5 @@ func (s *Service) updateCount(ctx context.Context, videoId int64, cnt int64) err
 删除Redis中存储的视频的完整的评论数量
 */
 func (s *Service) delCount2Cache(videoId string) error {
-	return s.commentTotalCountRedis.Del(context.Background(), videoId)
+	return s.commentTotalCountRedis.Del(context.Background(), videoId).Err()
 }

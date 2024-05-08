@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"github.com/TremblingV5/DouTok/applications/comment/api/comment_api"
 	"github.com/TremblingV5/DouTok/applications/comment/infra/misc"
 	"github.com/TremblingV5/DouTok/applications/comment/infra/query"
 	"github.com/TremblingV5/DouTok/applications/comment/infra/repository/comment_hb_repo"
 	"github.com/TremblingV5/DouTok/applications/comment/infra/rpc"
 	"github.com/TremblingV5/DouTok/applications/comment/services/comment_service"
+	"github.com/TremblingV5/DouTok/kitex_gen/comment"
 	"github.com/TremblingV5/DouTok/kitex_gen/comment/commentservice"
 	"github.com/TremblingV5/DouTok/pkg/cache"
 	"github.com/TremblingV5/DouTok/pkg/dlog"
@@ -14,6 +16,8 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/initHelper"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
+	"github.com/TremblingV5/box/components/mysqlx"
+	"github.com/TremblingV5/box/components/redisx"
 	"github.com/TremblingV5/box/configx"
 	"github.com/TremblingV5/box/dbtx"
 	"github.com/TremblingV5/box/launcher"
@@ -67,25 +71,13 @@ func initHb(host string) hbaseHandle.HBaseClient {
 	return hbaseHandle.InitHB(host)
 }
 
-func Init() *comment_api.CommentServiceImpl {
+func Init() comment.CommentService {
+	ctx := context.Background()
+
 	misc.InitViperConfig()
 
-	initDb(
-		misc.GetConfig("MySQL.Username"),
-		misc.GetConfig("MySQL.Password"),
-		misc.GetConfig("MySQL.Host"),
-		misc.GetConfig("MySQL.Port"),
-		misc.GetConfig("MySQL.Database"),
-	)
-
-	redisMap := map[string]int{
-		misc.ComCntCache:      int(misc.GetConfigNum("Redis.ComCntCache.Num")),
-		misc.ComTotalCntCache: int(misc.GetConfigNum("Redis.ComTotalCntCache.Num")),
-	}
-	redisClients := initRedis(
-		misc.GetConfig("Redis.Dest"),
-		misc.GetConfig("Redis.Password"),
-		redisMap,
+	query.SetDefault(
+		mysqlx.GetDBClient(context.Background(), "default"),
 	)
 
 	hbaseClient := initHb(misc.GetConfig("HBase.Host"))
@@ -94,8 +86,8 @@ func Init() *comment_api.CommentServiceImpl {
 		cache.NewCountMapCache(),
 		cache.NewCountMapCache(),
 		comment_hb_repo.New(&hbaseClient),
-		redisClients[misc.ComCntCache],
-		redisClients[misc.ComTotalCntCache],
+		redisx.GetClient(ctx, "default", misc.ComCntCache),
+		redisx.GetClient(ctx, "default", misc.ComTotalCntCache),
 	)
 
 	go service.UpdateComCountMap()
@@ -132,7 +124,11 @@ func main() {
 	defer shutdown()
 
 	l.AddBeforeServerStartHandler(func() {
-		kitexx.NewKitexServer()
+		l.AddServer(
+			kitexx.NewKitexServer(
+				commentservice.NewServer, Init(), options...,
+			),
+		)
 	})
 
 	l.Run()

@@ -10,4 +10,12 @@ redis:
     default:
         host: "127.0.0.1"
         port: 6379
-        Password: "root"
+        password: "root"
+        db_list:
+            default: 0
+            feedlist: 1
+            feedmarkedtime: 2
+            favcache: 3
+            favcountcache: 4
+            message: 5
+            relation: 6
