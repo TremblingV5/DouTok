@@ -14,7 +14,10 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/initHelper"
 	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
+	"github.com/TremblingV5/box/configx"
 	"github.com/TremblingV5/box/dbtx"
+	"github.com/TremblingV5/box/launcher"
+	"github.com/TremblingV5/box/rpcserver/kitexx"
 )
 
 var (
@@ -102,7 +105,7 @@ func Init() *comment_api.CommentServiceImpl {
 	return handle
 }
 
-func main() {
+func oldMain() {
 	Init()
 
 	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
@@ -116,4 +119,21 @@ func main() {
 	if err := svr.Run(); err != nil {
 		Logger.Fatal(err)
 	}
+}
+
+func main() {
+	l := launcher.New()
+
+	l.AddBeforeConfigInitHandler(func() {
+		configx.SetRootConfigFilename("comment")
+	})
+
+	options, shutdown := initHelper.InitRPCServerArgs(misc.Config)
+	defer shutdown()
+
+	l.AddBeforeServerStartHandler(func() {
+		kitexx.NewKitexServer()
+	})
+
+	l.Run()
 }

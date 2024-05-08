@@ -1,0 +1,13 @@
+mysql:
+    default:
+        host: "127.0.0.1"
+        port: 3306
+        database: "DouTok"
+        username: "root"
+        password: "root"
+
+redis:
+    default:
+        host: "127.0.0.1"
+        port: 6379
+        Password: "root"
