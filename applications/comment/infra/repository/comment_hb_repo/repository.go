@@ -6,6 +6,7 @@ import (
 	"github.com/TremblingV5/DouTok/applications/comment/infra/model"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	tools "github.com/TremblingV5/DouTok/pkg/misc"
+	"github.com/tsuna/gohbase"
 	"github.com/tsuna/gohbase/hrpc"
 )
 
@@ -16,10 +17,10 @@ type Repository interface {
 }
 
 type PersistRepository struct {
-	hbClient *hbaseHandle.HBaseClient
+	hbClient gohbase.Client
 }
 
-func New(hbClient *hbaseHandle.HBaseClient) *PersistRepository {
+func New(hbClient gohbase.Client) *PersistRepository {
 	return &PersistRepository{
 		hbClient: hbClient,
 	}
@@ -39,7 +40,7 @@ func (r *PersistRepository) Save(ctx context.Context, comment *model.CommentInHB
 		},
 	}
 
-	if err := r.hbClient.Put(
+	if _, err := r.hbClient.Put(
 		"comment", misc.GetCommentRowKey(
 			comment.GetVideoId(), "0",
 			comment.GetConversationId(),

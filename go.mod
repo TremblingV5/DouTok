@@ -5,7 +5,7 @@ go 1.21
 require (
 	bou.ke/monkey v1.0.2
 	github.com/IBM/sarama v1.43.1
-	github.com/TremblingV5/box v0.0.5
+	github.com/TremblingV5/box v0.0.7
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/caarlos0/env/v9 v9.0.0
@@ -40,7 +40,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/swag v1.16.3
-	github.com/tsuna/gohbase v0.0.0-20221118171731-ee78e2db30c3
+	github.com/tsuna/gohbase v0.0.0-20240425232423-fa78846cafc9
 	go.mongodb.org/mongo-driver v1.14.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/net v0.24.0

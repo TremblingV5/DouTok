@@ -14,8 +14,7 @@ import (
 	"github.com/TremblingV5/DouTok/pkg/dlog"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/initHelper"
-	"github.com/TremblingV5/DouTok/pkg/mysqlIniter"
-	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
+	"github.com/TremblingV5/box/components/hbasex"
 	"github.com/TremblingV5/box/components/mysqlx"
 	"github.com/TremblingV5/box/components/redisx"
 	"github.com/TremblingV5/box/configx"
@@ -27,45 +26,6 @@ import (
 var (
 	Logger = dlog.InitLog(3)
 )
-
-func initDb(
-	username, password, host, port, database string,
-) {
-	db, err := mysqlIniter.InitDb(
-		username,
-		password,
-		host,
-		port,
-		database,
-	)
-
-	if err != nil {
-		panic(err)
-	}
-
-	query.SetDefault(db)
-
-	dbtx.Init(func() dbtx.TX {
-		return query.Q.Begin()
-	})
-}
-
-func initRedis(
-	dest, password string,
-	dbs map[string]int,
-) map[string]*redishandle.RedisClient {
-	redisClients, err := redishandle.InitRedis(
-		dest,
-		password,
-		dbs,
-	)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return redisClients
-}
 
 func initHb(host string) hbaseHandle.HBaseClient {
 	return hbaseHandle.InitHB(host)
@@ -79,13 +39,16 @@ func Init() comment.CommentService {
 	query.SetDefault(
 		mysqlx.GetDBClient(context.Background(), "default"),
 	)
+	dbtx.Init(func() dbtx.TX {
+		return query.Q.Begin()
+	})
 
 	hbaseClient := initHb(misc.GetConfig("HBase.Host"))
 
 	service := comment_service.New(
 		cache.NewCountMapCache(),
 		cache.NewCountMapCache(),
-		comment_hb_repo.New(&hbaseClient),
+		comment_hb_repo.New(hbasex.GetClient(ctx, "default")),
 		redisx.GetClient(ctx, "default", misc.ComCntCache),
 		redisx.GetClient(ctx, "default", misc.ComTotalCntCache),
 	)
