@@ -102,7 +102,7 @@ git clone https://github.com/TremblingV5/DouTok.git
 
 ##### 逻辑层
 
-- Comment
+- Entity
 
 `./applications/comment/main.go`
 

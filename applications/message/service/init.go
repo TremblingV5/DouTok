@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
 	"github.com/TremblingV5/DouTok/pkg/hbaseHandle"
 	"github.com/TremblingV5/DouTok/pkg/kafka"

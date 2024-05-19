@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/TremblingV5/DouTok/applications/favorite/dal/query"
 	redishandle "github.com/TremblingV5/DouTok/pkg/redisHandle"
 	"github.com/TremblingV5/DouTok/pkg/safeMap"

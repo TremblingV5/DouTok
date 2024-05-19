@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/kitex_gen/message"
 	"github.com/cloudwego/kitex/pkg/klog"

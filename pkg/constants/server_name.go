@@ -1,7 +1,7 @@
 package constants
 
 const (
-	API_SERVER_NAME             = "DouTokAPIServer"
+	ApiServerName               = "DouTokAPIServer"
 	COMMENT_SERVER_NAME         = "DouTokCommentServer"
 	COMMENT_DOMAIN_SERVER_NAME  = "DouTokCommentDomainServer"
 	FAVORITE_SERVER_NAME        = "DouTokFavoriteServer"
@@ -12,7 +12,7 @@ const (
 	PUBLISH_SERVER_NAME         = "DouTokPublishServer"
 	RELATION_SERVER_NAME        = "DouTokRelationServer"
 	RELATION_DOMAIN_SERVER_NAME = "DouTokRelationDomainServer"
-	USER_SERVER_NAME            = "DouTokUserServer"
+	UserServerName              = "DouTokUserServer"
 	USER_DOMAIN_SERVER_NAME     = "DouTokUserDomainServer"
 	VIDEO_DOMAIN_SERVER_NAME    = "DouTokVideoDomainServer"
 )

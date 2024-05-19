@@ -1,0 +1,10 @@
+componentLoad:
+    mysql:
+        storeKey: database
+    redis:
+        storeKey: database
+
+subConfig:
+    database:
+        type: file
+        location: database

@@ -3,6 +3,7 @@ package rpc
 import (
 	"context"
 	"errors"
+
 	"github.com/TremblingV5/DouTok/kitex_gen/user"
 	"github.com/TremblingV5/DouTok/kitex_gen/user/userservice"
 	"github.com/TremblingV5/DouTok/pkg/dtviper"
@@ -16,7 +17,7 @@ func InitUserRpc() {
 
 	c, err := userservice.NewClient(
 		config.Viper.GetString("Server.Name"),
-		initHelper.InitRPCClientArgs(&config)...,
+		initHelper.InitRPCClientArgs(config)...,
 	)
 
 	if err != nil {

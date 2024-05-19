@@ -10,3 +10,5 @@ zip
 
 __debug*
 applications/api/docs/swagger.yaml
+
+go.sum

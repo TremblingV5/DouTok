@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/TremblingV5/DouTok/applications/message/pack"
 	"github.com/TremblingV5/DouTok/pkg/misc"
 	"github.com/TremblingV5/DouTok/pkg/utils"
